@@ -44,6 +44,24 @@
             animation: fadeIn 2s ease 0.5s forwards;
         }
 
+        .name-s {
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0;
+            margin-right: 0.4em;
+        }
+
+        .name-s::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: white;
+        }
+
         #title {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 11px;
@@ -59,10 +77,15 @@
             display: flex;
             flex-direction: row;
             gap: 48px;
-            margin-top: 48px;
             opacity: 0;
             animation: fadeIn 2s ease 3s forwards;
             pointer-events: all;
+            position: fixed;
+            top: 40px;
+            left: 0;
+            right: 0;
+            justify-content: center;
+            z-index: 20;
         }
 
         #menu a {
@@ -72,16 +95,563 @@
             color: rgba(255,255,255,0.4);
             text-decoration: none;
             text-transform: uppercase;
-            transition: color 0.3s;
+            transition: color 0.3s, background 0.3s;
             cursor: pointer;
+            padding: 6px 14px;
         }
 
-        #menu a:hover { color: white; }
+        #menu a:hover {
+            color: white;
+            background: rgba(255,255,255,0.04);
+        }
+
+        #menu a.active {
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.06);
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* WORKS PANEL */
+        #works-panel {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 10vw;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            overflow-y: auto;
+        }
+
+        #works-panel.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        #works-close {
+            position: fixed;
+            top: 40px; right: 48px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            z-index: 11;
+            opacity: 0;
+            pointer-events: none;
+            transition: color 0.3s, opacity 0.5s;
+        }
+
+        #works-close.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #works-close:hover { color: white; }
+
+        .works-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.5em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            margin-bottom: 56px;
+        }
+
+        .works-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 860px;
+            margin-bottom: 40px;
+        }
+
+        .works-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.5em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            margin-bottom: 0;
+        }
+
+        .works-toggle {
+            display: flex;
+            gap: 20px;
+        }
+
+        .toggle-btn {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .toggle-btn.active { color: rgba(255,255,255,0.8); }
+        .toggle-btn.inactive { color: rgba(255,255,255,0.2); }
+
+        .works-view-container {
+            position: relative;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .works-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .works-grid-view {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.07);
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .works-fade-out {
+            opacity: 0;
+        }
+
+        .grid-cell {
+            background: #0a0a0a;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+            min-height: 120px;
+            justify-content: flex-end;
+        }
+
+        .grid-cell:hover { background: rgba(255,255,255,0.04); }
+        .grid-cell:hover .grid-title { color: white; }
+
+        .grid-num {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.18);
+        }
+
+        .grid-title {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 100;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.65);
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        }
+
+        .work-item {
+            display: grid;
+            grid-template-columns: 72px 1fr auto;
+            align-items: start;
+            padding: 28px 0;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .work-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .work-item:last-child {
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .work-item:hover .work-title {
+            color: white;
+        }
+
+        .work-item:hover .work-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .work-num {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.18);
+            padding-top: 4px;
+        }
+
+        .work-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .work-title {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 26px;
+            font-weight: 100;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.75);
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .work-meta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .work-tag {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+        }
+
+        .work-desc {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.3);
+            max-width: 480px;
+            margin-top: 4px;
+        }
+
+        .work-arrow {
+            font-size: 14px;
+            color: rgba(255,255,255,0.25);
+            padding-top: 6px;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: opacity 0.3s, transform 0.3s, color 0.3s;
+        }
+
+        .work-item:hover .work-arrow {
+            color: white;
+        }
+
+        /* SOCIAL LINKS */
+        #social-links {
+            position: fixed;
+            bottom: 36px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            z-index: 20;
+            opacity: 0;
+            animation: fadeIn 2s ease 3.5s forwards;
+        }
+
+        #social-links a {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.25);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        #social-links a:hover { color: white; }
+
+        /* ABOUT PANEL */
+        #about-panel {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 10vw;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            overflow-y: auto;
+        }
+
+        #about-panel.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        #about-close {
+            position: fixed;
+            top: 40px; right: 48px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 11;
+            opacity: 0;
+            pointer-events: none;
+            transition: color 0.3s, opacity 0.5s;
+        }
+
+        #about-close.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #about-close:hover { color: white; }
+
+        .about-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.5em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            margin-bottom: 48px;
+        }
+
+        .about-bio {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 100;
+            line-height: 2;
+            color: rgba(255,255,255,0.55);
+            max-width: 680px;
+        }
+
+        /* CONTACT PANEL */
+        #contact-panel {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 10vw;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            overflow-y: auto;
+        }
+
+        #contact-panel.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        #contact-close {
+            position: fixed;
+            top: 40px; right: 48px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 11;
+            opacity: 0;
+            pointer-events: none;
+            transition: color 0.3s, opacity 0.5s;
+        }
+
+        #contact-close.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #contact-close:hover { color: white; }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .contact-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.5em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            margin-bottom: 48px;
+        }
+
+        .contact-item-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .contact-item-value {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 100;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .contact-item-value a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item-value a:hover { color: white; }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            padding: 12px 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 100;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6);
+            outline: none;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 0.2em;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-bottom-color: rgba(255,255,255,0.4);
+        }
+
+        .contact-form textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        .contact-form button {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 14px 32px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.3s, color 0.3s;
+            align-self: flex-start;
+            margin-top: 8px;
+        }
+
+        .contact-form button:hover {
+            border-color: rgba(255,255,255,0.6);
+            color: white;
+        }
+
+        #academic-panel {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 10vw;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            overflow-y: auto;
+        }
+
+        #academic-panel.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        #academic-close {
+            position: fixed;
+            top: 40px; right: 48px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 11;
+            opacity: 0;
+            pointer-events: none;
+            transition: color 0.3s, opacity 0.5s;
+        }
+
+        #academic-close.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #academic-close:hover { color: white; }
     </style>
 </head>
 <body>
@@ -89,12 +659,210 @@
     <canvas id="noise"></canvas>
 
     <div id="overlay">
-        <div id="name">ULAŞ YENER</div>
+        <div id="name" style="cursor:pointer;">ULA<span class="name-s">S</span> YENER</div>
         <div id="title">Architect · Media Artist · PhD Researcher</div>
-        <div id="menu">
-            <a>Works</a>
-            <a>About</a>
-            <a>Contact</a>
+    </div>
+
+    <!-- MENU — always visible -->
+    <div id="menu">
+        <a id="works-btn">Works</a>
+        <a id="academic-btn">Academic</a>
+        <a id="about-btn">About</a>
+        <a id="contact-btn">Contact</a>
+    </div>
+
+    <!-- SOCIAL LINKS -->
+    <div id="social-links">
+        <a href="https://behance.net/ulasynr" target="_blank">Behance</a>
+        <a href="https://vimeo.com/ulasyener" target="_blank">Vimeo</a>
+        <a href="https://linkedin.com/in/ulasynr" target="_blank">LinkedIn</a>
+        <a href="mailto:ulasynr@gmail.com">Email</a>
+    </div>
+
+    <!-- ABOUT PANEL -->
+    <div id="about-panel">
+        <div class="about-label">About</div>
+        <div class="about-bio">Ulaş Yener is an interdisciplinary artistic researcher, architect, and media practitioner currently pursuing his Ph.D. at the Faculty of Art and Design at Bauhaus-Universität Weimar. He completed his M.Sc. in MediaArchitecture at Bauhaus-Universität Weimar in 2021 and received his Bachelor's degree in Interior Architecture and Environmental Design from the Faculty of Fine Arts at Hacettepe University in 2012.<br><br>His research and artistic practice focus on migration, media archaeology, archives, memory, and audiovisual storytelling. For several years, he has been developing Fremde Türen – El Kapıları, an autoethnographic media archive examining the cultural history and media representations of Turkish immigration in Germany through cinema, music, literature, oral histories, and archival materials.<br><br>Working across essayistic documentary, archival research, sound, and experimental media practices, his projects investigate the relationships between personal memory, collective history, and cultural production.</div>
+    </div>
+
+    <!-- CONTACT PANEL -->
+    <div id="contact-panel">
+        <div class="contact-label">Contact</div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div>
+                    <div class="contact-item-label">Email</div>
+                    <div class="contact-item-value"><a href="mailto:hello@ulasyener.com">hello@ulasyener.com</a></div>
+                </div>
+                <div>
+                    <div class="contact-item-label">Phone</div>
+                    <div class="contact-item-value">+49 163 207 86 16</div>
+                </div>
+                <div>
+                    <div class="contact-item-label">Location</div>
+                    <div class="contact-item-value">70599 Stuttgart, Germany</div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <textarea placeholder="Message"></textarea>
+                <button type="submit">Send →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WORKS PANEL -->
+    <div id="works-panel">
+        <div class="works-header">
+            <div class="works-toggle">
+                <button class="toggle-btn active" id="btn-list" >List</button>
+                <button class="toggle-btn inactive" id="btn-grid" >Grid</button>
+            </div>
+        </div>
+
+        <!-- LIST & GRID WRAPPER -->
+        <div class="works-view-container">
+
+        <!-- LIST VIEW -->
+        <div class="works-grid" id="works-list-view">
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Architecture</div>
+                    <div class="work-desc">Residential, retail and hospitality projects across Istanbul, Weimar and Stuttgart. From concept to construction drawings, covering spatial visualization and branding.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Interior</div>
+                    <div class="work-desc">Interior design projects ranging from residential spaces to cafes, restaurants and retail environments across Istanbul, Weimar and Stuttgart.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Product</div>
+                    <div class="work-desc">Furniture, retail fixtures and product concepts developed for commercial clients and academic studios. From sketches to 3D-rendered prototypes.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Interactive</div>
+                    <div class="work-desc">Interactive installations and environments built in Unreal Engine and Unity 3D. Bridging physical space, narrative and audience participation.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Immersive</div>
+                    <div class="work-desc">Immersive audio-visual environments and spatial installations exploring the boundaries between digital and physical experience.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">VR / AR / XR</div>
+                    <div class="work-desc">360° fulldome animations and virtual, augmented and extended reality experiences. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and fulldome festivals. Includes spatial XR projects developed for corporate clients.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Moving Images</div>
+                    <div class="work-desc">3D animations, stop-motion films, experimental video and motion graphics. Exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Photography</div>
+                    <div class="work-desc">Analog and digital photography since 2010. Street, architectural, portrait and documentary work. Award-winning at the Architects' Association 1927 photography competition.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Sound</div>
+                    <div class="work-desc">Sound collages, podcasts and radio broadcasts produced for immersive environments and independent platforms including bauhaus.fm.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+        </div>
+
+        <!-- GRID VIEW -->
+        <div class="works-grid-view" id="works-grid-view">
+            <div class="grid-cell"><div class="grid-title">Architecture</div></div>
+            <div class="grid-cell"><div class="grid-title">Interior</div></div>
+            <div class="grid-cell"><div class="grid-title">Product</div></div>
+            <div class="grid-cell"><div class="grid-title">Interactive</div></div>
+            <div class="grid-cell"><div class="grid-title">Immersive</div></div>
+            <div class="grid-cell"><div class="grid-title">VR / AR / XR</div></div>
+            <div class="grid-cell"><div class="grid-title">Moving Images</div></div>
+            <div class="grid-cell"><div class="grid-title">Photography</div></div>
+            <div class="grid-cell"><div class="grid-title">Sound</div></div>
+        </div>
+
+        </div><!-- end works-view-container -->
+
+    </div>
+
+    <!-- ACADEMIC PANEL -->
+    <div id="academic-panel">
+        <div class="works-header">
+            <div class="works-toggle">
+                <button class="toggle-btn active" id="ac-btn-list" >List</button>
+                <button class="toggle-btn inactive" id="ac-btn-grid" >Grid</button>
+            </div>
+        </div>
+
+        <div class="works-view-container">
+
+        <div class="works-grid" id="academic-list-view">
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Projects</div>
+                    <div class="work-desc">Academic and practice-based research projects developed at Bauhaus-Universität Weimar. Covering immersive media, spatial narratives and digital heritage.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Articles</div>
+                    <div class="work-desc">Published and ongoing written research on media architecture, interactive design and the intersection of space and technology.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+            <div class="work-item">
+                <div class="work-body">
+                    <div class="work-title">Research</div>
+                    <div class="work-desc">PhD research in practice-based artistic research at Bauhaus-Universität Weimar. Investigating immersive media archives, Turkish immigration and collective memory.</div>
+                </div>
+                <div class="work-arrow">↗</div>
+            </div>
+
+        </div>
+
+        <div class="works-grid-view" id="academic-grid-view">
+            <div class="grid-cell"><div class="grid-title">Projects</div></div>
+            <div class="grid-cell"><div class="grid-title">Articles</div></div>
+            <div class="grid-cell"><div class="grid-title">Research</div></div>
+        </div>
+
         </div>
     </div>
 
@@ -187,6 +955,106 @@
             noiseCanvas.width = window.innerWidth;
             noiseCanvas.height = window.innerHeight;
         });
+
+        // --- PANEL MANAGER ---
+        const overlay = document.getElementById('overlay');
+
+        const panels = {
+            works:    document.getElementById('works-panel'),
+            academic: document.getElementById('academic-panel'),
+            about:    document.getElementById('about-panel'),
+            contact:  document.getElementById('contact-panel'),
+        };
+
+        const menuBtns = {
+            works:    document.getElementById('works-btn'),
+            academic: document.getElementById('academic-btn'),
+            about:    document.getElementById('about-btn'),
+            contact:  document.getElementById('contact-btn'),
+        };
+
+        let currentPanel = null;
+
+        function openPanel(name) {
+            if (currentPanel && currentPanel !== name) {
+                panels[currentPanel].classList.remove('visible');
+                menuBtns[currentPanel].classList.remove('active');
+            }
+            if (currentPanel === name) {
+                closeAll();
+                return;
+            }
+            currentPanel = name;
+            panels[name].classList.add('visible');
+            menuBtns[name].classList.add('active');
+            overlay.style.transition = 'opacity 0.5s ease';
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+        }
+
+        function closeAll() {
+            Object.keys(panels).forEach(name => {
+                panels[name].classList.remove('visible');
+                menuBtns[name].classList.remove('active');
+            });
+            currentPanel = null;
+            overlay.style.transition = 'opacity 0.5s ease';
+            overlay.style.opacity = '1';
+            overlay.style.pointerEvents = 'none';
+            setTimeout(() => { overlay.style.pointerEvents = ''; }, 500);
+        }
+
+        Object.keys(menuBtns).forEach(name => {
+            menuBtns[name].addEventListener('click', () => openPanel(name));
+        });
+
+        document.getElementById('name').addEventListener('click', () => closeAll());
+
+        // Attach toggle listeners after DOM ready
+        document.getElementById('btn-list').addEventListener('click', () => setWorksView('list'));
+        document.getElementById('btn-grid').addEventListener('click', () => setWorksView('grid'));
+        document.getElementById('ac-btn-list').addEventListener('click', () => setAcademicView('list'));
+        document.getElementById('ac-btn-grid').addEventListener('click', () => setAcademicView('grid'));
+
+        // --- WORKS TOGGLE ---
+        function setWorksView(v) {
+            const listView = document.getElementById('works-list-view');
+            const gridView = document.getElementById('works-grid-view');
+            const btnList = document.getElementById('btn-list');
+            const btnGrid = document.getElementById('btn-grid');
+            const current = v === 'list' ? gridView : listView;
+            const next = v === 'list' ? listView : gridView;
+            btnList.className = v === 'list' ? 'toggle-btn active' : 'toggle-btn inactive';
+            btnGrid.className = v === 'grid' ? 'toggle-btn active' : 'toggle-btn inactive';
+            current.classList.add('works-fade-out');
+            setTimeout(() => {
+                current.style.display = 'none';
+                current.classList.remove('works-fade-out');
+                next.style.display = v === 'list' ? 'flex' : 'grid';
+                next.style.opacity = '0';
+                setTimeout(() => { next.style.opacity = '1'; }, 20);
+            }, 300);
+        }
+
+        // --- ACADEMIC TOGGLE ---
+        function setAcademicView(v) {
+            const listView = document.getElementById('academic-list-view');
+            const gridView = document.getElementById('academic-grid-view');
+            const btnList = document.getElementById('ac-btn-list');
+            const btnGrid = document.getElementById('ac-btn-grid');
+            const current = v === 'list' ? gridView : listView;
+            const next = v === 'list' ? listView : gridView;
+            btnList.className = v === 'list' ? 'toggle-btn active' : 'toggle-btn inactive';
+            btnGrid.className = v === 'grid' ? 'toggle-btn active' : 'toggle-btn inactive';
+            current.classList.add('works-fade-out');
+            setTimeout(() => {
+                current.style.display = 'none';
+                current.classList.remove('works-fade-out');
+                next.style.display = v === 'list' ? 'flex' : 'grid';
+                next.style.opacity = '0';
+                setTimeout(() => { next.style.opacity = '1'; }, 20);
+            }, 300);
+        }
     </script>
 </body>
 </html>
