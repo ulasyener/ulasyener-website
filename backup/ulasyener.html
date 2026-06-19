@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ulas Yener</title>
+<link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+<canvas id="c"></canvas>
+<canvas id="grain"></canvas>
+<div id="global-proj-header" class="proj-detail-header">
+  <div id="gph-back" class="proj-detail-back"></div>
+  <div id="gph-title" class="proj-detail-title"></div>
+  <span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+</div>
+<img id="glitch-0" src="images/glitch-0.gif" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none;opacity:0;object-fit:cover;">
+<img id="glitch-1" src="images/glitch-1.gif" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none;opacity:0;object-fit:cover;">
+<img id="glitch-2" src="images/glitch-2.gif" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none;opacity:0;object-fit:cover;">
+
+<div id="ov">
+  <div id="name">ULAS YENER</div>
+  <div id="sub">Architect &middot; Media Artist &middot; PhD Researcher</div>
+</div>
+
+<div id="menu">
+  <a id="wb">Works</a>
+  <a id="ab">Academic</a>
+  <a id="abtb">About</a>
+  <a id="cb">Contact</a>
+</div>
+
+<div id="social">
+  <a href="https://behance.net/ulasynr" target="_blank">Behance</a>
+  <a href="https://vimeo.com/ulasyener" target="_blank">Vimeo</a>
+  <a href="https://linkedin.com/in/ulasynr" target="_blank">LinkedIn</a>
+  <a href="mailto:hello@ulasyener.com">Email</a>
+</div>
+
+<div id="wp" class="panel">
+  <span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Works</div>
+  <div class="work-item" id="architecture-item"><div><div class="wt">Architecture</div><div class="wd">Design, restoration, visualization and competition management projects across Istanbul, Weimar and Stuttgart.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item" id="interior-item"><div><div class="wt">Interior</div><div class="wd">Interior design projects ranging from residential spaces to cafes, restaurants and retail environments across Istanbul, Weimar and Stuttgart.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="product-item"><div class="wt">Product</div><div class="wd">Furniture, retail fixtures and product concepts developed for commercial clients and academic studios. From sketches to 3D-rendered prototypes.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="interactive-item"><div class="wt">Interactive</div><div class="wd">Interactive installations and environments built in Unreal Engine and Unity 3D. Bridging physical space, narrative and audience participation.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="immersive-item"><div class="wt">Immersive</div><div class="wd">Immersive audio-visual environments and spatial installations exploring the boundaries between digital and physical experience.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="vr-item"><div class="wt">VR / AR / XR</div><div class="wd">360 degree fulldome animations and virtual, augmented and extended reality experiences. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and fulldome festivals.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="moving-item"><div class="wt">Moving Images</div><div class="wd">3D animations, stop-motion films, experimental video and motion graphics. Exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="photo-item"><div class="wt">Photography</div><div class="wd">Analog and digital photography since 2010. Street, architectural, portrait and documentary work. Award-winning at the Architects Association 1927 photography competition.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item"><div id="sound-item"><div class="wt">Sound</div><div class="wd">Sound collages, podcasts and radio broadcasts produced for immersive environments and independent platforms including bauhaus.fm.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<!-- Architecture panelleri -->
+<div id="architecture-panel" class="panel">
+  <div class="panel-back" id="architecture-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture</div>
+  <div class="work-item sub-item" data-sub="arch-projects"><div><div class="wt">Projects</div><div class="wd">Design and restoration projects developed in professional and academic contexts across Istanbul, Weimar and Stuttgart.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="arch-viz"><div><div class="wt">Visualization & Drawing</div><div class="wd">Architectural drawings, 3D visualizations and presentation graphics produced in support of design and competition projects.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="arch-competition"><div><div class="wt">Competition Management</div><div class="wd">Wettbewerbsmanagement — evaluation and management of architectural competition submissions. Assessment, documentation and jury coordination.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<!-- Architecture / Projects alt panel -->
+<div id="arch-projects-panel" class="panel">
+  <div class="panel-back" id="back-arch-projects">&#x2190; Architecture</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture &middot; Projects</div>
+  <div class="work-item sub-item" data-sub="arch-design"><div><div class="wt">Design</div><div class="wd">Original design projects ranging from residential to public and cultural buildings.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="arch-restoration"><div><div class="wt">Restoration & Renovation</div><div class="wd">Conservation and adaptive reuse projects. Sensitive interventions within existing historic and contemporary structures.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<!-- Architecture / Design -->
+<div id="arch-design-panel" class="panel sub-panel">
+  <div class="panel-back" id="back-arch-design">&#x2190; Projects</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture &middot; Design</div>
+  <div class="project-grid"><div class="project-placeholder">Coming soon</div></div>
+</div>
+
+<!-- Architecture / Restoration -->
+<div id="arch-restoration-panel" class="panel sub-panel">
+  <div class="panel-back" id="back-arch-restoration">&#x2190; Projects</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture &middot; Restoration & Renovation</div>
+  <div class="project-grid"><div class="project-placeholder">Coming soon</div></div>
+</div>
+
+<!-- Architecture / Visualization -->
+<div id="arch-viz-panel" class="panel sub-panel">
+  <div class="panel-back" id="back-arch-viz">&#x2190; Architecture</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture &middot; Visualization & Drawing</div>
+  <div class="project-grid"><div class="project-placeholder">Coming soon</div></div>
+</div>
+
+<!-- Architecture / Competition Management -->
+<div id="arch-competition-panel" class="panel sub-panel">
+  <div class="panel-back" id="back-arch-competition">&#x2190; Architecture</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Architecture &middot; Competition Management</div>
+  <div class="project-grid"><div class="project-placeholder">Coming soon</div></div>
+</div>
+
+<div id="interior-panel" class="panel">
+  <div class="panel-back" id="interior-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interior</div>
+  <div class="work-item sub-item" data-sub="residential"><div><div class="wt">Residential</div><div class="wd">Apartment and house interiors across Istanbul, Weimar and Stuttgart. Living spaces, kitchens, bathrooms and custom joinery.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="retail"><div><div class="wt">Retail</div><div class="wd">Retail environments, kiosk designs and commercial interiors. Covering concept, spatial layout, fixture design and visual merchandising.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="hospitality"><div><div class="wt">Hospitality</div><div class="wd">Cafe, restaurant and hotel interiors. From spatial concept to material selection, lighting and furniture specification.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="workspace"><div><div class="wt">Workspace</div><div class="wd">Office and studio interiors designed for focus, collaboration and creative work. Flexible layouts and custom storage solutions.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<!-- Interior alt kategori panelleri -->
+<div id="interior-residential" class="panel sub-panel">
+  <div class="panel-back" id="back-residential">&#x2190; Interior</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interior &middot; Residential</div>
+  <div class="project-grid" id="grid-residential">
+    <div class="project-card" id="card-yesilkoy" onclick="openProjectYesilkoy()">
+      <img src="images/yesilkoy/1.jpg" alt="Yeşilköy Residence" onerror="this.style.display='none';this.parentNode.style.background='rgba(0,0,0,.06)'">
+      <div class="proj-title">Yeşilköy Residence</div>
+      <div class="proj-meta">Istanbul · 2023</div>
+    </div>
+  </div>
+</div>
+<div id="interior-retail" class="panel sub-panel">
+  <div class="panel-back" id="back-retail">&#x2190; Interior</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interior &middot; Retail</div>
+  <div class="project-grid" id="grid-retail">
+    <div class="project-card" id="card-cafe" onclick="openProjectCafe()">
+      <img src="images/retail-cafe/1.jpg" alt="Cafe" onerror="this.style.display='none';this.parentNode.style.background='rgba(0,0,0,.06)'">
+      <div class="proj-title">Cafe</div>
+      <div class="proj-meta">Istanbul · 2023</div>
+    </div>
+    <div class="project-card" id="card-bookstore" onclick="openProjectBookstore()">
+      <img src="images/retail-bookstore/1.jpg" alt="Book Cafe" onerror="this.style.display='none';this.parentNode.style.background='rgba(0,0,0,.06)'">
+      <div class="proj-title">Book Cafe</div>
+      <div class="proj-meta">Istanbul · 2023</div>
+    </div>
+  </div>
+</div>
+<div id="interior-hospitality" class="panel sub-panel">
+  <div class="panel-back" id="back-hospitality">&#x2190; Interior</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interior &middot; Hospitality</div>
+  <div class="project-grid" id="grid-hospitality">
+    <div class="project-placeholder">Coming soon</div>
+  </div>
+</div>
+<div id="interior-workspace" class="panel sub-panel">
+  <div class="panel-back" id="back-workspace">&#x2190; Interior</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interior &middot; Workspace</div>
+  <div class="project-grid" id="grid-workspace">
+    <div class="project-placeholder">Coming soon</div>
+  </div>
+</div>
+
+
+<!-- PRODUCT -->
+<div id="product-panel" class="panel">
+  <div class="panel-back" id="product-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Product</div>
+  <div class="work-item sub-item" data-sub="product-furniture"><div><div class="wt">Furniture</div><div class="wd">Custom furniture and built-in joinery designed for residential and commercial contexts.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="product-kiosk"><div><div class="wt">Kiosk & Display</div><div class="wd">Kiosk and display system designs for retail environments and public spaces. Also referenced under Interior / Retail.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="product-branding"><div><div class="wt">Branding & Spatial Identity</div><div class="wd">Branded spatial environments where architecture, material and identity converge into a coherent whole.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="product-objects"><div><div class="wt">Objects & Artifacts</div><div class="wd">Small-scale objects, brewing apparatus, handcrafted items and experimental product concepts.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="product-furniture-panel" class="panel sub-panel"><div class="panel-back" id="back-product-furniture">&#x2190; Product</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Product &middot; Furniture</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="product-kiosk-panel" class="panel sub-panel"><div class="panel-back" id="back-product-kiosk">&#x2190; Product</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Product &middot; Kiosk & Display</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="product-branding-panel" class="panel sub-panel"><div class="panel-back" id="back-product-branding">&#x2190; Product</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Product &middot; Branding & Spatial Identity</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="product-objects-panel" class="panel sub-panel"><div class="panel-back" id="back-product-objects">&#x2190; Product</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Product &middot; Objects & Artifacts</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- INTERACTIVE -->
+<div id="interactive-panel" class="panel">
+  <div class="panel-back" id="interactive-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Interactive</div>
+  <div class="work-item sub-item" data-sub="interactive-game"><div><div class="wt">Game Design</div><div class="wd">Interactive experiences and game environments developed in Unreal Engine. Narrative-driven spatial explorations.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="interactive-spatial"><div><div class="wt">Spatial Design</div><div class="wd">Interactive spatial systems and environments developed in Unity 3D. Bridging physical space and digital interaction.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="interactive-installations"><div><div class="wt">Installations</div><div class="wd">Site-specific interactive installations combining sensor systems, projection and audience participation.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="interactive-game-panel" class="panel sub-panel"><div class="panel-back" id="back-interactive-game">&#x2190; Interactive</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Interactive &middot; Game Design</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="interactive-spatial-panel" class="panel sub-panel"><div class="panel-back" id="back-interactive-spatial">&#x2190; Interactive</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Interactive &middot; Spatial Design</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="interactive-installations-panel" class="panel sub-panel"><div class="panel-back" id="back-interactive-installations">&#x2190; Interactive</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Interactive &middot; Installations</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- IMMERSIVE -->
+<div id="immersive-panel" class="panel">
+  <div class="panel-back" id="immersive-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Immersive</div>
+  <div class="work-item sub-item" data-sub="immersive-av"><div><div class="wt">Audio-Visual</div><div class="wd">Immersive audio-visual performances and environments combining spatial sound, projection and light.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="immersive-spatial"><div><div class="wt">Spatial Installations</div><div class="wd">Large-scale spatial installations occupying architectural environments and public spaces.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="immersive-av-panel" class="panel sub-panel"><div class="panel-back" id="back-immersive-av">&#x2190; Immersive</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Immersive &middot; Audio-Visual</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="immersive-spatial-panel" class="panel sub-panel"><div class="panel-back" id="back-immersive-spatial">&#x2190; Immersive</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Immersive &middot; Spatial Installations</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- VR / AR / XR -->
+<div id="vr-panel" class="panel">
+  <div class="panel-back" id="vr-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">VR / AR / XR</div>
+  <div class="work-item sub-item" data-sub="vr-fulldome"><div><div class="wt">360 & Fulldome</div><div class="wd">360 degree animations and fulldome productions. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and international fulldome festivals.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="vr-vr"><div><div class="wt">Virtual Reality</div><div class="wd">Immersive VR environments and experiences. Spatial narratives designed for head-mounted display.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="vr-ar"><div><div class="wt">Augmented Reality</div><div class="wd">AR interventions layering digital content onto physical space. Site-specific and mobile-based experiences.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="vr-fulldome-panel" class="panel sub-panel"><div class="panel-back" id="back-vr-fulldome">&#x2190; VR / AR / XR</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">VR / AR / XR &middot; 360 & Fulldome</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="vr-vr-panel" class="panel sub-panel"><div class="panel-back" id="back-vr-vr">&#x2190; VR / AR / XR</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">VR / AR / XR &middot; Virtual Reality</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="vr-ar-panel" class="panel sub-panel"><div class="panel-back" id="back-vr-ar">&#x2190; VR / AR / XR</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">VR / AR / XR &middot; Augmented Reality</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- MOVING IMAGES -->
+<div id="moving-panel" class="panel">
+  <div class="panel-back" id="moving-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Moving Images</div>
+  <div class="work-item sub-item" data-sub="moving-3d"><div><div class="wt">3D Animation</div><div class="wd">Three-dimensional animations produced for architectural visualization, art projects and festival screenings.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="moving-essay"><div><div class="wt">Essay Film & Documentary</div><div class="wd">Essayistic documentary films exploring migration, memory and cultural history. Also referenced under Academic / Archive.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="moving-experimental"><div><div class="wt">Experimental Video</div><div class="wd">Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="moving-stopmotion"><div><div class="wt">Stop Motion</div><div class="wd">Frame-by-frame animation works combining handcrafted objects, material textures and spatial environments.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="moving-motion"><div><div class="wt">Motion Graphics</div><div class="wd">Motion design and title sequences produced for film, installation and broadcast contexts.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="moving-3d-panel" class="panel sub-panel"><div class="panel-back" id="back-moving-3d">&#x2190; Moving Images</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Moving Images &middot; 3D Animation</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="moving-essay-panel" class="panel sub-panel"><div class="panel-back" id="back-moving-essay">&#x2190; Moving Images</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Moving Images &middot; Essay Film & Documentary</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="moving-experimental-panel" class="panel sub-panel"><div class="panel-back" id="back-moving-experimental">&#x2190; Moving Images</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Moving Images &middot; Experimental Video</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="moving-stopmotion-panel" class="panel sub-panel"><div class="panel-back" id="back-moving-stopmotion">&#x2190; Moving Images</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Moving Images &middot; Stop Motion</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="moving-motion-panel" class="panel sub-panel"><div class="panel-back" id="back-moving-motion">&#x2190; Moving Images</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Moving Images &middot; Motion Graphics</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- PHOTOGRAPHY -->
+<div id="photo-panel" class="panel">
+  <div class="panel-back" id="photo-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Photography</div>
+  <div class="work-item sub-item" data-sub="photo-street"><div><div class="wt">Street</div><div class="wd">Street photography from Istanbul, Weimar, Stuttgart and beyond. Analog and digital.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="photo-arch"><div><div class="wt">Architectural</div><div class="wd">Architectural photography documenting built environments, spatial atmosphere and material detail.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="photo-portrait"><div><div class="wt">Portrait</div><div class="wd">Portrait photography from personal and collaborative projects.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="photo-documentary"><div><div class="wt">Documentary</div><div class="wd">Documentary photography. Award-winning at the Architects Association 1927 photography competition.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="photo-street-panel" class="panel sub-panel"><div class="panel-back" id="back-photo-street">&#x2190; Photography</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Photography &middot; Street</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="photo-arch-panel" class="panel sub-panel"><div class="panel-back" id="back-photo-arch">&#x2190; Photography</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Photography &middot; Architectural</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="photo-portrait-panel" class="panel sub-panel"><div class="panel-back" id="back-photo-portrait">&#x2190; Photography</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Photography &middot; Portrait</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="photo-documentary-panel" class="panel sub-panel"><div class="panel-back" id="back-photo-documentary">&#x2190; Photography</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Photography &middot; Documentary</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- SOUND -->
+<div id="sound-panel" class="panel">
+  <div class="panel-back" id="sound-back">&#x2190; Works</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Sound</div>
+  <div class="work-item sub-item" data-sub="sound-collages"><div><div class="wt">Sound Collages</div><div class="wd">Sound collages and electroacoustic compositions produced for installation and performance contexts.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="sound-podcasts"><div><div class="wt">Podcasts & Radio</div><div class="wd">Podcast productions and radio broadcasts including contributions to bauhaus.fm.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="sound-collages-panel" class="panel sub-panel"><div class="panel-back" id="back-sound-collages">&#x2190; Sound</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Sound &middot; Sound Collages</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="sound-podcasts-panel" class="panel sub-panel"><div class="panel-back" id="back-sound-podcasts">&#x2190; Sound</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Sound &middot; Podcasts & Radio</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- ACADEMIC -->
+<div id="ap" class="panel">
+  <span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Academic</div>
+  <div class="work-item" id="academic-projects-item"><div><div class="wt">Projects</div><div class="wd">Academic and practice-based research projects developed at Bachelor, Masters and PhD level at Hacettepe University and Bauhaus-Universitat Weimar.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="academic-articles"><div><div class="wt">Articles</div><div class="wd">Published and ongoing written research on media architecture, interactive design and the intersection of space and technology.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="academic-research"><div><div class="wt">Research</div><div class="wd">PhD research in practice-based artistic research at Bauhaus-Universitat Weimar. Investigating immersive media archives, Turkish immigration and collective memory.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item" id="fremde-item"><div><div class="wt">Archive — Fremde Türen</div><div class="wd">An autoethnographic media archive examining the cultural history and media representations of Turkish immigration in Germany through cinema, music, literature and oral history.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<!-- Academic / Projects -->
+<div id="academic-projects-panel" class="panel">
+  <div class="panel-back" id="back-academic-projects">&#x2190; Academic</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Academic &middot; Projects</div>
+  <div class="work-item sub-item" data-sub="academic-bachelor"><div><div class="wt">Bachelor</div><div class="wd">Undergraduate design projects completed at the Faculty of Fine Arts, Hacettepe University, 2012.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="academic-masters"><div><div class="wt">Masters</div><div class="wd">M.Sc. MediaArchitecture projects completed at Bauhaus-Universitat Weimar, 2021.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="academic-phd"><div><div class="wt">PhD</div><div class="wd">Ongoing practice-based artistic research at Bauhaus-Universitat Weimar. Exploring immersive media, archives and migration.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="academic-bachelor-panel" class="panel sub-panel"><div class="panel-back" id="back-academic-bachelor">&#x2190; Projects</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Academic &middot; Bachelor</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="academic-masters-panel" class="panel sub-panel"><div class="panel-back" id="back-academic-masters">&#x2190; Projects</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Academic &middot; Masters</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="academic-phd-panel" class="panel sub-panel"><div class="panel-back" id="back-academic-phd">&#x2190; Projects</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Academic &middot; PhD</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="academic-articles-panel" class="panel sub-panel"><div class="panel-back" id="back-academic-articles">&#x2190; Academic</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Academic &middot; Articles</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="academic-research-panel" class="panel sub-panel"><div class="panel-back" id="back-academic-research">&#x2190; Academic</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Academic &middot; Research</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<!-- Fremde Türen Archive -->
+<div id="fremde-panel" class="panel">
+  <div class="panel-back" id="fremde-back">&#x2190; Academic</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Archive — Fremde Türen &middot; El Kapıları</div>
+  <div class="work-item sub-item" data-sub="fremde-film"><div><div class="wt">Film & Cinema</div><div class="wd">Film posters, stills, excerpts and critical writings on Turkish-German cinema from the 1960s to the present.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="fremde-music"><div><div class="wt">Music & Sound</div><div class="wd">Records, cassettes, radio broadcasts and sound documents tracing the musical culture of Turkish migration in Germany.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="fremde-literature"><div><div class="wt">Literature</div><div class="wd">Story collections, poetry, anthologies and literary documents produced within and about the Turkish-German experience.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="fremde-photo"><div><div class="wt">Photography & Visuals</div><div class="wd">Archival photographs, ephemera and visual documents from private and public collections.</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-sub="fremde-interviews"><div><div class="wt">Interviews</div><div class="wd">Audio, video and written interviews with first and second generation Turkish immigrants in Germany.</div></div><div class="wa">&#x2197;</div></div>
+</div>
+<div id="fremde-film-panel" class="panel sub-panel"><div class="panel-back" id="back-fremde-film">&#x2190; Fremde Türen</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Fremde Türen &middot; Film & Cinema</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="fremde-music-panel" class="panel sub-panel"><div class="panel-back" id="back-fremde-music">&#x2190; Fremde Türen</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Fremde Türen &middot; Music & Sound</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="fremde-literature-panel" class="panel sub-panel"><div class="panel-back" id="back-fremde-literature">&#x2190; Fremde Türen</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Fremde Türen &middot; Literature</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="fremde-photo-panel" class="panel sub-panel"><div class="panel-back" id="back-fremde-photo">&#x2190; Fremde Türen</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Fremde Türen &middot; Photography & Visuals</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+<div id="fremde-interviews-panel" class="panel sub-panel"><div class="panel-back" id="back-fremde-interviews">&#x2190; Fremde Türen</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span><div class="sec-label">Fremde Türen &middot; Interviews</div><div class="project-grid"><div class="project-placeholder">Coming soon</div></div></div>
+
+<div id="abt_p" class="panel">
+  <span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About</div>
+  <div class="work-item sub-item" data-abt="bio"><div><div class="wt">Bio</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-abt="education"><div><div class="wt">Education</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-abt="experience"><div><div class="wt">Work Experience</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-abt="teaching"><div><div class="wt">Teaching</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-abt="software"><div><div class="wt">Software</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-abt="download"><div><div class="wt">Download</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<div id="abt-bio" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Bio</div>
+  <div class="about-bio">Ulas Yener is an interdisciplinary artistic researcher, architect, and media practitioner currently pursuing his Ph.D. at the Faculty of Art and Design at Bauhaus-Universitat Weimar. He completed his M.Sc. in MediaArchitecture at Bauhaus-Universitat Weimar in 2021 and received his Bachelor degree in Interior Architecture and Environmental Design from the Faculty of Fine Arts at Hacettepe University in 2012.<br><br>His research and artistic practice focus on migration, media archaeology, archives, memory, and audiovisual storytelling. For several years, he has been developing Fremde Turen - El Kapilari, an autoethnographic media archive examining the cultural history and media representations of Turkish immigration in Germany through cinema, music, literature, oral histories, and archival materials.<br><br>Working across essayistic documentary, archival research, sound, and experimental media practices, his projects investigate the relationships between personal memory, collective history, and cultural production.</div>
+</div>
+
+<div id="abt-education" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Education</div>
+  <div class="about-bio">Coming soon.</div>
+</div>
+
+<div id="abt-experience" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Work Experience</div>
+  <div class="about-bio">Coming soon.</div>
+</div>
+
+<div id="abt-teaching" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Teaching</div>
+  <div class="about-bio">Coming soon.</div>
+</div>
+
+<div id="abt-software" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Software</div>
+  <div class="about-bio">Coming soon.</div>
+</div>
+
+<div id="abt-download" class="panel sub-panel">
+  <div class="panel-back" onclick="closeAbtSub()">&#x2190; About</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">About &middot; Download</div>
+  <div class="about-bio">Coming soon.</div>
+</div>
+
+<div id="cp" class="panel">
+  <span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Contact</div>
+  <div class="work-item sub-item" data-contact="info"><div><div class="wt">Info</div></div><div class="wa">&#x2197;</div></div>
+  <div class="work-item sub-item" data-contact="social"><div><div class="wt">Social</div></div><div class="wa">&#x2197;</div></div>
+</div>
+
+<div id="contact-info" class="panel sub-panel">
+  <div class="panel-back" onclick="closeContactSub()">&#x2190; Contact</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Contact &middot; Info</div>
+  <div class="cg">
+    <div>
+      <div class="cl">Email</div><div class="cv"><a href="mailto:hello@ulasyener.com">hello@ulasyener.com</a></div>
+      <div class="cl">Phone</div><div class="cv">+49 163 207 86 16</div>
+      <div class="cl">Location</div><div class="cv">70599 Stuttgart, Germany</div>
+    </div>
+    <div class="cf">
+      <input type="text" placeholder="Name">
+      <input type="email" placeholder="Email">
+      <textarea placeholder="Message"></textarea>
+      <button>Send</button>
+    </div>
+  </div>
+</div>
+
+<div id="contact-social" class="panel sub-panel">
+  <div class="panel-back" onclick="closeContactSub()">&#x2190; Contact</div><span class="home-btn" onclick="goHome()">&#x2302; Home</span>
+  <div class="sec-label">Contact &middot; Social</div>
+  <div class="cg"><div>
+    <div class="cl">Behance</div><div class="cv">—</div>
+    <div class="cl">Vimeo</div><div class="cv">—</div>
+    <div class="cl">LinkedIn</div><div class="cv">—</div>
+    <div class="cl">Instagram</div><div class="cv">—</div>
+    <div class="cl">Facebook</div><div class="cv">—</div>
+    <div class="cl">Twitter / X</div><div class="cv">—</div>
+    <div class="cl">Flickr</div><div class="cv">—</div>
+    <div class="cl">YouTube</div><div class="cv">—</div>
+    <div class="cl">Gmail</div><div class="cv">—</div>
+    <div class="cl">Substack</div><div class="cv">—</div>
+    <div class="cl">Patreon</div><div class="cv">—</div>
+  </div></div>
+</div>
+
+</div>
+
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<!-- ======== YEŞİLKÖY RESIDENCE — Full Screen Project ======== -->
+<div id="project-yesilkoy">
+  
+  <div class="proj-detail-body">
+
+    
+
+    <div class="proj-photo-grid" id="yesilkoy-grid">
+      <!-- Fotoğraflar JS ile yüklenir -->
+    </div>
+  </div>
+</div>
+
+<!-- CAFE PROJECT -->
+<div id="project-cafe">
+  
+  <div class="proj-detail-body">
+
+    <div class="proj-photo-grid" id="cafe-grid">
+      <!-- Fotoğraflar JS ile yüklenir -->
+    </div>
+  </div>
+</div>
+
+<!-- BOOKSTORE PROJECT -->
+<div id="project-bookstore">
+  
+  <div class="proj-detail-body">
+
+    <div class="proj-photo-grid" id="bookstore-grid">
+      <!-- Fotoğraflar JS ile yüklenir -->
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="proj-lightbox" onclick="closeLightbox(event)">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+
+<script src="js/lightbox.js"></script>
+<script src="data/projects/yesilkoy.js"></script>
+<script src="data/projects/cafe.js"></script>
+<script src="data/projects/bookstore.js"></script>
+<script src="js/glitch.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/main.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/panels.js"></script>
+<script src="js/projects.js"></script>
+<script src="js/terrain.js"></script>
+</body>
+</html>

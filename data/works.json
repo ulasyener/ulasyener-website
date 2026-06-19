@@ -1,0 +1,58 @@
+{
+  "categories": [
+    {
+      "id": "architecture",
+      "label": "Architecture",
+      "description": "Design, restoration, visualization and competition projects.",
+      "projects": ["yesilkoy", "cafe", "bookstore"]
+    },
+    {
+      "id": "interior",
+      "label": "Interior",
+      "description": "Interior design projects ranging from residential to commercial.",
+      "projects": []
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "description": "Furniture, retail fixtures and product concepts.",
+      "projects": []
+    },
+    {
+      "id": "interactive",
+      "label": "Interactive",
+      "description": "Interactive installations and environments.",
+      "projects": []
+    },
+    {
+      "id": "immersive",
+      "label": "Immersive",
+      "description": "Immersive audio-visual environments and spatial experiences.",
+      "projects": []
+    },
+    {
+      "id": "vr",
+      "label": "VR / AR / XR",
+      "description": "360 degree fulldome animations and virtual, augmented experiences.",
+      "projects": []
+    },
+    {
+      "id": "moving-images",
+      "label": "Moving Images",
+      "description": "3D animations, stop-motion films, experimental video.",
+      "projects": []
+    },
+    {
+      "id": "photography",
+      "label": "Photography",
+      "description": "Analog and digital photography since 2010.",
+      "projects": []
+    },
+    {
+      "id": "sound",
+      "label": "Sound",
+      "description": "Sound collages, podcasts and radio broadcasts.",
+      "projects": []
+    }
+  ]
+}
