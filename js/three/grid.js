@@ -86,10 +86,10 @@ function buildGrid(items, onSelect) {
   const PER_ROW   = IS_MOB ? 1 : 3;
   const GAP       = IS_MOB ? 0.10 : 0.18;
   const TILE      = IS_MOB ? 1.4  : 2.8;
-  const CAM_Z     = IS_MOB ? 6.5  : 7.5;
+  const CAM_Z     = IS_MOB ? 5.0  : 7.5;
   const NAV_SAFE  = IS_MOB ? 120  : 235;
   const CLIP_SAFE = IS_MOB ? 60   : 120;
-  const PLANE_ROT = IS_MOB ? 0.05 : 0.28;
+  const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
   const renderer = getGridRenderer(CLIP_SAFE);
 
@@ -107,7 +107,7 @@ function buildGrid(items, onSelect) {
   let mouseNX = 0, mouseNY = 0;
   let smoothMX = 0, smoothMY = 0;
   const MOUSE_LERP  = 0.035;
-  const CAM_ROT_MAX = IS_MOB ? 0.02 : 0.08;
+  const CAM_ROT_MAX = IS_MOB ? 0.0 : 0.08;
 
   function onMouseMove(e) {
     mouseNX =  (e.clientX / window.innerWidth)  * 2 - 1;
