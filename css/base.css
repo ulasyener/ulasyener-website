@@ -426,3 +426,62 @@ canvas#grain {
 
 /* ─── subcat-count ───────────────────────────────────────────────────── */
 .subcat-count { display: none; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   MOBİL UYUMLULUK
+   ══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  #menu { top: 16px; gap: 12px; }
+  #menu a { font-size: 8px; letter-spacing: .15em; padding: 4px 6px; }
+
+  #name { font-size: clamp(16px, 5.5vw, 26px); letter-spacing: .28em; }
+  #sub  { font-size: 8px; letter-spacing: .14em; margin-top: 12px; }
+
+  #social { gap: 16px; bottom: 14px; }
+  #social a { font-size: 7px; letter-spacing: .16em; }
+
+  .panel { padding: 58px 16px 80px 16px; }
+
+  .cat-label    { font-size: 15px; letter-spacing: .07em; }
+  .cat-desc     { font-size: 10px; }
+  .subcat-label { font-size: 13px; letter-spacing: .06em; }
+  .category-item { padding: 18px 0; }
+  .subcat-item   { padding: 14px 0; }
+  .category-list, .subcategory-list { max-width: 100%; }
+
+  .back-btn   { font-size: 8px; letter-spacing: .14em; }
+  .panel-nav  { gap: 12px; }
+  .sec-label  { font-size: 8px; letter-spacing: .2em; margin: 20px 0 0; }
+  .proj-nav-title { font-size: 8px; }
+
+  .contact-key { min-width: 64px; font-size: 8px; }
+  .contact-val { font-size: 10px; }
+
+  .accordion-content p { font-size: 11px; }
+  .accordion-arrow { font-size: 12px; }
+  .empty-state { font-size: 8px; margin-top: 32px; }
+
+  /* Hover efektleri mobilde kapalı */
+  .category-item:not(.empty):hover,
+  .subcat-item:not(.empty):hover,
+  .accordion-item:hover {
+    background: none;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .category-item:not(.empty):hover .cat-label,
+  .category-item:not(.empty):hover .cat-desc,
+  .subcat-item:not(.empty):hover .subcat-label,
+  .subcat-item:not(.empty):hover .cat-desc,
+  .accordion-item:hover .cat-label { color: inherit; }
+}
+
+@media (max-width: 480px) {
+  #menu a       { font-size: 7px; letter-spacing: .12em; padding: 3px 4px; }
+  .cat-label    { font-size: 13px; }
+  .subcat-label { font-size: 12px; }
+  .panel        { padding: 54px 14px 80px 14px; }
+  #name         { letter-spacing: .22em; }
+}

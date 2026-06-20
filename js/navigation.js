@@ -321,24 +321,29 @@ function renderProjectInfoPanel(project) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
-  const fovRad   = (50 * Math.PI) / 180;
-  const visibleH = 2 * Math.tan(fovRad / 2) * 7.5;
-  const tilePx   = Math.round((2.8 / visibleH) * window.innerHeight);
-  const panelTop = 235;
+  const isMobile   = window.innerWidth <= 768;
+  const fovRad     = (50 * Math.PI) / 180;
+  const visibleH   = 2 * Math.tan(fovRad / 2) * 7.5;
+  const tileSize   = isMobile ? 2.2 : 2.8;
+  const tilePx     = Math.round((tileSize / visibleH) * window.innerHeight);
+  const panelTop   = isMobile ? 160 : 235;
+  const panelLeft  = isMobile ? 16  : 100;
+  const panelWidth = isMobile ? Math.min(160, window.innerWidth - 32) : 180;
+  const panelPad   = isMobile ? '12px 14px 16px' : '20px 18px 22px';
 
   const panel = document.createElement('div');
   panel.id = 'proj-info-panel';
   panel.style.cssText = `
     position: fixed;
-    left: 100px;
+    left: ${panelLeft}px;
     top: ${panelTop}px;
-    width: 180px;
+    width: ${panelWidth}px;
     height: ${tilePx}px;
     z-index: 103;
     pointer-events: none;
     background: rgba(225,222,217,0.65);
     backdrop-filter: blur(3px);
-    padding: 20px 18px 22px;
+    padding: ${panelPad};
     box-sizing: border-box;
   `;
 
