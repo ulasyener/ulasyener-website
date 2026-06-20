@@ -1,9 +1,11 @@
 {
   "id": "yesilkoy",
-  "title": "Yeşilköy",
-  "category": "architecture",
+  "title": "Yeşilköy Residence",
+  "category": "interior",
+  "subcategory": "interior-residential",
   "year": "2023",
   "description": "",
-  "images": [],
-  "scene3d": null
+  "type": "image-grid",
+  "images": [
+  ]
 }

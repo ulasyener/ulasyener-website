@@ -1,9 +1,12 @@
 {
   "id": "bookstore",
   "title": "Bookstore",
-  "category": "architecture",
-  "year": "2023",
+  "category": "interior",
+  "subcategory": "interior-retail",
+  "year": "2022",
   "description": "",
-  "images": [],
-  "scene3d": null
+  "type": "image-grid",
+  "images": [
+   
+  ]
 }

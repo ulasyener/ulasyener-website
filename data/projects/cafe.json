@@ -1,9 +1,11 @@
 {
   "id": "cafe",
-  "title": "Cafe",
-  "category": "architecture",
-  "year": "2023",
+  "title": "Café",
+  "category": "interior",
+  "subcategory": "interior-retail",
+  "year": "2022",
   "description": "",
-  "images": [],
-  "scene3d": null
+  "type": "image-grid",
+  "images": []
+   
 }
