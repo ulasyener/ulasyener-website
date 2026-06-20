@@ -85,8 +85,8 @@ function buildGrid(items, onSelect) {
   const IS_MOB    = W <= 768;
   const PER_ROW   = IS_MOB ? 1 : 3;
   const GAP       = IS_MOB ? 0.10 : 0.18;
-  const TILE      = IS_MOB ? 2.6  : 2.8;
-  const CAM_Z     = IS_MOB ? 3.8  : 7.5;
+  const TILE      = IS_MOB ? 1.4  : 2.8;
+  const CAM_Z     = IS_MOB ? 6.5  : 7.5;
   const NAV_SAFE  = IS_MOB ? 120  : 235;
   const CLIP_SAFE = IS_MOB ? 60   : 120;
   const PLANE_ROT = IS_MOB ? 0.05 : 0.28;
