@@ -13,7 +13,7 @@ function initScene() {
     0.1,
     2000
   );
-camera.position.set(0, 30, 60);
+  camera.position.set(0, 30, 60);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({
@@ -41,10 +41,28 @@ camera.position.set(0, 30, 60);
   animate();
 }
 
+// Terrain loop eşiği: kamera bu değere ulaşınca glitch ile sıfırla
+const TERRAIN_LOOP_THRESHOLD = -280;
+const TERRAIN_LOOP_START     = 60;
+let   terrainLooping         = false;
+
 function animate() {
   requestAnimationFrame(animate);
+
   camera.position.z -= 0.015;
-  if (camera.position.z < -300) camera.position.z = 60;
+
+  // Loop noktasına yaklaşıldığında glitch tetikle, sonra sıfırla
+  if (!terrainLooping && camera.position.z < TERRAIN_LOOP_THRESHOLD) {
+    terrainLooping = true;
+    // runGlitch navigation.js'de tanımlı; o yüklenene kadar fallback
+    const doReset = () => { camera.position.z = TERRAIN_LOOP_START; terrainLooping = false; };
+    if (typeof runGlitch === 'function') {
+      runGlitch(doReset);
+    } else {
+      doReset();
+    }
+  }
+
   camera.lookAt(0, 30, camera.position.z - 1);
   renderer.render(scene, camera);
 }
