@@ -7,17 +7,21 @@ let gridAnimId   = null;
 let gridOverlay  = null;
 
 // ─── Sabitler ─────────────────────────────────────────────────────────────
+// PER_ROW — buildGrid içinde dinamik
+// GAP — buildGrid içinde dinamik
+// TILE — buildGrid içinde dinamik
+// CAM_Z — buildGrid içinde dinamik
+// NAV_SAFE — buildGrid içinde dinamik
+// CLIP_SAFE — buildGrid içinde dinamik
 const SCROLL_SPD  = 0.8;
 const SCROLL_LERP = 0.1;
 const LERP        = 0.09;
 
-// Mobil değerler buildGrid içinde dinamik hesaplanır
-
 // ─── Renderer ─────────────────────────────────────────────────────────────
 function getGridRenderer(clipSafe) {
+  const clip = clipSafe || 120;
   if (gridRenderer) {
-    // clip-path'i güncelle (mobil/desktop geçişi için)
-    gridRenderer.domElement.style.clipPath = 'inset(' + clipSafe + 'px 0 0 0)';
+    gridRenderer.domElement.style.clipPath = 'inset(' + clip + 'px 0 0 0)';
     return gridRenderer;
   }
   gridRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -26,7 +30,7 @@ function getGridRenderer(clipSafe) {
   gridRenderer.setClearColor(0x000000, 0);
   gridRenderer.domElement.style.cssText =
     'position:fixed;top:0;left:0;z-index:101;pointer-events:none;' +
-    'clip-path:inset(' + clipSafe + 'px 0 0 0);';
+    'clip-path:inset(' + clip + 'px 0 0 0);';
   document.body.appendChild(gridRenderer.domElement);
   window.addEventListener('resize', onGridResize);
   return gridRenderer;
@@ -77,14 +81,15 @@ function buildGrid(items, onSelect) {
   const W = window.innerWidth;
   const H = window.innerHeight;
 
-  // ── Mobil responsive değerler ─────────────────────────────────────────
-  const IS_MOB  = W <= 768;
-  const PER_ROW = IS_MOB ? 2 : 3;
-  const GAP     = IS_MOB ? 0.12 : 0.18;
-  const TILE    = IS_MOB ? 1.8  : 2.8;
-  const CAM_Z   = IS_MOB ? 5.5  : 7.5;
-  const NAV_SAFE  = IS_MOB ? 130 : 235;
-  const CLIP_SAFE = IS_MOB ? 70  : 120;
+  // ── Mobil responsive sabitler ─────────────────────────────────────────
+  const IS_MOB    = W <= 768;
+  const PER_ROW   = IS_MOB ? 1 : 3;
+  const GAP       = IS_MOB ? 0.10 : 0.18;
+  const TILE      = IS_MOB ? 2.6  : 2.8;
+  const CAM_Z     = IS_MOB ? 3.8  : 7.5;
+  const NAV_SAFE  = IS_MOB ? 120  : 235;
+  const CLIP_SAFE = IS_MOB ? 60   : 120;
+  const PLANE_ROT = IS_MOB ? 0.05 : 0.28;
 
   const renderer = getGridRenderer(CLIP_SAFE);
 
@@ -102,8 +107,7 @@ function buildGrid(items, onSelect) {
   let mouseNX = 0, mouseNY = 0;
   let smoothMX = 0, smoothMY = 0;
   const MOUSE_LERP  = 0.035;
-  const CAM_ROT_MAX = 0.08;
-  const PLANE_ROT   = 0.28;
+  const CAM_ROT_MAX = IS_MOB ? 0.02 : 0.08;
 
   function onMouseMove(e) {
     mouseNX =  (e.clientX / window.innerWidth)  * 2 - 1;
@@ -459,52 +463,6 @@ function buildGrid(items, onSelect) {
   gridOverlay.addEventListener('click',     onClick);
   gridOverlay.addEventListener('wheel',     onWheel, { passive: false });
 
-  // ── Touch desteği ─────────────────────────────────────────────────────
-  let touchStartY = 0, touchLastY = 0, touchStartX = 0, touchMoved = false;
-
-  function onTouchStart(e) {
-    if (e.touches.length !== 1) return;
-    touchStartY = touchLastY = e.touches[0].clientY;
-    touchStartX = e.touches[0].clientX;
-    touchMoved  = false;
-  }
-
-  function onTouchMove(e) {
-    e.preventDefault();
-    if (e.touches.length !== 1) return;
-    const dy = touchLastY - e.touches[0].clientY;
-    if (Math.abs(e.touches[0].clientY - touchStartY) > 8) touchMoved = true;
-
-    // Scroll
-    scrollTarget += dy * 0.012 * SCROLL_SPD;
-    scrollTarget  = Math.max(0, Math.min(maxScroll, scrollTarget));
-    touchLastY    = e.touches[0].clientY;
-
-    // Paralaks — parmak pozisyonu mouse gibi
-    mouseNX =  (e.touches[0].clientX / W) * 2 - 1;
-    mouseNY = -(e.touches[0].clientY / H) * 2 + 1;
-  }
-
-  function onTouchEnd(e) {
-    if (touchMoved) return;
-    if (!introComplete) return;
-    const touch = e.changedTouches[0];
-    mouse.x =  (touch.clientX / W) * 2 - 1;
-    mouse.y = -(touch.clientY / H) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    const hits = raycaster.intersectObjects(meshes);
-    if (!hits.length) { deselect(); return; }
-    const hit = hits[0].object;
-    if (hit === selected) { deselect(); return; }
-    selected = hit;
-    meshes.forEach((m, i) => { scales[i] = m === hit ? 1.12 : 0.9; });
-    if (onSelect) onSelect(hit.userData.item.data);
-  }
-
-  gridOverlay.addEventListener('touchstart', onTouchStart, { passive: true });
-  gridOverlay.addEventListener('touchmove',  onTouchMove,  { passive: false });
-  gridOverlay.addEventListener('touchend',   onTouchEnd,   { passive: true });
-
   // ── Render loop ───────────────────────────────────────────────────────
   function loop() {
     gridAnimId = requestAnimationFrame(loop);
@@ -569,9 +527,6 @@ function buildGrid(items, onSelect) {
       gridOverlay?.removeEventListener('mousemove', onMove);
       gridOverlay?.removeEventListener('click',     onClick);
       gridOverlay?.removeEventListener('wheel',     onWheel);
-      gridOverlay?.removeEventListener('touchstart', onTouchStart);
-      gridOverlay?.removeEventListener('touchmove',  onTouchMove);
-      gridOverlay?.removeEventListener('touchend',   onTouchEnd);
       _destroyGlitch();
       destroyGrid();
     }
