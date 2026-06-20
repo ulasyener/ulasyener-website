@@ -463,6 +463,47 @@ function buildGrid(items, onSelect) {
   gridOverlay.addEventListener('click',     onClick);
   gridOverlay.addEventListener('wheel',     onWheel, { passive: false });
 
+  // ── Touch desteği ─────────────────────────────────────────────────────
+  let touchStartY = 0, touchLastY = 0, touchMoved = false;
+
+  function onTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    touchStartY = touchLastY = e.touches[0].clientY;
+    touchMoved = false;
+  }
+
+  function onTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length !== 1) return;
+    const dy = touchLastY - e.touches[0].clientY;
+    if (Math.abs(e.touches[0].clientY - touchStartY) > 8) touchMoved = true;
+    scrollTarget += dy * 0.012 * SCROLL_SPD;
+    scrollTarget  = Math.max(0, Math.min(maxScroll, scrollTarget));
+    touchLastY    = e.touches[0].clientY;
+    mouseNX = (e.touches[0].clientX / W) * 2 - 1;
+    mouseNY = -(e.touches[0].clientY / H) * 2 + 1;
+  }
+
+  function onTouchEnd(e) {
+    if (touchMoved) return;
+    if (!introComplete) return;
+    const touch = e.changedTouches[0];
+    mouse.x =  (touch.clientX / W) * 2 - 1;
+    mouse.y = -(touch.clientY / H) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(meshes);
+    if (!hits.length) { deselect(); return; }
+    const hit = hits[0].object;
+    if (hit === selected) { deselect(); return; }
+    selected = hit;
+    meshes.forEach((m, i) => { scales[i] = m === hit ? 1.12 : 0.9; });
+    if (onSelect) onSelect(hit.userData.item.data);
+  }
+
+  gridOverlay.addEventListener('touchstart', onTouchStart, { passive: true });
+  gridOverlay.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  gridOverlay.addEventListener('touchend',   onTouchEnd,   { passive: true });
+
   // ── Render loop ───────────────────────────────────────────────────────
   function loop() {
     gridAnimId = requestAnimationFrame(loop);
@@ -524,9 +565,12 @@ function buildGrid(items, onSelect) {
   return {
     destroy: () => {
       window.removeEventListener('mousemove', onMouseMove);
-      gridOverlay?.removeEventListener('mousemove', onMove);
-      gridOverlay?.removeEventListener('click',     onClick);
-      gridOverlay?.removeEventListener('wheel',     onWheel);
+      gridOverlay?.removeEventListener('mousemove',  onMove);
+      gridOverlay?.removeEventListener('click',      onClick);
+      gridOverlay?.removeEventListener('wheel',      onWheel);
+      gridOverlay?.removeEventListener('touchstart', onTouchStart);
+      gridOverlay?.removeEventListener('touchmove',  onTouchMove);
+      gridOverlay?.removeEventListener('touchend',   onTouchEnd);
       _destroyGlitch();
       destroyGrid();
     }

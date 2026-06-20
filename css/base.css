@@ -131,6 +131,8 @@ canvas#grain {
 
 .panel-grid {
   overflow: hidden;
+  background: transparent !important;
+  backdrop-filter: none !important;
 }
 
 /* ─── Panel navigasyon ───────────────────────────────────────────────── */
