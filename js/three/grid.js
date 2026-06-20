@@ -7,27 +7,26 @@ let gridAnimId   = null;
 let gridOverlay  = null;
 
 // ─── Sabitler ─────────────────────────────────────────────────────────────
-const IS_MOBILE   = window.innerWidth <= 768;
-const PER_ROW     = IS_MOBILE ? 2 : 3;
-const GAP         = IS_MOBILE ? 0.12 : 0.18;
-const TILE        = IS_MOBILE ? 2.2 : 2.8;
-const CAM_Z       = IS_MOBILE ? 6.0 : 7.5;
-const NAV_SAFE    = IS_MOBILE ? 160 : 235;
-const CLIP_SAFE   = IS_MOBILE ? 80  : 120;
 const SCROLL_SPD  = 0.8;
 const SCROLL_LERP = 0.1;
 const LERP        = 0.09;
 
+// Mobil değerler buildGrid içinde dinamik hesaplanır
+
 // ─── Renderer ─────────────────────────────────────────────────────────────
-function getGridRenderer() {
-  if (gridRenderer) return gridRenderer;
+function getGridRenderer(clipSafe) {
+  if (gridRenderer) {
+    // clip-path'i güncelle (mobil/desktop geçişi için)
+    gridRenderer.domElement.style.clipPath = 'inset(' + clipSafe + 'px 0 0 0)';
+    return gridRenderer;
+  }
   gridRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   gridRenderer.setSize(window.innerWidth, window.innerHeight);
   gridRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   gridRenderer.setClearColor(0x000000, 0);
   gridRenderer.domElement.style.cssText =
     'position:fixed;top:0;left:0;z-index:101;pointer-events:none;' +
-    'clip-path:inset(' + CLIP_SAFE + 'px 0 0 0);';
+    'clip-path:inset(' + clipSafe + 'px 0 0 0);';
   document.body.appendChild(gridRenderer.domElement);
   window.addEventListener('resize', onGridResize);
   return gridRenderer;
@@ -77,7 +76,17 @@ function buildGrid(items, onSelect) {
 
   const W = window.innerWidth;
   const H = window.innerHeight;
-  const renderer = getGridRenderer();
+
+  // ── Mobil responsive değerler ─────────────────────────────────────────
+  const IS_MOB  = W <= 768;
+  const PER_ROW = IS_MOB ? 2 : 3;
+  const GAP     = IS_MOB ? 0.12 : 0.18;
+  const TILE    = IS_MOB ? 1.8  : 2.8;
+  const CAM_Z   = IS_MOB ? 5.5  : 7.5;
+  const NAV_SAFE  = IS_MOB ? 130 : 235;
+  const CLIP_SAFE = IS_MOB ? 70  : 120;
+
+  const renderer = getGridRenderer(CLIP_SAFE);
 
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
