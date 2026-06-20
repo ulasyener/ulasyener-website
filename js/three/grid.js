@@ -18,8 +18,8 @@ const LERP        = 0.09;
 // ─── Renderer ─────────────────────────────────────────────────────────────
 // navPx: nav çubuğunun piksel yüksekliği — grid bu çizginin altında fade-out ile başlar
 function getGridRenderer(navPx) {
-  const fadeStart = navPx || 120;  // grid canvas'ın üstünde bu kadar px fade bölgesi
-  const FADE_PX   = 32;            // fade geçişinin kaç px sürdüğü
+  const fadeStart = navPx || 130;  // kırmızı çerçeve üst kenarı
+  const FADE_PX   = 24;            // fade geçiş mesafesi (px)
 
   // mask: navPx'ten yukarısı tamamen şeffaf, navPx+FADE_PX'ten aşağısı tam opak
   function buildMask(px) {
@@ -110,14 +110,14 @@ function buildGrid(items, onSelect) {
   const W = window.innerWidth;
   const H = window.innerHeight;
 
-  // FIX [3] Mobil: daha büyük TILE + güçlü scroll çarpanı
   const IS_MOB    = W <= 768;
-  const PER_ROW   = IS_MOB ? 1 : 3;
-  const GAP       = IS_MOB ? 0.12 : 0.18;
-  const TILE      = IS_MOB ? 2.4  : 2.8;
-  const CAM_Z     = IS_MOB ? 5.5  : 7.5;
-  // NAV_SAFE: menü çubuğunun gerçek px yüksekliği — grid mask fade buradan başlar
-  const NAV_SAFE  = IS_MOB ? 56   : 68;
+  const PER_ROW   = IS_MOB ? 1    : 3;
+  const GAP       = IS_MOB ? 0.10 : 0.18;
+  const TILE      = IS_MOB ? 1.4  : 2.8;   // eski çalışan mobil boyut
+  const CAM_Z     = IS_MOB ? 5.0  : 7.5;   // eski çalışan mobil kamera
+  // NAV_SAFE: fade-out'un başladığı px — nav+breadcrumb+section label toplamı
+  // = kırmızı çerçevenin üst kenarı
+  const NAV_SAFE  = IS_MOB ? 160  : 130;
   const CLIP_SAFE = NAV_SAFE;
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
