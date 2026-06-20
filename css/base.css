@@ -1,7 +1,8 @@
 /* ─── Font değişkenleri ──────────────────────────────────────────────── */
 :root {
-  --f-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+  --f-sans: 'Space Grotesk', 'Helvetica Neue', sans-serif;
   --f-mono: 'IBM Plex Mono', monospace;
+  --f-info: 'IBM Plex Mono', monospace;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -36,9 +37,9 @@ canvas#grain {
 #name {
   font-family: var(--f-sans);
   font-size: clamp(22px, 4.5vw, 40px);
-  font-weight: 200;
-  letter-spacing: .45em;
-  color: rgba(0,0,0,0.58);
+  font-weight: 500;
+  letter-spacing: .38em;
+  color: rgba(0,0,0,0.65);
   opacity: 0;
   animation: fi 2s ease .5s forwards;
 }
@@ -69,7 +70,7 @@ canvas#grain {
   font-family: var(--f-mono);
   font-size: 10px;
   letter-spacing: .25em;
-  color: rgba(0,0,0,0.6);
+  color: rgba(0,0,0,0.65);
   text-decoration: none;
   text-transform: uppercase;
   transition: color .2s ease;
@@ -158,7 +159,7 @@ canvas#grain {
   font-family: var(--f-mono);
   font-size: 10px;
   letter-spacing: .28em;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0,0,0,0.5);
   text-transform: uppercase;
   margin: 32px 0 0;
   padding-bottom: 16px;
@@ -208,10 +209,10 @@ canvas#grain {
 .cat-label {
   font-family: var(--f-sans);
   font-size: 19px;
-  font-weight: 200;
-  letter-spacing: .18em;
+  font-weight: 700;
+  letter-spacing: .10em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.68);
+  color: rgba(0,0,0,0.75);
   transition: color .2s ease;
 }
 
@@ -219,8 +220,8 @@ canvas#grain {
   font-family: var(--f-sans);
   font-size: 11px;
   font-weight: 300;
-  color: rgba(0,0,0,0.38);
-  letter-spacing: .06em;
+  color: rgba(0,0,0,0.42);
+  letter-spacing: .04em;
   margin-top: 6px;
   transition: color .2s ease;
   line-height: 1.65;
@@ -259,10 +260,10 @@ canvas#grain {
 .subcat-label {
   font-family: var(--f-sans);
   font-size: 17px;
-  font-weight: 200;
-  letter-spacing: .16em;
+  font-weight: 700;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.62);
+  color: rgba(0,0,0,0.7);
   transition: color .2s ease;
 }
 

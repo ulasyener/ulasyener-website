@@ -312,14 +312,14 @@ function renderProjectInfoPanel(project) {
     height: ${tilePx}px;
     z-index: 103;
     pointer-events: none;
-    background: rgba(200,197,192,0.85);
-    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(225,222,217,0.65);
+    backdrop-filter: blur(3px);
     padding: 20px 18px 22px;
     box-sizing: border-box;
   `;
 
   const rows = [];
-  rows.push({ key: null, val: project.title, style: 'font-size:12px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,0.8);margin-bottom:16px;display:block;line-height:1.5;' });
+  rows.push({ key: null, val: project.title, style: `font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,0,0,0.75);margin-bottom:18px;display:block;line-height:1.6;` });
 
   if (project.year)
     rows.push({ key: 'Year', val: project.year });
@@ -338,15 +338,15 @@ function renderProjectInfoPanel(project) {
     if (row.key === null) {
       const span = document.createElement('span');
       span.style.cssText = row.style || '';
-      span.style.fontFamily = "'Helvetica Neue', sans-serif";
+      span.style.fontFamily = "'IBM Plex Mono', monospace";
       span.textContent = row.val;
       panel.appendChild(span);
     } else {
       const div = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
       div.innerHTML = `
-        <span style="font-family:'Helvetica Neue',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:2px;">${row.key}</span>
-        <span style="font-family:'Helvetica Neue',sans-serif;font-size:11px;letter-spacing:.08em;color:rgba(0,0,0,0.7);line-height:1.5;">${row.val}</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:2px;">${row.key}</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(0,0,0,0.7);line-height:1.5;">${row.val}</span>
       `;
       panel.appendChild(div);
     }
@@ -398,7 +398,7 @@ function openLightbox(images, startIndex) {
       background:none;border:none;cursor:pointer;
       color:rgba(255,255,255,0.5);font-size:28px;
       padding:12px;z-index:901;
-      transition:color 0.15s ease;font-family:'Helvetica Neue',sans-serif;
+      transition:color 0.15s ease;font-family:'IBM Plex Mono',monospace;
       font-weight:100;letter-spacing:0;
     `;
     btn.textContent = dir === 'left' ? '←' : '→';
@@ -417,7 +417,7 @@ function openLightbox(images, startIndex) {
   const counter = document.createElement('div');
   counter.style.cssText = `
     position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-    font-family:'Helvetica Neue',sans-serif;font-size:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
     letter-spacing:.25em;color:rgba(255,255,255,0.35);
     z-index:901;user-select:none;
   `;
@@ -426,7 +426,7 @@ function openLightbox(images, startIndex) {
   const closeBtn = document.createElement('div');
   closeBtn.style.cssText = `
     position:fixed;top:24px;right:32px;
-    font-family:'Helvetica Neue',sans-serif;font-size:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
     letter-spacing:.25em;text-transform:uppercase;
     color:rgba(255,255,255,0.35);cursor:pointer;z-index:901;
     transition:color 0.15s ease;
