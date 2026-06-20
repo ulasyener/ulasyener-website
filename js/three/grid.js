@@ -115,9 +115,33 @@ function buildGrid(items, onSelect) {
   const startY   = topEdge - navUnits - TILE / 2;
   const gridH    = ROWS * TILE + (ROWS - 1) * GAP;
   const maxScroll = Math.max(0, gridH - (visibleH - navUnits) + TILE * 0.3);
+  // Scroll: grid NAV_SAFE çizgisinin üstüne çıkmasın
+  const scrollMax = maxScroll;
 
   const DEPTH   = 0.08;
   const edgeMat = new THREE.MeshBasicMaterial({ color: 0x2a2825 });
+
+  // ── Giriş animasyonu state ────────────────────────────────────────────
+  const useIntro = items.length > 0 && items[0].intro === true;
+  const INTRO_DURATION = 1400;
+  const INTRO_STAGGER  = 80;
+  let   introStartTime = useIntro ? performance.now() : null;
+  let   introComplete  = !useIntro; // intro yoksa direkt tamamlanmış say
+
+  // Her plane için başlangıç: daha yakın, daha kontrollü
+  const directions = [
+    { x: -4,  y:  3, z: -4, rx:  0.3, ry: -0.5 },
+    { x:  0,  y:  5, z: -5, rx:  0.5, ry:  0.0 },
+    { x:  4,  y:  3, z: -4, rx:  0.3, ry:  0.5 },
+    { x: -4,  y: -3, z: -4, rx: -0.3, ry: -0.5 },
+    { x:  0,  y: -5, z: -5, rx: -0.5, ry:  0.0 },
+    { x:  4,  y: -3, z: -4, rx: -0.3, ry:  0.5 },
+    { x: -5,  y:  0, z: -6, rx:  0.2, ry: -0.7 },
+    { x:  5,  y:  0, z: -6, rx: -0.2, ry:  0.7 },
+    { x:  0,  y:  0, z: -8, rx:  0.2, ry:  0.3 },
+  ];
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
   items.forEach((item, i) => {
     const col      = i % PER_ROW;
@@ -126,8 +150,8 @@ function buildGrid(items, onSelect) {
     const rowCount = Math.min(PER_ROW, items.length - rowStart);
     const rowW     = rowCount * TILE + (rowCount - 1) * GAP;
     const rowStartX = -rowW / 2 + TILE / 2;
-    const x = rowStartX + col * (TILE + GAP);
-    const y = startY - row * (TILE + GAP);
+    const targetX = rowStartX + col * (TILE + GAP);
+    const targetY = startY - row * (TILE + GAP);
 
     const geo = new THREE.BoxGeometry(TILE, TILE, DEPTH);
     let frontMat;
@@ -141,19 +165,37 @@ function buildGrid(items, onSelect) {
     }
 
     const mesh = new THREE.Mesh(geo, [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, edgeMat]);
-    mesh.position.set(x, y, 0);
-    mesh.rotation.y = PLANE_ROT;
-    mesh.userData = { item, index: i, baseY: y };
+
+    if (useIntro) {
+      const dir = directions[i % directions.length];
+      mesh.position.set(targetX + dir.x, targetY + dir.y, dir.z);
+      mesh.rotation.set(dir.rx, dir.ry + PLANE_ROT, 0);
+      mesh.userData = {
+        item, index: i, baseY: targetY,
+        targetX, targetY,
+        startX: targetX + dir.x,
+        startY: targetY + dir.y,
+        startZ: dir.z,
+        startRX: dir.rx, startRY: dir.ry + PLANE_ROT,
+        staggerDelay: i * INTRO_STAGGER
+      };
+    } else {
+      mesh.position.set(targetX, targetY, 0);
+      mesh.rotation.y = PLANE_ROT;
+      mesh.userData = { item, index: i, baseY: targetY, targetX, targetY, staggerDelay: 0 };
+    }
     scene.add(mesh);
     meshes.push(mesh);
     scales[i] = 1;
   });
 
+  // Intro başladı
+
   // ── Info Panel'ler ────────────────────────────────────────────────────
   // Her plane'in altında bilgi penceresi — plane genişliği kadar
   // ── 3D Alt Bant (Label Band) ──────────────────────────────────────────
-  const BAND_H   = 0.42;          // bant yüksekliği Three.js birimi
-  const BAND_Z   = DEPTH / 2 + 0.02;
+  const BAND_H   = 0.42;
+  const BAND_Z   = DEPTH / 2 + 0.06;  // önceki 0.02 → daha önde
   const CHARS    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const labelBands = [];
   const bandInited = new Set();
@@ -218,7 +260,7 @@ function buildGrid(items, onSelect) {
     const geo  = new THREE.PlaneGeometry(TILE, BAND_H);
     const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
     const band = new THREE.Mesh(geo, mat);
-    const bandBaseY = mesh.userData.baseY - TILE / 2 - BAND_H / 2 - 0.04;
+    const bandBaseY = mesh.userData.baseY - TILE / 2 - BAND_H / 2 - 0.18;
     band.position.set(mesh.position.x, bandBaseY, BAND_Z);
     band.rotation.y = PLANE_ROT;
     scene.add(band);
@@ -233,10 +275,10 @@ function buildGrid(items, onSelect) {
       if (!lb) return;
       const mesh = meshes[i];
 
-      // Ana plane ile senkron
+      // Ana plane ile tam senkron — intro dahil
       lb.band.position.x = mesh.position.x;
-      lb.band.position.y = mesh.position.y - TILE / 2 - BAND_H / 2 - 0.04;
-      lb.band.position.z = BAND_Z;
+      lb.band.position.y = mesh.position.y - TILE / 2 - BAND_H / 2 - 0.18;
+      lb.band.position.z = mesh.position.z + BAND_Z;
       lb.band.rotation.copy(mesh.rotation);
       lb.band.scale.x = mesh.scale.x;
       lb.band.scale.y = mesh.scale.y;
@@ -315,6 +357,7 @@ function buildGrid(items, onSelect) {
   }
 
   function onClick(e) {
+    if (!introComplete) return; // intro bitmeden tıklama yok
     toNDC(e);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(meshes);
@@ -334,7 +377,9 @@ function buildGrid(items, onSelect) {
   function onWheel(e) {
     e.preventDefault();
     scrollTarget += e.deltaY * 0.003 * SCROLL_SPD;
-    scrollTarget = Math.max(0, Math.min(maxScroll, scrollTarget));
+    // Yukarı sınır: ilk satır NAV_SAFE çizgisinin altında kalsın
+    const upLimit = navUnits * 0.15;
+    scrollTarget = Math.max(-upLimit, Math.min(maxScroll, scrollTarget));
   }
 
   // ── LED Glitch ────────────────────────────────────────────────────────
@@ -379,9 +424,8 @@ function buildGrid(items, onSelect) {
   function syncGlitchMeshes() {
     glitchMeshes.forEach((gMesh, i) => {
       const p = meshes[i];
-      gMesh.position.x = p.position.x;
-      gMesh.position.y = p.position.y;
-      gMesh.position.z = DEPTH / 2 + 0.01;
+      gMesh.position.copy(p.position);
+      gMesh.position.z = p.position.z + DEPTH / 2 + 0.01;
       gMesh.rotation.copy(p.rotation);
       gMesh.scale.copy(p.scale);
     });
@@ -419,11 +463,39 @@ function buildGrid(items, onSelect) {
     camera.lookAt(0, 0, 0);
 
     meshes.forEach((m, i) => {
-      m.position.y = m.userData.baseY + scrollY;
-      smoothRotY[i] += (hoverRotY[i] - smoothRotY[i]) * 0.08;
-      smoothRotX[i] += (hoverRotX[i] - smoothRotX[i]) * 0.08;
-      m.rotation.y = smoothRotY[i] + smoothMX * -0.08;
-      m.rotation.x = smoothRotX[i] + smoothMY * -0.04;
+      const ud  = m.userData;
+      const now = performance.now();
+
+      // ── Giriş animasyonu ──────────────────────────────────────────────
+      if (!introComplete) {
+        const elapsed = now - introStartTime - ud.staggerDelay;
+        if (elapsed < 0) {
+          // Henüz başlamadı — başlangıç pozisyonunda bekle
+          m.position.set(ud.startX, ud.startY + scrollY, ud.startZ);
+          m.rotation.set(ud.startRX, ud.startRY, 0);
+          return;
+        }
+        const t = Math.min(1, elapsed / INTRO_DURATION);
+        const e = easeOut(t);
+
+        m.position.x = ud.startX + (ud.targetX - ud.startX) * e;
+        m.position.y = ud.startY + (ud.targetY - ud.startY) * e + scrollY;
+        m.position.z = ud.startZ * (1 - e);
+        m.rotation.x = ud.startRX * (1 - e) + (smoothMY * -0.04) * e;
+        m.rotation.y = ud.startRY + (PLANE_ROT - ud.startRY) * e + (smoothMX * -0.08) * e;
+
+        // Tüm plane'ler tamamlandı mı?
+        const lastDone = now - introStartTime - (meshes.length - 1) * INTRO_STAGGER;
+        if (lastDone > INTRO_DURATION) introComplete = true;
+      } else {
+        // ── Normal mod ────────────────────────────────────────────────
+        m.position.y = ud.baseY + scrollY;
+        smoothRotY[i] += (hoverRotY[i] - smoothRotY[i]) * 0.08;
+        smoothRotX[i] += (hoverRotX[i] - smoothRotX[i]) * 0.08;
+        m.rotation.y = smoothRotY[i] + smoothMX * -0.08;
+        m.rotation.x = smoothRotX[i] + smoothMY * -0.04;
+      }
+
       m.scale.x += (scales[i] - m.scale.x) * LERP;
       m.scale.y += (scales[i] - m.scale.y) * LERP;
     });
@@ -453,7 +525,8 @@ function showProjectGrid(projects, onProjectClick) {
     src:      proj.cover || null,
     label:    proj.title,
     sublabel: proj.year,
-    data:     proj
+    data:     proj,
+    intro:    true   // giriş animasyonu aktif
   }));
   return buildGrid(items, onProjectClick);
 }
@@ -468,7 +541,8 @@ function showPhotoGrid(project, onPhotoClick) {
     src:      img.src || null,
     label:    null,
     sublabel: null,
-    data:     { index: i, project }
+    data:     { index: i, project },
+    intro:    false  // fotoğraf grid'inde animasyon yok
   }));
 
   return buildGrid(items, onPhotoClick);
