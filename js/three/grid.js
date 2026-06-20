@@ -92,11 +92,6 @@ function buildGrid(items, onSelect) {
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
   // Debug: ekran boyutunu göster (geçici)
-  const dbg = document.createElement('div');
-  dbg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,0,0,0.8);color:white;font-size:20px;padding:10px;z-index:9999;';
-  dbg.textContent = W + 'x' + H + ' MOB:' + IS_MOB;
-  document.body.appendChild(dbg);
-  setTimeout(() => dbg.remove(), 5000);
 
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);

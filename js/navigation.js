@@ -321,7 +321,10 @@ function renderProjectInfoPanel(project) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
-  const isMobile   = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 768;
+
+  // Mobilde bilgi paneli gösterilmez — ekran çok küçük
+  if (isMobile) return;
   const fovRad     = (50 * Math.PI) / 180;
   const visibleH   = 2 * Math.tan(fovRad / 2) * 7.5;
   const tileSize   = isMobile ? 2.2 : 2.8;
