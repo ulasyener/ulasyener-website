@@ -1,3 +1,9 @@
+/* ─── Font değişkenleri ──────────────────────────────────────────────── */
+:root {
+  --f-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+  --f-mono: 'IBM Plex Mono', monospace;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
 
 /* ─── Canvas'lar ─────────────────────────────────────────────────────── */
@@ -28,20 +34,20 @@ canvas#grain {
   transition: opacity 0.4s ease;
 }
 #name {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: clamp(24px, 5vw, 44px);
-  font-weight: 100;
-  letter-spacing: .4em;
-  color: rgba(0,0,0,0.6);
+  font-family: var(--f-sans);
+  font-size: clamp(22px, 4.5vw, 40px);
+  font-weight: 200;
+  letter-spacing: .45em;
+  color: rgba(0,0,0,0.58);
   opacity: 0;
   animation: fi 2s ease .5s forwards;
 }
 #sub {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: .3em;
-  color: rgba(0,0,0,0.65);
-  margin-top: 16px;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  color: rgba(0,0,0,0.45);
+  margin-top: 18px;
   opacity: 0;
   animation: fi 1.2s ease 0.7s forwards;
   text-transform: uppercase;
@@ -60,10 +66,10 @@ canvas#grain {
   z-index: 500;
 }
 #menu a {
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: var(--f-mono);
   font-size: 10px;
-  letter-spacing: .3em;
-  color: rgba(0,0,0,0.7);
+  letter-spacing: .25em;
+  color: rgba(0,0,0,0.6);
   text-decoration: none;
   text-transform: uppercase;
   transition: color .2s ease;
@@ -84,10 +90,10 @@ canvas#grain {
   animation: fi 1.2s ease 1.5s forwards;
 }
 #social a {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 10px;
-  letter-spacing: .3em;
-  color: rgba(0,0,0,.6);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .25em;
+  color: rgba(0,0,0,.5);
   text-decoration: none;
   text-transform: uppercase;
   transition: color .2s ease;
@@ -135,24 +141,24 @@ canvas#grain {
 }
 
 .back-btn {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: .3em;
-  color: rgba(0,0,0,0.35);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  color: rgba(0,0,0,0.3);
   text-transform: uppercase;
   cursor: pointer;
   pointer-events: all;
   transition: color .2s ease;
   display: inline-block;
 }
-.back-btn:hover { color: rgba(0,0,0,1); }
+.back-btn:hover { color: rgba(0,0,0,0.9); }
 
 /* ─── Section label ──────────────────────────────────────────────────── */
 .sec-label {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: .3em;
-  color: rgba(0,0,0,0.45);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .28em;
+  color: rgba(0,0,0,0.4);
   text-transform: uppercase;
   margin: 32px 0 0;
   padding-bottom: 16px;
@@ -200,23 +206,24 @@ canvas#grain {
 .category-item:not(.empty):hover .cat-desc  { color: rgba(0,0,0,0.65); }
 
 .cat-label {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 20px;
-  font-weight: 300;
-  letter-spacing: .15em;
+  font-family: var(--f-sans);
+  font-size: 19px;
+  font-weight: 200;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.7);
+  color: rgba(0,0,0,0.68);
   transition: color .2s ease;
 }
 
 .cat-desc {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 12px;
-  color: rgba(0,0,0,0.4);
-  letter-spacing: .08em;
+  font-family: var(--f-sans);
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(0,0,0,0.38);
+  letter-spacing: .06em;
   margin-top: 6px;
   transition: color .2s ease;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ─── Alt kategori listesi ───────────────────────────────────────────── */
@@ -247,34 +254,34 @@ canvas#grain {
   padding-right: 12px;
 }
 .subcat-item:not(.empty):hover .subcat-label { color: rgba(0,0,0,1); }
-.subcat-item:not(.empty):hover .cat-desc    { color: rgba(0,0,0,0.65); }
+.subcat-item:not(.empty):hover .cat-desc     { color: rgba(0,0,0,0.65); }
 
 .subcat-label {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 18px;
-  font-weight: 300;
-  letter-spacing: .15em;
+  font-family: var(--f-sans);
+  font-size: 17px;
+  font-weight: 200;
+  letter-spacing: .16em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.65);
+  color: rgba(0,0,0,0.62);
   transition: color .2s ease;
 }
 
 /* ─── Inline subcat list (Academic) ─────────────────────────────────── */
 .subcat-list-inline {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 12px;
-  color: rgba(0,0,0,0.35);
-  letter-spacing: .08em;
-  margin-top: 6px;
-  line-height: 1.6;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: rgba(0,0,0,0.32);
+  letter-spacing: .1em;
+  margin-top: 7px;
+  line-height: 1.7;
 }
 
 /* ─── Empty state ────────────────────────────────────────────────────── */
 .empty-state {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
+  font-family: var(--f-mono);
+  font-size: 10px;
   letter-spacing: .3em;
-  color: rgba(0,0,0,0.25);
+  color: rgba(0,0,0,0.22);
   text-transform: uppercase;
   margin-top: 48px;
   text-align: center;
@@ -290,11 +297,11 @@ canvas#grain {
 
 /* ─── Proje nav başlığı ──────────────────────────────────────────────── */
 .proj-nav-title {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: .25em;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0,0,0,0.45);
 }
 
 /* ─── Accordion ──────────────────────────────────────────────────────── */
@@ -313,11 +320,12 @@ canvas#grain {
 
 .accordion-arrow {
   float: right;
-  font-size: 16px;
-  color: rgba(0,0,0,0.3);
+  font-size: 14px;
+  color: rgba(0,0,0,0.25);
   cursor: pointer;
   transition: color .2s ease;
   user-select: none;
+  font-family: var(--f-mono);
 }
 .accordion-arrow:hover { color: rgba(0,0,0,1); }
 
@@ -332,10 +340,11 @@ canvas#grain {
 }
 
 .accordion-content p {
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: var(--f-sans);
   font-size: 12px;
-  color: rgba(0,0,0,0.45);
-  letter-spacing: .08em;
+  font-weight: 300;
+  color: rgba(0,0,0,0.42);
+  letter-spacing: .06em;
   line-height: 1.8;
 }
 
@@ -348,18 +357,19 @@ canvas#grain {
 }
 
 .contact-key {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: .2em;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.35);
+  color: rgba(0,0,0,0.32);
   min-width: 100px;
 }
 
 .contact-val {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 12px;
-  letter-spacing: .08em;
+  font-family: var(--f-sans);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: .06em;
   color: rgba(0,0,0,0.55);
   text-decoration: none;
   transition: color .2s ease;
@@ -375,11 +385,11 @@ canvas#grain {
 }
 
 .social-link-btn {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
+  font-family: var(--f-mono);
+  font-size: 9px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.55);
+  color: rgba(0,0,0,0.5);
   text-decoration: none;
   border: 1px solid rgba(0,0,0,0.12);
   padding: 6px 14px;
@@ -398,11 +408,11 @@ canvas#grain {
 }
 
 .dl-btn {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 11px;
+  font-family: var(--f-mono);
+  font-size: 9px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.55);
+  color: rgba(0,0,0,0.5);
   text-decoration: none;
   border: 1px solid rgba(0,0,0,0.12);
   padding: 6px 14px;
@@ -413,5 +423,5 @@ canvas#grain {
   border-color: rgba(0,0,0,0.4);
 }
 
-/* ─── subcat-count (kullanılmıyor ama temiz kalsın) ──────────────────── */
+/* ─── subcat-count ───────────────────────────────────────────────────── */
 .subcat-count { display: none; }
