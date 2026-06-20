@@ -11,8 +11,8 @@ const PER_ROW     = 3;
 const GAP         = 0.18;
 const TILE        = 2.8;
 const CAM_Z       = 7.5;
-const NAV_SAFE    = 235;   // px — overlay başlangıcı (butonlar buraya kadar serbest)
-const CLIP_SAFE   = 120;   // px — canvas clip, plane'ler buraya kadar görünür
+const NAV_SAFE    = 235;
+const CLIP_SAFE   = 120;
 const SCROLL_SPD  = 0.8;
 const SCROLL_LERP = 0.1;
 const LERP        = 0.09;
@@ -24,7 +24,6 @@ function getGridRenderer() {
   gridRenderer.setSize(window.innerWidth, window.innerHeight);
   gridRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   gridRenderer.setClearColor(0x000000, 0);
-  // clip-path: CLIP_SAFE px'den kes — plane'ler dönerken nav altına taşabilir
   gridRenderer.domElement.style.cssText =
     'position:fixed;top:0;left:0;z-index:101;pointer-events:none;' +
     'clip-path:inset(' + CLIP_SAFE + 'px 0 0 0);';
@@ -41,13 +40,34 @@ function onGridResize() {
 function destroyGrid() {
   if (gridAnimId)  { cancelAnimationFrame(gridAnimId); gridAnimId = null; }
   if (gridOverlay) { gridOverlay.remove(); gridOverlay = null; }
-  document.querySelectorAll('.grid-label').forEach(e => e.remove());
+  document.querySelectorAll('.grid-label, .grid-info-panel').forEach(e => e.remove());
   if (gridRenderer) {
     window.removeEventListener('resize', onGridResize);
     gridRenderer.dispose();
     gridRenderer.domElement.remove();
     gridRenderer = null;
   }
+}
+
+// ─── Scramble Text ────────────────────────────────────────────────────────
+function gridScramble(el, finalText, duration = 1400) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const steps = Math.floor(duration / 60);
+  let step = 0;
+  const fixed = Array.from(finalText).map(c =>
+    c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
+  );
+  const iv = setInterval(() => {
+    const revealed = Math.floor((step / steps) * finalText.length);
+    let out = '';
+    for (let i = 0; i < finalText.length; i++) {
+      if (finalText[i] === ' ') { out += ' '; continue; }
+      out += i < revealed ? finalText[i] : fixed[i];
+    }
+    el.textContent = out;
+    step++;
+    if (step > steps) { el.textContent = finalText; clearInterval(iv); }
+  }, 60);
 }
 
 // ─── Çekirdek builder ─────────────────────────────────────────────────────
@@ -68,12 +88,12 @@ function buildGrid(items, onSelect) {
   const scales = {};
   let selected  = null;
 
-  // ── Mouse paralaks state ──────────────────────────────────────────────
-  let mouseNX = 0, mouseNY = 0;      // hedef — normalize -1..1
-  let smoothMX = 0, smoothMY = 0;    // smooth değerler
-  const MOUSE_LERP   = 0.035;
-  const CAM_ROT_MAX  = 0.08;         // max kamera tilt        // max kamera tilt (radyan ~3°)
-  const PLANE_ROT    = 0.28;         // ~16° — belirgin 3D his         // plane'lerin sabit base rotasyonu (radyan ~7°)
+  // ── Mouse paralaks ────────────────────────────────────────────────────
+  let mouseNX = 0, mouseNY = 0;
+  let smoothMX = 0, smoothMY = 0;
+  const MOUSE_LERP  = 0.035;
+  const CAM_ROT_MAX = 0.08;
+  const PLANE_ROT   = 0.28;
 
   function onMouseMove(e) {
     mouseNX =  (e.clientX / window.innerWidth)  * 2 - 1;
@@ -85,44 +105,30 @@ function buildGrid(items, onSelect) {
   let scrollY      = 0;
   let scrollTarget = 0;
 
-  // ── Viewport yüksekliği Three.js biriminde ────────────────────────────
   const fovRad   = (50 * Math.PI) / 180;
   const visibleH = 2 * Math.tan(fovRad / 2) * CAM_Z;
   const visibleW = visibleH * (W / H);
-
-  // NAV_SAFE px → Three.js Y birimi
   const navUnits = (NAV_SAFE / H) * visibleH;
 
-  // ── Plane'leri oluştur ────────────────────────────────────────────────
-  const ROWS = Math.ceil(items.length / PER_ROW);
+  const ROWS     = Math.ceil(items.length / PER_ROW);
+  const topEdge  = visibleH / 2;
+  const startY   = topEdge - navUnits - TILE / 2;
+  const gridH    = ROWS * TILE + (ROWS - 1) * GAP;
+  const maxScroll = Math.max(0, gridH - (visibleH - navUnits) + TILE * 0.3);
 
-  // İlk satır: viewport'un üst kenarından navUnits + yarım tile aşağıda
-  const topEdge = visibleH / 2;
-  const startY  = topEdge - navUnits - TILE / 2;
-
-  // Max scroll: son satır görünene kadar
-  const gridH       = ROWS * TILE + (ROWS - 1) * GAP;
-  const visibleGrid = visibleH - navUnits;
-  const maxScroll   = Math.max(0, gridH - visibleGrid + TILE * 0.3);
-
-  const DEPTH = 0.08; // kutu kalınlığı (Three.js birimi)
-  // Kenar rengi: mat, koyu gri — fotoğrafın yanında derinlik verir
+  const DEPTH   = 0.08;
   const edgeMat = new THREE.MeshBasicMaterial({ color: 0x2a2825 });
 
   items.forEach((item, i) => {
-    const col = i % PER_ROW;
-    const row = Math.floor(i / PER_ROW);
-
-    // Bu satırdaki item sayısı
-    const rowStart  = row * PER_ROW;
-    const rowCount  = Math.min(PER_ROW, items.length - rowStart);
-    const rowW      = rowCount * TILE + (rowCount - 1) * GAP;
+    const col      = i % PER_ROW;
+    const row      = Math.floor(i / PER_ROW);
+    const rowStart = row * PER_ROW;
+    const rowCount = Math.min(PER_ROW, items.length - rowStart);
+    const rowW     = rowCount * TILE + (rowCount - 1) * GAP;
     const rowStartX = -rowW / 2 + TILE / 2;
-
     const x = rowStartX + col * (TILE + GAP);
     const y = startY - row * (TILE + GAP);
 
-    // BoxGeometry: ön yüz fotoğraf, diğer 5 yüz kenar rengi
     const geo = new THREE.BoxGeometry(TILE, TILE, DEPTH);
     let frontMat;
     if (item.src) {
@@ -134,17 +140,7 @@ function buildGrid(items, onSelect) {
       frontMat = new THREE.MeshBasicMaterial({ color: grays[i % grays.length] });
     }
 
-    // BoxGeometry yüz sırası: +X, -X, +Y, -Y, +Z (ön), -Z (arka)
-    const materials = [
-      edgeMat,    // sağ kenar
-      edgeMat,    // sol kenar
-      edgeMat,    // üst kenar
-      edgeMat,    // alt kenar
-      frontMat,   // ön yüz — fotoğraf
-      edgeMat     // arka yüz
-    ];
-
-    const mesh = new THREE.Mesh(geo, materials);
+    const mesh = new THREE.Mesh(geo, [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, edgeMat]);
     mesh.position.set(x, y, 0);
     mesh.rotation.y = PLANE_ROT;
     mesh.userData = { item, index: i, baseY: y };
@@ -153,40 +149,120 @@ function buildGrid(items, onSelect) {
     scales[i] = 1;
   });
 
-  // ── HTML label'lar ────────────────────────────────────────────────────
-  function renderLabels() {
-    document.querySelectorAll('.grid-label').forEach(e => e.remove());
-    meshes.forEach(mesh => {
-      const { item } = mesh.userData;
-      if (!item.label) return;
+  // ── Info Panel'ler ────────────────────────────────────────────────────
+  // Her plane'in altında bilgi penceresi — plane genişliği kadar
+  // ── 3D Alt Bant (Label Band) ──────────────────────────────────────────
+  const BAND_H   = 0.42;          // bant yüksekliği Three.js birimi
+  const BAND_Z   = DEPTH / 2 + 0.02;
+  const CHARS    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const labelBands = [];
+  const bandInited = new Set();
 
-      const screenPos = mesh.position.clone().project(camera);
-      const sx = ( screenPos.x * 0.5 + 0.5) * W;
-      const sy = (-screenPos.y * 0.5 + 0.5) * H;
-      const labelY = sy + (TILE / 2 / visibleH) * H + 8;
+  function makeCanvasTex() {
+    const c = document.createElement('canvas');
+    c.width = 512; c.height = 80;
+    const t = new THREE.CanvasTexture(c);
+    t.minFilter = THREE.LinearFilter;
+    return { canvas: c, texture: t };
+  }
 
-      if (labelY < NAV_SAFE || labelY > H + 40) return;
+  function drawBand(canvas, texture, title, sub, progress) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 512, 80);
 
-      const div = document.createElement('div');
-      div.className = 'grid-label';
-      div.style.cssText = `
-        position:fixed;left:${sx}px;top:${labelY}px;
-        transform:translateX(-50%);
-        z-index:103;pointer-events:none;text-align:center;
-      `;
-      div.innerHTML = `
-        <div style="font-family:'Helvetica Neue',sans-serif;font-size:9px;
-          letter-spacing:.25em;text-transform:uppercase;color:rgba(0,0,0,0.5)">
-          ${item.label}</div>
-        ${item.sublabel ? `<div style="font-family:'Helvetica Neue',sans-serif;
-          font-size:9px;letter-spacing:.12em;color:rgba(0,0,0,0.3);margin-top:2px">
-          ${item.sublabel}</div>` : ''}
-      `;
-      document.body.appendChild(div);
+    // Arka plan
+    ctx.fillStyle = 'rgba(218,215,210,0.90)';
+    ctx.fillRect(0, 0, 512, 80);
+
+    // Scan line
+    const sy = ((Date.now() % 1800) / 1800) * 80;
+    const g  = ctx.createLinearGradient(0, sy-2, 0, sy+2);
+    g.addColorStop(0,   'rgba(0,0,0,0)');
+    g.addColorStop(0.5, 'rgba(0,0,0,0.07)');
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, sy-2, 512, 4);
+
+    // Scramble reveal
+    const revCount = Math.ceil(progress * title.length);
+    let display = '';
+    for (let k = 0; k < title.length; k++) {
+      if (title[k] === ' ') { display += ' '; continue; }
+      display += k < revCount ? title[k] : (canvas._fixed || [])[k] || CHARS[0];
+    }
+
+    ctx.font = 'bold 20px Arial, sans-serif';
+    ctx.fillStyle = 'rgba(0,0,0,0.78)';
+    ctx.fillText(display, 16, 30);
+
+    if (sub) {
+      const subCount = Math.ceil(Math.max(0, progress * 2 - 1) * sub.length);
+      ctx.font = '13px monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.38)';
+      ctx.fillText(sub.slice(0, subCount), 16, 54);
+    }
+
+    texture.needsUpdate = true;
+  }
+
+  meshes.forEach((mesh, i) => {
+    const { item } = mesh.userData;
+    if (!item.label) { labelBands.push(null); return; }
+
+    const { canvas, texture } = makeCanvasTex();
+    // Sabit rastgele karakterler
+    canvas._fixed = Array.from(item.label.toUpperCase()).map(c =>
+      c === ' ' ? ' ' : CHARS[Math.floor(Math.random() * CHARS.length)]
+    );
+
+    const geo  = new THREE.PlaneGeometry(TILE, BAND_H);
+    const mat  = new THREE.MeshBasicMaterial({ map: texture, transparent: true, depthWrite: false });
+    const band = new THREE.Mesh(geo, mat);
+    const bandBaseY = mesh.userData.baseY - TILE / 2 - BAND_H / 2 - 0.04;
+    band.position.set(mesh.position.x, bandBaseY, BAND_Z);
+    band.rotation.y = PLANE_ROT;
+    scene.add(band);
+
+    labelBands.push({ band, canvas, texture, progress: 0, animating: false, bandBaseY,
+                      title: item.label.toUpperCase(), sub: item.sublabel || '' });
+  });
+
+  function updateLabelBands() {
+    const now = Date.now();
+    labelBands.forEach((lb, i) => {
+      if (!lb) return;
+      const mesh = meshes[i];
+
+      // Ana plane ile senkron
+      lb.band.position.x = mesh.position.x;
+      lb.band.position.y = mesh.position.y - TILE / 2 - BAND_H / 2 - 0.04;
+      lb.band.position.z = BAND_Z;
+      lb.band.rotation.copy(mesh.rotation);
+      lb.band.scale.x = mesh.scale.x;
+      lb.band.scale.y = mesh.scale.y;
+
+      // İlk göründüğünde scramble başlat
+      if (!bandInited.has(i)) {
+        const pos = mesh.position.clone().project(camera);
+        const sy  = (-pos.y * 0.5 + 0.5) * H;
+        if (sy > CLIP_SAFE && sy < H + 60) {
+          bandInited.add(i);
+          lb.animating = true;
+          lb.startTime = now;
+          lb.duration  = 1600;
+        }
+      }
+
+      if (lb.animating) {
+        lb.progress = Math.min(1, (now - lb.startTime) / lb.duration);
+        if (lb.progress >= 1) lb.animating = false;
+      }
+
+      drawBand(lb.canvas, lb.texture, lb.title, lb.sub, lb.progress);
     });
   }
 
-  // ── Overlay: NAV_SAFE altı, tıklamaları yakalar ───────────────────────
+  // ── Overlay ───────────────────────────────────────────────────────────
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
@@ -204,45 +280,30 @@ function buildGrid(items, onSelect) {
     mouse.y = -(e.clientY  / H) * 2 + 1;
   }
 
-  // Her mesh için ayrı hover rotasyon hedefi
-  const hoverRotY = {}; // hedef Y rotasyonu
-  const hoverRotX = {}; // hedef X rotasyonu
-  const smoothRotY = {};
-  const smoothRotX = {};
+  const hoverRotY  = {}, hoverRotX  = {};
+  const smoothRotY = {}, smoothRotX = {};
   meshes.forEach((_, i) => {
-    hoverRotY[i] = PLANE_ROT;
-    hoverRotX[i] = 0;
-    smoothRotY[i] = PLANE_ROT;
-    smoothRotX[i] = 0;
+    hoverRotY[i] = PLANE_ROT; hoverRotX[i] = 0;
+    smoothRotY[i] = PLANE_ROT; smoothRotX[i] = 0;
   });
-
-  let hoveredIndex = -1; // şu an hover'daki mesh index'i
+  let hoveredIndex = -1;
 
   function onMove(e) {
     toNDC(e);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(meshes, false);
     gridOverlay.style.cursor = hits.length ? 'pointer' : 'default';
-
     if (hits.length) {
-      const hit  = hits[0];
-      const mesh = hit.object;
-      const idx  = mesh.userData.index;
+      const hit = hits[0], mesh = hit.object, idx = mesh.userData.index;
       hoveredIndex = idx;
-
-      // UV'den mouse'un plane üzerindeki lokal pozisyonunu al (-0.5..0.5)
       const uv = hit.uv;
       if (uv) {
-        const localX = uv.x - 0.5; // -0.5 sol, +0.5 sağ
-        const localY = uv.y - 0.5; // -0.5 alt, +0.5 üst
-        const MAX_ROT = 0.26; // ~15°
-        hoverRotY[idx] = PLANE_ROT + localX * MAX_ROT * 2;
-        hoverRotX[idx] = localY * MAX_ROT * -1;
+        const lx = uv.x - 0.5, ly = uv.y - 0.5;
+        hoverRotY[idx] = PLANE_ROT + lx * 0.52;
+        hoverRotX[idx] = ly * -0.26;
       }
-
       if (!selected) scales[idx] = 1.06;
     } else {
-      // Hover çıkınca base rotasyona dön
       if (hoveredIndex >= 0) {
         hoverRotY[hoveredIndex] = PLANE_ROT;
         hoverRotX[hoveredIndex] = 0;
@@ -261,9 +322,7 @@ function buildGrid(items, onSelect) {
     const hit = hits[0].object;
     if (hit === selected) { deselect(); return; }
     selected = hit;
-    meshes.forEach((m, i) => {
-      scales[i] = m === hit ? 1.12 : 0.9;
-    });
+    meshes.forEach((m, i) => { scales[i] = m === hit ? 1.12 : 0.9; });
     if (onSelect) onSelect(hit.userData.item.data);
   }
 
@@ -272,14 +331,13 @@ function buildGrid(items, onSelect) {
     meshes.forEach((_, i) => { scales[i] = 1; });
   }
 
-  // ── Scroll: deltaY > 0 (aşağı) → meshler yukarı kayar ───────────────
   function onWheel(e) {
     e.preventDefault();
     scrollTarget += e.deltaY * 0.003 * SCROLL_SPD;
     scrollTarget = Math.max(0, Math.min(maxScroll, scrollTarget));
   }
 
-  // ── LED Glitch Video Texture ──────────────────────────────────────────
+  // ── LED Glitch ────────────────────────────────────────────────────────
   const GLITCH_SRCS = [
     'images/effects/ledglitch/01.mp4',
     'images/effects/ledglitch/02.mp4',
@@ -288,56 +346,44 @@ function buildGrid(items, onSelect) {
   ];
   const GLITCH_OPACITY = 0.5;
 
-  // 4 video için texture havuzu
   const gifPool = GLITCH_SRCS.map(src => {
     const video = document.createElement('video');
-    video.src     = src;
-    video.loop    = true;
-    video.muted   = true;
-    video.autoplay = true;
-    video.playsInline = true;
+    video.src = src; video.loop = true; video.muted = true;
+    video.autoplay = true; video.playsInline = true;
     video.style.cssText = 'position:fixed;top:-9999px;left:-9999px;pointer-events:none;';
     document.body.appendChild(video);
     video.play().catch(() => {});
-
     const texture = new THREE.VideoTexture(video);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
-
     return { video, texture };
   });
 
-  // Her frame texture otomatik güncellenir (VideoTexture bunu halleder)
   function updateGifTextures() {
     gifPool.forEach(({ texture }) => { texture.needsUpdate = true; });
   }
 
-  // Glitch mesh'leri — her plane'in önünde
   const glitchMeshes = meshes.map((mesh, i) => {
-    const pool = gifPool[i % gifPool.length];
-    const geo  = new THREE.PlaneGeometry(TILE, TILE);
-    const mat  = new THREE.MeshBasicMaterial({
-      map:         pool.texture,
-      transparent: true,
-      opacity:     GLITCH_OPACITY,
-      blending:    THREE.AdditiveBlending,
-      depthWrite:  false
+    const pool  = gifPool[i % gifPool.length];
+    const geo   = new THREE.PlaneGeometry(TILE, TILE);
+    const mat   = new THREE.MeshBasicMaterial({
+      map: pool.texture, transparent: true,
+      opacity: GLITCH_OPACITY, blending: THREE.AdditiveBlending, depthWrite: false
     });
     const gMesh = new THREE.Mesh(geo, mat);
     gMesh.position.set(mesh.position.x, mesh.userData.baseY, DEPTH / 2 + 0.01);
-    gMesh.userData = { parentIndex: i };
     scene.add(gMesh);
     return gMesh;
   });
 
   function syncGlitchMeshes() {
     glitchMeshes.forEach((gMesh, i) => {
-      const parent = meshes[i];
-      gMesh.position.x = parent.position.x;
-      gMesh.position.y = parent.position.y;
+      const p = meshes[i];
+      gMesh.position.x = p.position.x;
+      gMesh.position.y = p.position.y;
       gMesh.position.z = DEPTH / 2 + 0.01;
-      gMesh.rotation.copy(parent.rotation);
-      gMesh.scale.copy(parent.scale);
+      gMesh.rotation.copy(p.rotation);
+      gMesh.scale.copy(p.scale);
     });
   }
 
@@ -347,6 +393,11 @@ function buildGrid(items, onSelect) {
       video.pause();
       if (document.body.contains(video)) video.remove();
       texture.dispose();
+    });
+    labelBands.forEach(lb => {
+      if (!lb) return;
+      scene.remove(lb.band);
+      lb.texture.dispose();
     });
   };
 
@@ -358,34 +409,21 @@ function buildGrid(items, onSelect) {
   function loop() {
     gridAnimId = requestAnimationFrame(loop);
 
-    // Smooth mouse
     smoothMX += (mouseNX - smoothMX) * MOUSE_LERP;
     smoothMY += (mouseNY - smoothMY) * MOUSE_LERP;
+    scrollY  += (scrollTarget - scrollY) * SCROLL_LERP;
 
-    // Smooth scroll
-    scrollY += (scrollTarget - scrollY) * SCROLL_LERP;
-
-    // Kamera: position ile paralaks — rotation yok, lookAt sabit
     const camX = smoothMX * CAM_ROT_MAX * -1.2;
     const camY = smoothMY * CAM_ROT_MAX *  0.6;
     camera.position.set(camX, camY, CAM_Z);
     camera.lookAt(0, 0, 0);
 
-    // Mesh: scroll + bireysel hover rotasyonu + global paralaks
     meshes.forEach((m, i) => {
       m.position.y = m.userData.baseY + scrollY;
-
-      // Global paralaks rotasyonu (tüm plane'ler)
-      const globalY = smoothMX * -0.08;
-      const globalX = smoothMY * -0.04;
-
-      // Hover rotasyonu smooth lerp
       smoothRotY[i] += (hoverRotY[i] - smoothRotY[i]) * 0.08;
       smoothRotX[i] += (hoverRotX[i] - smoothRotX[i]) * 0.08;
-
-      m.rotation.y = smoothRotY[i] + globalY;
-      m.rotation.x = smoothRotX[i] + globalX;
-
+      m.rotation.y = smoothRotY[i] + smoothMX * -0.08;
+      m.rotation.x = smoothRotX[i] + smoothMY * -0.04;
       m.scale.x += (scales[i] - m.scale.x) * LERP;
       m.scale.y += (scales[i] - m.scale.y) * LERP;
     });
@@ -393,9 +431,7 @@ function buildGrid(items, onSelect) {
     renderer.render(scene, camera);
     updateGifTextures();
     syncGlitchMeshes();
-    renderLabels();
-    updateGifTextures();
-    syncGlitchMeshes();
+    updateLabelBands();
   }
   loop();
 

@@ -289,14 +289,38 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
   });
 }
 
+// ─── Scramble Text Efekti ─────────────────────────────────────────────────
+function scrambleText(el, finalText, duration = 1800) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const steps = Math.floor(duration / 60);
+  let step = 0;
+  // Her pozisyon için sabit rastgele karakter — titremez, sadece reveal olur
+  const fixedRandom = Array.from(finalText).map(c =>
+    c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
+  );
+
+  const interval = setInterval(() => {
+    const progress = step / steps;
+    const revealedCount = Math.floor(progress * finalText.length);
+    let display = '';
+    for (let i = 0; i < finalText.length; i++) {
+      if (finalText[i] === ' ') { display += ' '; continue; }
+      display += i < revealedCount ? finalText[i] : fixedRandom[i];
+    }
+    el.textContent = display;
+    step++;
+    if (step > steps) {
+      el.textContent = finalText;
+      clearInterval(interval);
+    }
+  }, 60);
+}
+
 // ─── Proje Bilgi Paneli ───────────────────────────────────────────────────
 function renderProjectInfoPanel(project) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
-  // Yükseklik: bir plane kadar — TILE=2.8, CAM_Z=7.5, FOV=50 ile px hesabı
-  // visibleH = 2 * tan(25°) * 7.5 ≈ 6.99 birim
-  // 1 TILE (2.8) / visibleH * innerHeight ≈ ekrandaki px karşılığı
   const fovRad   = (50 * Math.PI) / 180;
   const visibleH = 2 * Math.tan(fovRad / 2) * 7.5;
   const tilePx   = Math.round((2.8 / visibleH) * window.innerHeight);
@@ -306,7 +330,7 @@ function renderProjectInfoPanel(project) {
   panel.id = 'proj-info-panel';
   panel.style.cssText = `
     position: fixed;
-    left: 64px;
+    left: 100px;
     top: ${panelTop}px;
     width: 180px;
     height: ${tilePx}px;
@@ -318,9 +342,22 @@ function renderProjectInfoPanel(project) {
     box-sizing: border-box;
   `;
 
-  const rows = [];
-  rows.push({ key: null, val: project.title, style: `font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,0,0,0.75);margin-bottom:18px;display:block;line-height:1.6;` });
+  // Başlık
+  const titleEl = document.createElement('span');
+  titleEl.style.cssText = `
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .10em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.78);
+    margin-bottom: 18px;
+    display: block;
+    line-height: 1.5;
+  `;
+  panel.appendChild(titleEl);
 
+  const rows = [];
   if (project.year)
     rows.push({ key: 'Year', val: project.year });
   if (project.location)
@@ -332,27 +369,107 @@ function renderProjectInfoPanel(project) {
   if (project.coworkers && project.coworkers.length)
     rows.push({ key: 'With', val: project.coworkers.join(', ') });
   if (project.description)
-    rows.push({ key: null, val: project.description, style: 'font-size:11px;color:rgba(0,0,0,0.5);letter-spacing:.06em;line-height:1.7;margin-top:14px;display:block;font-family:\'Helvetica Neue\',sans-serif;' });
+    rows.push({ key: 'Info', val: project.description });
+
+  const valueEls = [];
 
   rows.forEach(row => {
-    if (row.key === null) {
-      const span = document.createElement('span');
-      span.style.cssText = row.style || '';
-      span.style.fontFamily = "'IBM Plex Mono', monospace";
-      span.textContent = row.val;
-      panel.appendChild(span);
-    } else {
-      const div = document.createElement('div');
-      div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
-      div.innerHTML = `
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:2px;">${row.key}</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(0,0,0,0.7);line-height:1.5;">${row.val}</span>
-      `;
-      panel.appendChild(div);
-    }
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
+
+    const keyEl = document.createElement('span');
+    keyEl.style.cssText = `
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.38);
+      margin-bottom: 2px;
+    `;
+    keyEl.textContent = row.key;
+
+    const valEl = document.createElement('span');
+    valEl.style.cssText = `
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: rgba(0,0,0,0.68);
+      line-height: 1.5;
+    `;
+    valEl.textContent = row.val;
+
+    div.appendChild(keyEl);
+    div.appendChild(valEl);
+    panel.appendChild(div);
+    valueEls.push({ el: valEl, text: row.val });
   });
 
   document.body.appendChild(panel);
+
+  // ── Scan line ────────────────────────────────────────────────────────
+  const scanLine = document.createElement('div');
+  scanLine.style.cssText = `
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.08), rgba(0,0,0,0));
+    pointer-events: none;
+    z-index: 1;
+  `;
+  panel.style.position = 'fixed';
+  panel.style.overflow = 'hidden';
+  panel.appendChild(scanLine);
+
+  let scanPos = 0;
+  let scanAnimId = null;
+  function animateScan() {
+    scanPos += 0.4;
+    if (scanPos > tilePx) scanPos = -2;
+    scanLine.style.top = scanPos + 'px';
+    scanAnimId = requestAnimationFrame(animateScan);
+  }
+  animateScan();
+
+  // ── Glitch flash ─────────────────────────────────────────────────────
+  let glitchTimeout = null;
+  function scheduleGlitch() {
+    const delay = 3000 + Math.random() * 5000; // 3-8 sn arası
+    glitchTimeout = setTimeout(() => {
+      if (!document.body.contains(panel)) return;
+
+      // Kısa bir kayma + opacity flash
+      const offsetX = (Math.random() - 0.5) * 6;
+      const offsetY = (Math.random() - 0.5) * 3;
+      panel.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      panel.style.opacity = '0.7';
+
+      setTimeout(() => {
+        if (!document.body.contains(panel)) return;
+        panel.style.transform = 'translate(0,0)';
+        panel.style.opacity = '1';
+        scheduleGlitch();
+      }, 80);
+    }, delay);
+  }
+  scheduleGlitch();
+
+  // Panel kaldırılınca animasyonları temizle
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(panel)) {
+      if (scanAnimId) cancelAnimationFrame(scanAnimId);
+      if (glitchTimeout) clearTimeout(glitchTimeout);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true });
+
+  // Scramble efektleri — stagger ile sırayla
+  scrambleText(titleEl, project.title.toUpperCase(), 1400);
+  valueEls.forEach(({ el, text }, i) => {
+    setTimeout(() => scrambleText(el, text, 1000), 400 + i * 200);
+  });
 }
 
 // ─── Lightbox ─────────────────────────────────────────────────────────────
