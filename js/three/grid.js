@@ -14,20 +14,20 @@ const GLITCH_SRCS    = [
 const GLITCH_OPACITY = 0.38;
 
 // ─── Yerleşim sabitleri ───────────────────────────────────────────────────
-// RESIDENTIAL bottom : 147px
+// RESIDENTIAL bottom : 85px  (konsolla doğrulandı)
 // Boşluk ritmi       : 88px
 //
 // Kademe 1 (proje kapak — bilgi paneli yok):
-//   Grid top         : 147 + 88 = 235px
-//   Fade başlangıcı  : 235 - 44 = 191px  → OVERLAY_TOP
+//   Grid top         : 85 + 88 = 173px
+//   Fade başlangıcı  : 173 - 44 = 129px  → K1_OVERLAY_TOP
 //   Fade mesafesi    : 44px
 //
 // Kademe 2 (fotoğraf — bilgi paneli var):
-//   Bilgi paneli top : 235px  (navigation.js'te)
+//   Bilgi paneli top : navigation.js → panelTop
 //   Bilgi paneli h   : 204px
-//   Bilgi paneli bot : 439px
-//   Grid top         : 439 + 88 = 527px
-//   Fade başlangıcı  : 527 - 44 = 483px  → OVERLAY_TOP
+//   Bilgi paneli bot : panelTop + 204
+//   Grid top         : bot + 88
+//   Fade başlangıcı  : grid top - 44  → K2_OVERLAY_TOP
 //   Fade mesafesi    : 44px
 //
 // Mobil (bilgi paneli yok her iki kademede):
@@ -39,7 +39,7 @@ const FADE_PX        = 44;
 const FADE_PX_MOB    = 24;
 
 // Kademe 1 desktop overlay top
-const K1_OVERLAY_TOP = 191;
+const K1_OVERLAY_TOP = 129;
 // Kademe 2 desktop overlay top
 const K2_OVERLAY_TOP = 429;
 // Mobil overlay top (her iki kademe)
@@ -48,8 +48,7 @@ const MOB_OVERLAY_TOP = 104;
 // ─── Temizleme ────────────────────────────────────────────────────────────
 function destroyGrid() {
   if (gridAnimId) { cancelAnimationFrame(gridAnimId); gridAnimId = null; }
-  if (gridOverlay && gridOverlay.parentNode) gridOverlay.remove();
-  gridOverlay = null;
+  if (gridOverlay && gridOverlay.parentNode) { gridOverlay.remove(); gridOverlay = null; }
   document.querySelectorAll('.grid-glitch-video').forEach(function(v) {
     v.pause(); v.remove();
   });
@@ -99,7 +98,7 @@ function buildGrid(items, onSelect, overlayTop) {
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-  'padding:0 ' + PAD_H + ' 80px;' +
+'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
     'box-sizing:border-box;' +
     '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
     'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
