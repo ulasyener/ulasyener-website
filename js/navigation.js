@@ -33,9 +33,9 @@ function runGlitch(callback) {
 // ─── State ────────────────────────────────────────────────────────────────
 let navState = {
   section:     null,  // 'works' | 'academic' | 'about' | 'contact'
-  category:    null,  // 'interior' vb.
-  subcategory: null,  // 'interior-retail' vb.
-  project:     null   // 'cafe' vb.
+  category:    null,
+  subcategory: null,
+  project:     null
 };
 
 // ─── Panel yardımcıları ───────────────────────────────────────────────────
@@ -85,7 +85,7 @@ function makePanelNav(items) {
 
   items.forEach((item, i) => {
     const isLast = i === items.length - 1;
-    if (isLast) return; // aktif sayfa nav'da gösterilmiyor, sadece back butonları
+    if (isLast) return;
 
     const btn = document.createElement('span');
     btn.className = 'back-btn';
@@ -97,204 +97,11 @@ function makePanelNav(items) {
   return nav;
 }
 
-// ─── WORKS ────────────────────────────────────────────────────────────────
-async function renderWorks() {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
-  const root = getPanelRoot();
-
-  const el = document.createElement('div');
-  el.className = 'panel';
-
-  const label = document.createElement('div');
-  label.className = 'sec-label sec-label--home';
-  label.textContent = 'Works';
-  label.addEventListener('click', goHome);
-  el.appendChild(label);
-
-  const list = document.createElement('div');
-  list.className = 'category-list';
-  list.innerHTML = data.categories.map(cat => `
-    <div class="category-item" data-cat="${cat.id}">
-      <div class="cat-label">${cat.label}</div>
-      <div class="cat-desc">${cat.description}</div>
-    </div>
-  `).join('');
-  el.appendChild(list);
-
-  list.querySelectorAll('.category-item').forEach(item => {
-    item.addEventListener('click', () => showCategory(item.dataset.cat));
-  });
-
-  root.appendChild(el);
-}
-
-// ─── Kategori (ör. Interior) ──────────────────────────────────────────────
-async function showCategory(categoryId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
-  const cat  = data.categories.find(c => c.id === categoryId);
-  if (!cat) return;
-
-  runGlitch(() => {
-    navState.category    = categoryId;
-    navState.subcategory = null;
-
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    // Geri butonu: ← WORKS
-    el.appendChild(makePanelNav([
-      { label: 'Works', action: () => showSection('works') },
-      { label: cat.label }
-    ]));
-
-    // Başlık — tıklanınca Works'e döner
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = cat.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('works')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-    list.innerHTML = cat.subcategories.map(sub => `
-      <div class="subcat-item" data-sub="${sub.id}">
-        <div class="subcat-label">${sub.label}</div>
-        ${sub.description ? `<div class="cat-desc">${sub.description}</div>` : ''}
-      </div>
-    `).join('');
-    el.appendChild(list);
-
-    list.querySelectorAll('.subcat-item').forEach(item => {
-      item.addEventListener('click', () => showSubcategory(categoryId, item.dataset.sub));
-    });
-
-    root.appendChild(el);
-  });
-}
-
-// ─── Alt kategori → Kademe 1 grid ─────────────────────────────────────────
-async function showSubcategory(categoryId, subcategoryId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
-  const cat  = data.categories.find(c => c.id === categoryId);
-  const sub  = cat?.subcategories.find(s => s.id === subcategoryId);
-  if (!sub) return;
-
-  // Sound/Radio özel sayfası
-  if (subcategoryId === 'sound-radio') {
-    showRadio(categoryId, cat.label);
-    return;
-  }
-
-  runGlitch(async () => {
-    navState.subcategory = subcategoryId;
-    navState.project     = null;
-
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel panel-grid';
-
-    // Geri butonları: ← WORKS  ← CAT
-    el.appendChild(makePanelNav([
-      { label: 'Works',   action: () => showSection('works') },
-      { label: cat.label, action: () => showCategory(categoryId) },
-      { label: sub.label }
-    ]));
-
-    // Başlık — tıklanınca category'e döner
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = sub.label;
-    label.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
-    el.appendChild(label);
-
-    root.appendChild(el);
-
-    if (sub.projects.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty-state';
-      empty.textContent = '— coming soon —';
-      el.appendChild(empty);
-      return;
-    }
-
-    const projects = await Promise.all(
-      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()))
-    );
-
-    window.grid3d = showProjectGrid(projects, (proj) => {
-      openPhotoGrid(proj, categoryId, subcategoryId, cat.label, sub.label);
-    });
-
-  });
-}
-
-// ─── Kademe 2: Proje fotoğrafları ─────────────────────────────────────────
-function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
-  runGlitch(() => {
-    navState.project = project.id;
-
-    const root        = getPanelRoot();
-    const existingNav = root.querySelector('.panel-nav');
-
-    if (existingNav) {
-      existingNav.innerHTML = '';
-
-      // ← WORKS
-      const backWorks = document.createElement('span');
-      backWorks.className   = 'back-btn';
-      backWorks.textContent = '← Works';
-      backWorks.addEventListener('click', () => runGlitch(() => showSection('works')));
-      existingNav.appendChild(backWorks);
-
-      // ← CAT
-      const backCat = document.createElement('span');
-      backCat.className   = 'back-btn';
-      backCat.textContent = '← ' + catLabel;
-      backCat.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
-      existingNav.appendChild(backCat);
-
-      // ← SUBCAT
-      const backBtn = document.createElement('span');
-      backBtn.className   = 'back-btn';
-      backBtn.textContent = '← ' + subLabel;
-      backBtn.addEventListener('click', () =>
-        runGlitch(() => showSubcategory(categoryId, subcategoryId))
-      );
-      existingNav.appendChild(backBtn);
-
-      // Proje başlığı
-      const title = document.createElement('span');
-      title.className = 'proj-nav-title';
-      title.innerHTML = `${project.title} <span style="opacity:.4">${project.year}</span>`;
-      existingNav.appendChild(title);
-    }
-
-    if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
-    window.grid3d = showPhotoGrid(project, (data) => {
-      if (project.images && project.images.length) {
-        openLightbox(project.images, data.index);
-      }
-    });
-
-    // Sol bilgi paneli
-    renderProjectInfoPanel(project);
-  });
-}
-
 // ─── Scramble Text Efekti ─────────────────────────────────────────────────
 function scrambleText(el, finalText, duration = 1800) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const steps = Math.floor(duration / 60);
   let step = 0;
-  // Her pozisyon için sabit rastgele karakter — titremez, sadece reveal olur
   const fixedRandom = Array.from(finalText).map(c =>
     c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
   );
@@ -322,17 +129,16 @@ function renderProjectInfoPanel(project) {
   if (existing) existing.remove();
 
   const isMobile = window.innerWidth <= 768;
-
-  // Mobilde bilgi paneli gösterilmez — ekran çok küçük
   if (isMobile) return;
+
   const fovRad     = (50 * Math.PI) / 180;
   const visibleH   = 2 * Math.tan(fovRad / 2) * 7.5;
-  const tileSize   = isMobile ? 2.2 : 2.8;
+  const tileSize   = 2.8;
   const tilePx     = Math.round((tileSize / visibleH) * window.innerHeight);
-  const panelTop   = isMobile ? 160 : 235;
-  const panelLeft  = isMobile ? 16  : 100;
-  const panelWidth = isMobile ? Math.min(160, window.innerWidth - 32) : 180;
-  const panelPad   = isMobile ? '12px 14px 16px' : '20px 18px 22px';
+  const panelTop   = 235;
+  const panelLeft  = 100;
+  const panelWidth = 180;
+  const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
   panel.id = 'proj-info-panel';
@@ -348,9 +154,9 @@ function renderProjectInfoPanel(project) {
     backdrop-filter: blur(3px);
     padding: ${panelPad};
     box-sizing: border-box;
+    overflow: hidden;
   `;
 
-  // Başlık
   const titleEl = document.createElement('span');
   titleEl.style.cssText = `
     font-family: 'Space Grotesk', sans-serif;
@@ -426,8 +232,6 @@ function renderProjectInfoPanel(project) {
     pointer-events: none;
     z-index: 1;
   `;
-  panel.style.position = 'fixed';
-  panel.style.overflow = 'hidden';
   panel.appendChild(scanLine);
 
   let scanPos = 0;
@@ -443,11 +247,10 @@ function renderProjectInfoPanel(project) {
   // ── Glitch flash ─────────────────────────────────────────────────────
   let glitchTimeout = null;
   function scheduleGlitch() {
-    const delay = 3000 + Math.random() * 5000; // 3-8 sn arası
+    const delay = 3000 + Math.random() * 5000;
     glitchTimeout = setTimeout(() => {
       if (!document.body.contains(panel)) return;
 
-      // Kısa bir kayma + opacity flash
       const offsetX = (Math.random() - 0.5) * 6;
       const offsetY = (Math.random() - 0.5) * 3;
       panel.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
@@ -473,7 +276,7 @@ function renderProjectInfoPanel(project) {
   });
   observer.observe(document.body, { childList: true });
 
-  // Scramble efektleri — stagger ile sırayla
+  // Scramble efektleri
   scrambleText(titleEl, project.title.toUpperCase(), 1400);
   valueEls.forEach(({ el, text }, i) => {
     setTimeout(() => scrambleText(el, text, 1000), 400 + i * 200);
@@ -495,7 +298,6 @@ function openLightbox(images, startIndex) {
     display:flex;align-items:center;justify-content:center;
   `;
 
-  // Fotoğraf
   const img = document.createElement('img');
   img.style.cssText = `
     max-width:88vw;max-height:88vh;
@@ -510,11 +312,9 @@ function openLightbox(images, startIndex) {
       img.src = images[index].src;
       img.onload = () => { img.style.opacity = '1'; };
     }, 150);
-    // Sayaç güncelle
     counter.textContent = (index + 1) + ' / ' + images.length;
   }
 
-  // ── Ok butonları ──
   function makeArrow(dir) {
     const btn = document.createElement('button');
     btn.style.cssText = `
@@ -538,7 +338,6 @@ function openLightbox(images, startIndex) {
     return btn;
   }
 
-  // ── Sayaç ──
   const counter = document.createElement('div');
   counter.style.cssText = `
     position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
@@ -547,7 +346,6 @@ function openLightbox(images, startIndex) {
     z-index:901;user-select:none;
   `;
 
-  // ── Kapat butonu ──
   const closeBtn = document.createElement('div');
   closeBtn.style.cssText = `
     position:fixed;top:24px;right:32px;
@@ -572,7 +370,6 @@ function openLightbox(images, startIndex) {
     if (e.target === box) closeLightbox();
   });
 
-  // ── Klavye ──
   function onKey(e) {
     if (e.key === 'Escape')     closeLightbox();
     if (e.key === 'ArrowRight') { current = (current + 1) % images.length; loadImg(current); }
@@ -587,900 +384,11 @@ function openLightbox(images, startIndex) {
   box.appendChild(closeBtn);
   document.body.appendChild(box);
 
-  // İlk fotoğrafı yükle
   loadImg(current);
 
-  // Fade in
   box.style.opacity = '0';
   box.style.transition = 'opacity 0.25s ease';
   requestAnimationFrame(() => { box.style.opacity = '1'; });
-}
-
-// ─── SOUND / RADIO — özel sayfa ───────────────────────────────────────────
-function showRadio(categoryId, catLabel) {
-  runGlitch(() => {
-    navState.subcategory = 'sound-radio';
-    navState.project     = null;
-
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    // Geri butonları: ← WORKS  ← SOUND
-    el.appendChild(makePanelNav([
-      { label: 'Works',   action: () => showSection('works') },
-      { label: catLabel,  action: () => showCategory(categoryId) },
-      { label: 'Radio' }
-    ]));
-
-    // Başlık — tıklanınca Sound kategorisine döner
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = 'Radio';
-    label.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
-    el.appendChild(label);
-
-    const radioSections = [
-      { id: 'live',    label: 'Live',    desc: 'Live radio broadcasts and streaming sessions.' },
-      { id: 'archive', label: 'Archive', desc: 'Archival recordings from past broadcasts and sessions.' },
-      { id: 'pirate',  label: 'Pirate',  desc: 'Recordings and transmissions from independent pirate radio platforms.' }
-    ];
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-    radioSections.forEach(s => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `
-        <div class="subcat-label">${s.label}</div>
-        <div class="cat-desc">${s.desc}</div>
-      `;
-      item.addEventListener('click', () => showRadioSection(s, categoryId, catLabel));
-      list.appendChild(item);
-    });
-    el.appendChild(list);
-
-    root.appendChild(el);
-  });
-}
-
-// ─── Radio alt sayfa ──────────────────────────────────────────────────────
-function showRadioSection(section, categoryId, catLabel) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Works',   action: () => showSection('works') },
-      { label: catLabel,  action: () => showCategory(categoryId) },
-      { label: 'Radio',   action: () => showRadio(categoryId, catLabel) },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showRadio(categoryId, catLabel)));
-    el.appendChild(label);
-
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-
-    root.appendChild(el);
-  });
-}
-
-// ─── ACADEMIC ─────────────────────────────────────────────────────────────
-function renderAcademic() {
-  const sections = [
-    {
-      id: 'projects',
-      label: 'Projects',
-      subs: [
-        { id: 'bachelor', label: 'Bachelor' },
-        { id: 'master',   label: 'Master' },
-        { id: 'phd',      label: 'PhD' }
-      ]
-    },
-    {
-      id: 'articles',
-      label: 'Articles',
-      subs: [
-        { id: 'essays',   label: 'Essays' },
-        { id: 'reviews',  label: 'Reviews' },
-        { id: 'writings', label: 'Writings' }
-      ]
-    },
-    {
-      id: 'research',
-      label: 'Research',
-      subs: [
-        { id: 'media-architecture', label: 'Media Architecture' },
-        { id: 'immersive-media',    label: 'Immersive Media' },
-        { id: 'artistic-research',  label: 'Artistic Research' }
-      ]
-    },
-    {
-      id: 'archive',
-      label: 'Archive',
-      subs: [
-        { id: 'fremde-tueren', label: 'Fremde Türen / El Kapıları' }
-      ]
-    }
-  ];
-
-  const root = getPanelRoot();
-  const el   = document.createElement('div');
-  el.className = 'panel';
-
-  const label = document.createElement('div');
-  label.className = 'sec-label sec-label--home';
-  label.textContent = 'Academic';
-  label.addEventListener('click', goHome);
-  el.appendChild(label);
-
-  const list = document.createElement('div');
-  list.className = 'category-list';
-
-  sections.forEach(s => {
-    const item = document.createElement('div');
-    item.className = 'category-item';
-    item.innerHTML = `
-      <div class="cat-label">${s.label}</div>
-      <div class="subcat-list-inline">${s.subs.map(sub => sub.label).join(' &middot; ')}</div>
-    `;
-    item.addEventListener('click', () => showAcademicSection(s));
-    list.appendChild(item);
-  });
-
-  el.appendChild(list);
-  root.appendChild(el);
-}
-
-// ─── Academic alt sayfa ────────────────────────────────────────────────────
-function showAcademicSection(section) {
-  if (section.id === 'archive')  { showArchiveSection(section); return; }
-  if (section.id === 'projects') { showAcademicProjects(section); return; }
-  if (section.id === 'articles') { showAcademicArticles(section); return; }
-  if (section.id === 'research') { showAcademicResearch(section); return; }
-
-  // fallback
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-    const el = document.createElement('div');
-    el.className = 'panel';
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Projects ────────────────────────────────────────────────────
-function showAcademicProjects(section) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
-      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicProjects));
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Articles (accordion) ───────────────────────────────────────
-function showAcademicArticles(section) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'category-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'category-item accordion-item';
-      item.innerHTML = `
-        <div class="cat-label">${sub.label}</div>
-        <div class="cat-arrow accordion-arrow">&#x002B;</div>
-        <div class="accordion-body"></div>
-      `;
-
-      function toggle() {
-        const isOpen = item.classList.contains('is-open');
-        const arrow  = item.querySelector('.accordion-arrow');
-        const body   = item.querySelector('.accordion-body');
-        if (isOpen) {
-          item.classList.remove('is-open');
-          arrow.innerHTML = '&#x002B;';
-          body.innerHTML  = '';
-          body.style.maxHeight = '0';
-        } else {
-          item.classList.add('is-open');
-          arrow.innerHTML = '&#x2212;';
-          body.innerHTML  = `<div class="accordion-content"><p class="empty-state" style="margin-top:16px;text-align:left;">— coming soon —</p></div>`;
-          body.style.maxHeight = body.scrollHeight + 'px';
-        }
-      }
-
-      item.querySelector('.cat-label').addEventListener('click', toggle);
-      item.querySelector('.accordion-arrow').addEventListener('click', toggle);
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Research ────────────────────────────────────────────────────
-function showAcademicResearch(section) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
-      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicResearch));
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Coming Soon sayfası ────────────────────────────────────────
-function showAcademicComingSoon(title, parentSection, parentFn) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic',          action: () => showSection('academic') },
-      { label: parentSection.label, action: () => parentFn(parentSection) },
-      { label: title }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = title;
-    label.addEventListener('click', () => parentFn(parentSection));
-    el.appendChild(label);
-
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-
-    root.appendChild(el);
-  });
-}
-
-// ─── Archive → Fremde Türen listesi ───────────────────────────────────────
-function showArchiveSection(section) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
-      item.addEventListener('click', () => showFremdeTueren(section));
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Fremde Türen sayfası ─────────────────────────────────────────────────
-const FREMDE_SECTIONS = [
-  {
-    title: 'Archive',
-    items: [
-      { label: 'Texts',         desc: 'Literature, poetry, stories, and written narratives related to Turkish migration to Germany.' },
-      { label: 'Music',         desc: 'Albums, songs, records, and cassette tapes preserving sonic memories and cultural expressions.' },
-      { label: 'Moving Images', desc: 'Films, television programmes, posters, video recordings, and visual representations of migration.' },
-      { label: 'Printed Media', desc: 'Newspapers, magazines, brochures, and other printed materials documenting migration histories.' },
-      { label: 'Voices',        desc: 'Interviews, testimonies, conversations, and audio recordings collected through oral history practices.' },
-      { label: 'Documents',     desc: 'Letters, manuscripts, personal collections, and various archival materials.' },
-      { label: 'Sources',       desc: 'Written, visual, and audiovisual references, bibliographies, and external archives.' }
-    ]
-  },
-  {
-    title: 'Research',
-    items: [
-      { label: 'Methods',   desc: 'Autoethnography · Oral History · Media Archaeology · Practice-Based Artistic Research · Marxist Research Methods' },
-      { label: 'Theory',    desc: 'Marxist Theory · Memory Studies · Migration Studies · Media Theory · Spatial Theory' },
-      { label: 'Practices', desc: 'Documentary Practices · Archival Reconstruction · Spatial Storytelling · Audiovisual Experiments · Interactive Media · Radio & Podcast Production · Digital Heritage · Worldbuilding' },
-      { label: 'Outputs',   desc: 'PhD Project · Essays · Articles · Publications · Conference Papers · Lectures · Documents · Bibliographies' }
-    ]
-  },
-  {
-    title: 'Works',
-    items: [
-      { label: 'Films',             desc: 'Documentary Films · Video Essays' },
-      { label: 'Audio',             desc: 'Radio Programmes · Podcasts · Sound Works' },
-      { label: 'Installations',     desc: 'Multimedia Installations · Spatial Installations' },
-      { label: 'Interactive Media', desc: 'XR Experiences · Interactive Narratives · Digital Archives' },
-      { label: 'Games',             desc: 'Open World Environments · Narrative Experiments' },
-      { label: 'Web',               desc: 'Websites · Online Platforms' },
-      { label: 'Exhibitions',       desc: 'Exhibitions · Screenings · Presentations' }
-    ]
-  }
-];
-
-function showFremdeTueren(archiveSection) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: 'Archive',  action: () => showArchiveSection(archiveSection) },
-      { label: 'Fremde Türen / El Kapıları' }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = 'Fremde Türen / El Kapıları';
-    label.addEventListener('click', () => runGlitch(() => showArchiveSection(archiveSection)));
-    el.appendChild(label);
-
-    FREMDE_SECTIONS.forEach(sec => {
-      // Bölüm satırı — category-item stilinde, hover/touch ile alt liste açılır
-      const secItem = document.createElement('div');
-      secItem.className = 'category-item fremde-sec-item';
-      secItem.innerHTML = `
-        <div class="cat-label">${sec.title}</div>
-        <div class="fremde-sec-body"></div>
-      `;
-
-      const body = secItem.querySelector('.fremde-sec-body');
-
-      function buildBody() {
-        if (body.children.length) return; // zaten dolu
-        const list = document.createElement('div');
-        list.className = 'subcategory-list';
-        sec.items.forEach(item => {
-          const div = document.createElement('div');
-          div.className = 'subcat-item';
-          div.innerHTML = `
-            <div class="subcat-label">${item.label}</div>
-            <div class="cat-desc">${item.desc}</div>
-          `;
-          div.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showFremdeTuerenItem(item, sec, archiveSection);
-          });
-          list.appendChild(div);
-        });
-        body.appendChild(list);
-      }
-
-      // Desktop + mobil: tıkla aç/kapat
-      secItem.addEventListener('click', () => {
-        buildBody();
-        const isOpen = secItem.classList.contains('is-open');
-        if (isOpen) {
-          body.style.maxHeight = '0';
-          secItem.classList.remove('is-open');
-        } else {
-          body.style.maxHeight = body.scrollHeight + 'px';
-          secItem.classList.add('is-open');
-        }
-      });
-
-      el.appendChild(secItem);
-    });
-
-    root.appendChild(el);
-  });
-}
-
-// ─── Fremde Türen bölüm sayfası (Archive / Research / Works) ──────────────
-function showFremdeTuerenSection(sec, archiveSection) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic',                    action: () => showSection('academic') },
-      { label: 'Archive',                     action: () => showArchiveSection(archiveSection) },
-      { label: 'Fremde Türen / El Kapıları',  action: () => showFremdeTueren(archiveSection) },
-      { label: sec.title }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = sec.title;
-    label.addEventListener('click', () => showFremdeTueren(archiveSection));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    sec.items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'subcat-item';
-      div.innerHTML = `
-        <div class="subcat-label">${item.label}</div>
-        <div class="cat-desc">${item.desc}</div>
-      `;
-      div.addEventListener('click', () =>
-        showFremdeTuerenItem(item, sec, archiveSection)
-      );
-      list.appendChild(div);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Fremde Türen alt öğe sayfası (coming soon) ───────────────────────────
-function showFremdeTuerenItem(item, sec, archiveSection) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic',                    action: () => showSection('academic') },
-      { label: 'Archive',                     action: () => showArchiveSection(archiveSection) },
-      { label: 'Fremde Türen / El Kapıları',  action: () => showFremdeTueren(archiveSection) },
-      { label: sec.title,                     action: () => showFremdeTuerenSection(sec, archiveSection) },
-      { label: item.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = item.label;
-    label.addEventListener('click', () => showFremdeTuerenSection(sec, archiveSection));
-    el.appendChild(label);
-
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-
-    root.appendChild(el);
-  });
-}
-
-// ─── ABOUT ────────────────────────────────────────────────────────────────
-function renderAbout() {
-  const sections = [
-    { id: 'bio',        label: 'Bio' },
-    { id: 'education',  label: 'Education' },
-    { id: 'experience', label: 'Work Experience' },
-    { id: 'teaching',   label: 'Teaching' },
-    { id: 'software',   label: 'Software' }
-  ];
-
-  const root = getPanelRoot();
-  const el   = document.createElement('div');
-  el.className = 'panel';
-
-  const label = document.createElement('div');
-  label.className = 'sec-label sec-label--home';
-  label.textContent = 'About';
-  label.addEventListener('click', goHome);
-  el.appendChild(label);
-
-  const list = document.createElement('div');
-  list.className = 'category-list';
-
-  sections.forEach(s => {
-    const item = document.createElement('div');
-    item.className = 'category-item accordion-item';
-    item.innerHTML = `
-      <div class="cat-label">${s.label}</div>
-      <div class="cat-arrow accordion-arrow">&#x002B;</div>
-      <div class="accordion-body"></div>
-    `;
-    item.querySelector('.cat-label').addEventListener('click', () => toggleAccordion(item, s.id));
-    item.querySelector('.accordion-arrow').addEventListener('click', () => toggleAccordion(item, s.id));
-    list.appendChild(item);
-  });
-
-  // Area of Work — ayrı accordion
-  const aowItem = document.createElement('div');
-  aowItem.className = 'category-item accordion-item';
-  aowItem.innerHTML = `
-    <div class="cat-label">Area of Work</div>
-    <div class="cat-arrow accordion-arrow">&#x002B;</div>
-    <div class="accordion-body"></div>
-  `;
-  function toggleAow() {
-    const isOpen = aowItem.classList.contains('is-open');
-    const arrow  = aowItem.querySelector('.accordion-arrow');
-    const body   = aowItem.querySelector('.accordion-body');
-    if (isOpen) {
-      aowItem.classList.remove('is-open');
-      arrow.innerHTML      = '&#x002B;';
-      body.innerHTML       = '';
-      body.style.maxHeight = '0';
-    } else {
-      aowItem.classList.add('is-open');
-      arrow.innerHTML = '&#x2212;';
-      const areas = [
-        { label: 'Architecture',        desc: 'Spatial design, restoration, visualization and competition projects.' },
-        { label: 'Computation',         desc: 'Three.js, TouchDesigner, Unreal Engine, parametric and generative tools.' },
-        { label: 'Culture',             desc: 'Documentary practices, archival research, migration narratives and media archaeology.' },
-        { label: 'Teaching',            desc: 'Lectures and workshops at Bauhaus-Universität Weimar and international institutions.' },
-        { label: 'Event Organisation',  desc: 'Curatorial and production experience across exhibitions, screenings and installations.' }
-      ];
-      body.innerHTML = `<div class="accordion-content">${areas.map(a => `
-        <div class="about-row">
-          <div class="about-period" style="font-family:var(--f-sans);font-size:11px;font-weight:500;color:rgba(0,0,0,0.7);letter-spacing:.04em;">${a.label}</div>
-          <div class="about-detail"><div class="about-sub">${a.desc}</div></div>
-        </div>`).join('')}</div>`;
-      body.style.maxHeight = body.scrollHeight + 'px';
-    }
-  }
-  aowItem.querySelector('.cat-label').addEventListener('click', toggleAow);
-  aowItem.querySelector('.accordion-arrow').addEventListener('click', toggleAow);
-  list.appendChild(aowItem);
-
-  // Download bölümü
-  const dlItem = document.createElement('div');
-  dlItem.className = 'category-item';
-  dlItem.innerHTML = `
-    <div class="cat-label">Download</div>
-    <div class="download-btns">
-      <a class="dl-btn" href="files/portfolio.pdf" download>Portfolio</a>
-      <a class="dl-btn" href="files/cv.pdf" download>CV</a>
-    </div>
-  `;
-  list.appendChild(dlItem);
-
-  el.appendChild(list);
-  root.appendChild(el);
-}
-
-function toggleAccordion(item, sectionId) {
-  const isOpen = item.classList.contains('is-open');
-  const arrow  = item.querySelector('.accordion-arrow');
-  const body   = item.querySelector('.accordion-body');
-
-  if (isOpen) {
-    item.classList.remove('is-open');
-    arrow.innerHTML = '&#x002B;';
-    body.innerHTML  = '';
-    body.style.maxHeight = '0';
-  } else {
-    item.classList.add('is-open');
-    arrow.innerHTML = '&#x2212;';
-    body.innerHTML  = getAboutContent(sectionId);
-    body.style.maxHeight = body.scrollHeight + 'px';
-  }
-}
-
-function getAboutContent(sectionId) {
-  if (sectionId === 'bio') {
-    return `
-      <div class="accordion-content">
-        <p>Ulas Yener is an architect, 3D artist, and interdisciplinary media researcher based in Germany. With nearly fifteen years of experience in architecture, visualization, and digital media production, his practice combines spatial design with moving images, photography, sound, and immersive technologies. His work explores memory, migration, and cultural narratives through documentary practices, archives, and interactive storytelling, creating experiences that move between physical and virtual spaces.</p>
-        <p style="margin-top:12px;">Alongside his professional work in architecture and visualization, he develops artistic and research-based projects that investigate new forms of storytelling and the relationship between media, memory, and space.</p>
-      </div>`;
-  }
-
-  if (sectionId === 'education') {
-    const items = [
-      { period: '2022 – Present', title: 'PhD Candidate, Practice-Based Artistic Research', sub: 'Bauhaus-Universität Weimar' },
-      { period: '2017 – 2021',    title: 'M.Sc., MediaArchitecture',                        sub: 'Bauhaus-Universität Weimar' },
-      { period: '2014 – 2017',    title: 'M.Sc., Architectural Design Computing',            sub: 'Istanbul Technical University' },
-      { period: '2013',           title: 'Guest Student, M.Sc. Industrial Design',           sub: 'Istanbul Technical University' },
-      { period: '2008 – 2012',    title: 'B.F.A., Interior Architecture and Environmental Design', sub: 'Hacettepe University' }
-    ];
-    return `<div class="accordion-content">${items.map(it => `
-      <div class="about-row">
-        <div class="about-period">${it.period}</div>
-        <div class="about-detail">
-          <div class="about-title">${it.title}</div>
-          <div class="about-sub">${it.sub}</div>
-        </div>
-      </div>`).join('')}</div>`;
-  }
-
-  if (sectionId === 'experience') {
-    const items = [
-      { period: '2023 – 2026', title: 'Competition Management Architect (Pre-Examiner)', sub: 'Kohler Grohe Architekten, Stuttgart' },
-      { period: '2022 – 2023', title: 'Freelance XR Designer',                           sub: 'Aesculap AG, Tuttlingen' },
-      { period: '2018 – 2024', title: 'Freelance Lecturer',                              sub: 'Bauhaus-Universität Weimar, Faculty of Architecture and Urbanism' },
-      { period: '2017 – 2023', title: 'Freelance Architectural Designer',                sub: 'Schmitz-Riol Architekten, Weimar' },
-      { period: '2014 – 2016', title: 'Interior Architect and Product Designer',         sub: '304 Design, Istanbul' },
-      { period: '2013 – 2014', title: 'Interior Architect and Product Designer',         sub: 'cisimdesign, Istanbul' },
-      { period: '2012 – 2013', title: 'Interior Architect and Product Designer',         sub: 'projemasif, Istanbul' }
-    ];
-    return `<div class="accordion-content">${items.map(it => `
-      <div class="about-row">
-        <div class="about-period">${it.period}</div>
-        <div class="about-detail">
-          <div class="about-title">${it.title}</div>
-          <div class="about-sub">${it.sub}</div>
-        </div>
-      </div>`).join('')}</div>`;
-  }
-
-  if (sectionId === 'teaching') {
-    const items = [
-      { period: '2023 – 2024', title: 'Spatial Narratives, Lecturer',                    sub: 'Bauhaus Spring School 2024, Bauhaus-Universität Weimar' },
-      { period: '2023 – 2024', title: 'Re-Located Stories, Lecturer',                    sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2021 – 2022', title: 'Contemporary Tools for Design, Lecturer',         sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2020 – 2021', title: 'Modelling Bauhaus Workshop, Workshop Instructor', sub: 'Faculty of Art and Design, Kadir Has University' },
-      { period: '2019 – 2020', title: 'Professional Presentation Methods, Lecturer',     sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen, Workshop Instructor', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling, Lecturer', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' }
-    ];
-    return `<div class="accordion-content">${items.map(it => `
-      <div class="about-row">
-        <div class="about-period">${it.period}</div>
-        <div class="about-detail">
-          <div class="about-title">${it.title}</div>
-          <div class="about-sub">${it.sub}</div>
-        </div>
-      </div>`).join('')}</div>`;
-  }
-
-  if (sectionId === 'software') {
-    const categories = [
-      { label: '2D · 3D · BIM',        items: ['Autodesk 3ds Max', 'Autodesk AutoCAD', 'Vectorworks', 'Blender', 'Cinema 4D', 'V-Ray Renderer'] },
-      { label: 'Image · Video · Sound', items: ['Adobe Photoshop', 'Adobe Lightroom', 'Adobe Illustrator', 'Adobe InDesign', 'Adobe After Effects', 'Adobe Premiere Pro', 'Adobe Audition', 'Reaper', 'Audacity', 'Ableton Live', 'Serato'] },
-      { label: 'Game Engine',           items: ['Unreal Engine', 'Unity 3D'] },
-      { label: '3D & Photogrammetry',   items: ['Adobe Substance 3D Painter', 'Adobe Substance 3D Designer', 'Autodesk Recap Pro', 'Reality Capture', 'Polycam'] },
-      { label: 'Computational Tools',   items: ['Python', 'TouchDesigner', 'Three.js', 'ChatGPT', 'Claude', 'Leonardo AI', 'Midjourney', 'RunwayML'] },
-      { label: 'Digital Tools',         items: ['Microsoft Office', 'Canva', 'WordPress'] }
-    ];
-    return `<div class="accordion-content">${categories.map(cat => `
-      <div class="about-row">
-        <div class="about-period">${cat.label}</div>
-        <div class="about-detail">
-          <div class="about-sub">${cat.items.join(', ')}</div>
-        </div>
-      </div>`).join('')}</div>`;
-  }
-
-  return `<div class="accordion-content"><p>— coming soon —</p></div>`;
-}
-
-// ─── CONTACT ──────────────────────────────────────────────────────────────
-function renderContact() {
-  const root = getPanelRoot();
-  const el   = document.createElement('div');
-  el.className = 'panel';
-
-  const label = document.createElement('div');
-  label.className = 'sec-label sec-label--home';
-  label.textContent = 'Contact';
-  label.addEventListener('click', goHome);
-  el.appendChild(label);
-
-  const list = document.createElement('div');
-  list.className = 'category-list';
-
-  const sections = [
-    { id: 'info',    label: 'Info' },
-    { id: 'social',  label: 'Social' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
-  sections.forEach(s => {
-    const item = document.createElement('div');
-    item.className = 'category-item';
-    item.innerHTML = `<div class="cat-label">${s.label}</div>`;
-    item.addEventListener('click', () => showContactSection(s));
-    list.appendChild(item);
-  });
-
-  el.appendChild(list);
-  root.appendChild(el);
-}
-
-// ─── Contact alt sayfa ────────────────────────────────────────────────────
-function showContactSection(s) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Contact', action: () => showSection('contact') },
-      { label: s.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = s.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('contact')));
-    el.appendChild(label);
-
-    if (s.id === 'info') {
-      const list = document.createElement('div');
-      list.className = 'category-list';
-      list.innerHTML = `
-        <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val">hello [at] ulasyener.com</span></div>
-        <div class="contact-row"><span class="contact-key">Phone</span><a href="tel:+491632078616" class="contact-val">+49 163 207 8616</a></div>
-        <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
-        <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
-        <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">Weimar · Stuttgart · Istanbul</span></div>
-        <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 Stuttgart</span></div>
-        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">Open to collaboration</span></div>
-        <div class="contact-row" style="padding-top:20px;">
-          <span class="contact-key"></span>
-          <div class="download-btns">
-            <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
-            <a class="dl-btn" href="files/cv.pdf" download>CV</a>
-          </div>
-        </div>
-      `;
-      el.appendChild(list);
-    }
-
-    if (s.id === 'social') {
-      const links = [
-        { label: 'Instagram', href: '#' },
-        { label: 'LinkedIn',  href: 'https://linkedin.com/in/ulasynr' },
-        { label: 'Behance',   href: 'https://behance.net/ulasynr' },
-        { label: 'Vimeo',     href: 'https://vimeo.com/ulasyener' },
-        { label: 'Patreon',   href: '#' },
-        { label: 'Substack',  href: '#' },
-        { label: 'GitHub',    href: '#' },
-        { label: 'bauhaus.fm',href: '#' }
-      ];
-      const wrap = document.createElement('div');
-      wrap.className = 'social-links';
-      wrap.style.paddingTop = '16px';
-      wrap.innerHTML = links.map(l =>
-        `<a class="social-link-btn" href="${l.href}" target="_blank">${l.label}</a>`
-      ).join('');
-      el.appendChild(wrap);
-    }
-
-    if (s.id === 'contact') {
-      const wrap = document.createElement('div');
-      wrap.style.paddingTop = '16px';
-      wrap.innerHTML = `
-        <div class="contact-row" style="padding:0 0 12px;">
-          <span class="contact-key">—</span>
-          <span class="contact-val" style="font-size:12px;line-height:1.8;">
-            For project inquiries, collaborations, or general questions, feel free to reach out directly.
-          </span>
-        </div>
-        <div class="contact-form">
-          <input type="text"     class="cf-input" placeholder="Name" />
-          <input type="email"    class="cf-input" placeholder="Email" />
-          <input type="text"     class="cf-input" placeholder="Subject" />
-          <textarea              class="cf-input cf-textarea" placeholder="Message" rows="5"></textarea>
-          <button class="cf-btn" onclick="handleContactSubmit(this)">Send</button>
-        </div>
-      `;
-      el.appendChild(wrap);
-    }
-
-    root.appendChild(el);
-  });
-}
-
-function handleContactSubmit(btn) {
-  const form   = btn.closest('.contact-form');
-  const inputs = form.querySelectorAll('.cf-input');
-  const name   = inputs[0].value.trim();
-  const email  = inputs[1].value.trim();
-  const msg    = inputs[3].value.trim();
-  if (!name || !email || !msg) { btn.textContent = 'Fill in required fields'; setTimeout(() => { btn.textContent = 'Send'; }, 2000); return; }
-  btn.textContent = 'Sent —';
-  btn.disabled = true;
-  inputs.forEach(i => { i.disabled = true; });
 }
 
 // ─── Menü bağlantıları ────────────────────────────────────────────────────
