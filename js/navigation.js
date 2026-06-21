@@ -131,7 +131,7 @@ function renderProjectInfoPanel(project) {
   const isMobile = window.innerWidth <= 768;
   if (isMobile) return;
 
-const panelTop   = 235;
+const panelTop   = 323;
 const panelLeft  = 100;
 const panelWidth = 180;
 const tilePx     = 204;
