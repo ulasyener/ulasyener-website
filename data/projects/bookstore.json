@@ -1,12 +1,27 @@
 {
   "id": "bookstore",
-  "title": "Bookstore",
-  "category": "interior",
-  "subcategory": "interior-retail",
-  "year": "2022",
-  "description": "",
+  "title": "Read & Rest Bookstore Cafe",
+  "year": "2014",
+  "location": "Göktürk, Istanbul",
+  "coordinates": [41.1776, 28.8867],
+  "office": "Cisim Design",
+  "responsibilities": ["Interior Architect", "Project Architect", "Construction Management"],
+  "program": "Bookstore + Cafe",
   "type": "image-grid",
+  "cover": "images/projects/interior/bookstore/cover.jpg",
   "images": [
-   
+    { "src": "images/projects/interior/bookstore/1.jpg" },
+    { "src": "images/projects/interior/bookstore/2.jpg" },
+    { "src": "images/projects/interior/bookstore/3.jpg" },
+    { "src": "images/projects/interior/bookstore/4.jpg" },
+    { "src": "images/projects/interior/bookstore/5.jpg" },
+    { "src": "images/projects/interior/bookstore/6.jpg" },
+    { "src": "images/projects/interior/bookstore/7.jpg" },
+    { "src": "images/projects/interior/bookstore/8.jpg" },
+    { "src": "images/projects/interior/bookstore/9.jpg" },
+    { "src": "images/projects/interior/bookstore/10.jpg" },
+    { "src": "images/projects/interior/bookstore/11.jpg" },
+    { "src": "images/projects/interior/bookstore/12.jpg" },
+    { "src": "images/projects/interior/bookstore/13.jpg" }
   ]
 }

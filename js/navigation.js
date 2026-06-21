@@ -78,7 +78,6 @@ function showSection(sectionId) {
 }
 
 // ─── Ortak: panel-nav üretici ─────────────────────────────────────────────
-// items: [{ label, action }]  — soldan sağa, son item aktif sayfa
 function makePanelNav(items) {
   const nav = document.createElement('div');
   nav.className = 'panel-nav';
@@ -131,11 +130,11 @@ function renderProjectInfoPanel(project) {
   const isMobile = window.innerWidth <= 768;
   if (isMobile) return;
 
-const panelTop   = 181;
-const panelLeft  = 100;
-const panelWidth = 180;
-const tilePx     = 204;
-const panelPad   = '20px 18px 22px';
+  const panelTop   = 181;
+  const panelLeft  = 100;
+  const panelWidth = 520;
+const tilePx     = 'auto';
+  const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
   panel.id = 'proj-info-panel';
@@ -144,16 +143,17 @@ const panelPad   = '20px 18px 22px';
     left: ${panelLeft}px;
     top: ${panelTop}px;
     width: ${panelWidth}px;
-    height: ${tilePx}px;
+height: auto;
     z-index: 103;
     pointer-events: none;
     background: rgba(225,222,217,0.65);
     backdrop-filter: blur(3px);
     padding: ${panelPad};
     box-sizing: border-box;
-    overflow: hidden;
+ overflow: visible;
   `;
 
+  // Başlık
   const titleEl = document.createElement('span');
   titleEl.style.cssText = `
     font-family: 'Space Grotesk', sans-serif;
@@ -168,23 +168,10 @@ const panelPad   = '20px 18px 22px';
   `;
   panel.appendChild(titleEl);
 
-  const rows = [];
-  if (project.year)
-    rows.push({ key: 'Year', val: project.year });
-  if (project.location)
-    rows.push({ key: 'Location', val: project.location });
-  if (project.office)
-    rows.push({ key: 'Office', val: project.office });
-  if (project.responsibilities && project.responsibilities.length)
-    rows.push({ key: 'Role', val: project.responsibilities.join(', ') });
-  if (project.coworkers && project.coworkers.length)
-    rows.push({ key: 'With', val: project.coworkers.join(', ') });
-  if (project.description)
-    rows.push({ key: 'Info', val: project.description });
-
   const valueEls = [];
 
-  rows.forEach(row => {
+  // ── Yardımcı: tek kolon satır ekle ──────────────────────────────────
+  function addRow(key, val) {
     const div = document.createElement('div');
     div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
 
@@ -197,7 +184,7 @@ const panelPad   = '20px 18px 22px';
       color: rgba(0,0,0,0.38);
       margin-bottom: 2px;
     `;
-    keyEl.textContent = row.key;
+    keyEl.textContent = key;
 
     const valEl = document.createElement('span');
     valEl.style.cssText = `
@@ -208,13 +195,76 @@ const panelPad   = '20px 18px 22px';
       color: rgba(0,0,0,0.68);
       line-height: 1.5;
     `;
-    valEl.textContent = row.val;
+    valEl.textContent = val;
 
     div.appendChild(keyEl);
     div.appendChild(valEl);
     panel.appendChild(div);
-    valueEls.push({ el: valEl, text: row.val });
-  });
+    valueEls.push({ el: valEl, text: val });
+  }
+
+  // ── Yardımcı: çift kolon satır ekle (location + coordinates) ────────
+  function addDoubleRow(left, right) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:row;gap:24px;margin-bottom:10px;';
+
+    [left, right].forEach(col => {
+      if (!col) return;
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;flex-direction:column;';
+
+      const keyEl = document.createElement('span');
+      keyEl.style.cssText = `
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 8px;
+        letter-spacing: .24em;
+        text-transform: uppercase;
+        color: rgba(0,0,0,0.38);
+        margin-bottom: 2px;
+      `;
+      keyEl.textContent = col.key;
+
+      const valEl = document.createElement('span');
+      valEl.style.cssText = `
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        font-weight: 300;
+        letter-spacing: .04em;
+        color: rgba(0,0,0,0.68);
+        line-height: 1.5;
+      `;
+      valEl.textContent = col.val;
+
+      div.appendChild(keyEl);
+      div.appendChild(valEl);
+      row.appendChild(div);
+      valueEls.push({ el: valEl, text: col.val });
+    });
+
+    panel.appendChild(row);
+  }
+
+  // ── Satırları sırayla ekle ───────────────────────────────────────────
+  if (project.year)
+    addRow('Year', project.year);
+
+  addDoubleRow(
+    project.location ? { key: 'Location', val: project.location } : null,
+    project.coordinates && project.coordinates.length === 2
+      ? { key: 'Coordinates', val: project.coordinates[0].toFixed(2) + ', ' + project.coordinates[1].toFixed(2) }
+      : null
+  );
+
+  if (project.office)
+    addRow('Office', project.office);
+  if (project.program)
+    addRow('Program', project.program);
+  if (project.responsibilities && project.responsibilities.length)
+    addRow('Role', project.responsibilities.join(', '));
+  if (project.coworkers && project.coworkers.length)
+    addRow('With', project.coworkers.join(', '));
+  if (project.description)
+    addRow('Info', project.description);
 
   document.body.appendChild(panel);
 

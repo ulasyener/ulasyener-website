@@ -82,11 +82,11 @@ function buildGrid(items, onSelect, overlayTop) {
   destroyGrid();
 
   const IS_MOB  = window.innerWidth <= 768;
-  const COLS    = IS_MOB ? 1 : 3;
+const COLS    = IS_MOB ? 1 : 3;
   const GAP     = IS_MOB ? 12 : 16;
-  const PAD_H   = IS_MOB ? '16px' : '80px';
   const FADE    = IS_MOB ? FADE_PX_MOB : FADE_PX;
   const OV_TOP  = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
+  const PAD_H   = IS_MOB ? '16px' : '80px';
 
   // Overlay
   gridOverlay = document.createElement('div');
@@ -94,11 +94,12 @@ function buildGrid(items, onSelect, overlayTop) {
   gridOverlay.style.cssText =
     'position:fixed;' +
     'top:' + OV_TOP + 'px;' +
-    'left:0;right:0;bottom:0;' +
+'left:0;right:0;' +
+    'bottom:0;' +
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
+    'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
     'box-sizing:border-box;' +
     '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
     'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';

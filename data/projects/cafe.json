@@ -1,11 +1,31 @@
 {
   "id": "cafe",
-  "title": "Café",
-  "category": "interior",
-  "subcategory": "interior-retail",
-  "year": "2022",
-  "description": "",
+  "title": "Mums Cafe",
+  "year": "2013",
+  "location": "Istanbul",
+  "coordinates": [41.0248, 28.9792],
+  "office": "Cisim Design",
+  "responsibilities": ["Interior Architect", "Project Architect", "Construction Management"],
+  "program": "Cafe",
   "type": "image-grid",
-  "images": []
-   
+  "cover": "images/projects/interior/cafe/cover.jpg",
+  "images": [
+    { "src": "images/projects/interior/cafe/1.jpg" },
+    { "src": "images/projects/interior/cafe/2.jpg" },
+    { "src": "images/projects/interior/cafe/3.jpg" },
+    { "src": "images/projects/interior/cafe/4.jpg" },
+    { "src": "images/projects/interior/cafe/5.jpg" },
+    { "src": "images/projects/interior/cafe/6.jpg" },
+    { "src": "images/projects/interior/cafe/7.jpg" },
+    { "src": "images/projects/interior/cafe/8.jpg" },
+    { "src": "images/projects/interior/cafe/9.jpg" },
+    { "src": "images/projects/interior/cafe/10.jpg" },
+    { "src": "images/projects/interior/cafe/11.jpg" },
+    { "src": "images/projects/interior/cafe/12.jpg" },
+    { "src": "images/projects/interior/cafe/13.jpg" },
+    { "src": "images/projects/interior/cafe/14.jpg" },
+    { "src": "images/projects/interior/cafe/15.jpg" },
+    { "src": "images/projects/interior/cafe/16.jpg" },
+    { "src": "images/projects/interior/cafe/17.jpg" }
+  ]
 }
