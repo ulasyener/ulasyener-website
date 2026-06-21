@@ -113,15 +113,12 @@ function buildGrid(items, onSelect) {
   const IS_MOB    = W <= 768;
   const PER_ROW   = IS_MOB ? 1    : 3;
   const GAP       = IS_MOB ? 0.10 : 0.18;
-  const TILE      = IS_MOB ? 1.4  : 2.8;
-  const CAM_Z     = IS_MOB ? 5.0  : 7.5;
-  // GRID_TOP: grid kartlarının ekranda başladığı px (nav yüksekliği)
-  // → navUnits hesabı için küçük tutulmalı, kartlar ortalı çıksın
+  const TILE      = IS_MOB ? 1.0  : 2.8;   // mobil portrait için daha küçük
+  const CAM_Z     = IS_MOB ? 3.5  : 7.5;   // yakın kamera → kart ortalı görünür
   const GRID_TOP  = IS_MOB ? 56   : 68;
-  // FADE_TOP: mask fade + overlay'in başladığı px (kırmızı çerçeve üst kenarı)
   const FADE_TOP  = IS_MOB ? 160  : 130;
-  const NAV_SAFE  = GRID_TOP;   // layout hesapları GRID_TOP kullanır
-  const CLIP_SAFE = FADE_TOP;   // label band görünürlük eşiği
+  const NAV_SAFE  = GRID_TOP;
+  const CLIP_SAFE = FADE_TOP;
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
   // FIX [1]: Grid kendi özel scene'ini kullanıyor
