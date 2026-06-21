@@ -172,7 +172,7 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
     if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
     window.grid3d = showPhotoGrid(project, (data) => {
       if (project.images && project.images.length) {
-        openLightbox(project.images, data.index);
+        openLightbox(project.images, data.index, project);
       }
     });
 
