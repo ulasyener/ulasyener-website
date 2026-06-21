@@ -1327,80 +1327,110 @@ function renderContact() {
   const list = document.createElement('div');
   list.className = 'category-list';
 
-  // INFO
-  const infoItem = document.createElement('div');
-  infoItem.className = 'category-item accordion-item';
-  infoItem.innerHTML = `
-    <div class="cat-label">Info</div>
-    <div class="cat-arrow accordion-arrow">&#x002B;</div>
-    <div class="accordion-body"></div>
-  `;
-  infoItem.querySelector('.cat-label').addEventListener('click', () => toggleContactAccordion(infoItem, 'info'));
-  infoItem.querySelector('.accordion-arrow').addEventListener('click', () => toggleContactAccordion(infoItem, 'info'));
-  list.appendChild(infoItem);
+  const sections = [
+    { id: 'info',    label: 'Info' },
+    { id: 'social',  label: 'Social' },
+    { id: 'contact', label: 'Contact' }
+  ];
 
-  // SOCIAL
-  const socialItem = document.createElement('div');
-  socialItem.className = 'category-item accordion-item';
-  socialItem.innerHTML = `
-    <div class="cat-label">Social</div>
-    <div class="cat-arrow accordion-arrow">&#x002B;</div>
-    <div class="accordion-body"></div>
-  `;
-  socialItem.querySelector('.cat-label').addEventListener('click', () => toggleContactAccordion(socialItem, 'social'));
-  socialItem.querySelector('.accordion-arrow').addEventListener('click', () => toggleContactAccordion(socialItem, 'social'));
-  list.appendChild(socialItem);
+  sections.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `<div class="cat-label">${s.label}</div>`;
+    item.addEventListener('click', () => showContactSection(s));
+    list.appendChild(item);
+  });
 
   el.appendChild(list);
   root.appendChild(el);
 }
 
-function toggleContactAccordion(item, sectionId) {
-  const isOpen = item.classList.contains('is-open');
-  const arrow  = item.querySelector('.accordion-arrow');
-  const body   = item.querySelector('.accordion-body');
+// ─── Contact alt sayfa ────────────────────────────────────────────────────
+function showContactSection(s) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
 
-  if (isOpen) {
-    item.classList.remove('is-open');
-    arrow.innerHTML      = '&#x002B;';
-    body.innerHTML       = '';
-    body.style.maxHeight = '0';
-  } else {
-    item.classList.add('is-open');
-    arrow.innerHTML = '&#x2212;';
-    body.innerHTML  = getContactContent(sectionId);
-    body.style.maxHeight = body.scrollHeight + 'px';
-  }
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Contact', action: () => showSection('contact') },
+      { label: s.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = s.label;
+    label.addEventListener('click', () => runGlitch(() => showSection('contact')));
+    el.appendChild(label);
+
+    if (s.id === 'info') {
+      const list = document.createElement('div');
+      list.className = 'category-list';
+      list.innerHTML = `
+        <div class="contact-row"><span class="contact-key">Email</span><a href="mailto:hello@ulasyener.com" class="contact-val">hello@ulasyener.com</a></div>
+        <div class="contact-row"><span class="contact-key">Location</span><span class="contact-val">Weimar / Stuttgart, Germany</span></div>
+        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">Open to collaboration</span></div>
+      `;
+      el.appendChild(list);
+    }
+
+    if (s.id === 'social') {
+      const links = [
+        { label: 'Instagram', href: '#' },
+        { label: 'LinkedIn',  href: 'https://linkedin.com/in/ulasynr' },
+        { label: 'Behance',   href: 'https://behance.net/ulasynr' },
+        { label: 'Vimeo',     href: 'https://vimeo.com/ulasyener' },
+        { label: 'Patreon',   href: '#' },
+        { label: 'Substack',  href: '#' },
+        { label: 'GitHub',    href: '#' },
+        { label: 'bauhaus.fm',href: '#' }
+      ];
+      const wrap = document.createElement('div');
+      wrap.className = 'social-links';
+      wrap.style.paddingTop = '16px';
+      wrap.innerHTML = links.map(l =>
+        `<a class="social-link-btn" href="${l.href}" target="_blank">${l.label}</a>`
+      ).join('');
+      el.appendChild(wrap);
+    }
+
+    if (s.id === 'contact') {
+      const wrap = document.createElement('div');
+      wrap.style.paddingTop = '16px';
+      wrap.innerHTML = `
+        <div class="contact-row" style="padding:0 0 12px;">
+          <span class="contact-key">—</span>
+          <span class="contact-val" style="font-size:12px;line-height:1.8;">
+            For project inquiries, collaborations, or general questions, feel free to reach out directly.
+          </span>
+        </div>
+        <div class="contact-form">
+          <input type="text"     class="cf-input" placeholder="Name" />
+          <input type="email"    class="cf-input" placeholder="Email" />
+          <input type="text"     class="cf-input" placeholder="Subject" />
+          <textarea              class="cf-input cf-textarea" placeholder="Message" rows="5"></textarea>
+          <button class="cf-btn" onclick="handleContactSubmit(this)">Send</button>
+        </div>
+      `;
+      el.appendChild(wrap);
+    }
+
+    root.appendChild(el);
+  });
 }
 
-function getContactContent(sectionId) {
-  if (sectionId === 'info') {
-    return `
-      <div class="accordion-content">
-        <div class="contact-row"><span class="contact-key">Email</span><a href="mailto:hello@ulasyener.com" class="contact-val">hello@ulasyener.com</a></div>
-        <div class="contact-row"><span class="contact-key">Location</span><span class="contact-val">—</span></div>
-        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">—</span></div>
-      </div>
-    `;
-  }
-  if (sectionId === 'social') {
-    const links = [
-      { label: 'Instagram', href: '#' },
-      { label: 'LinkedIn',  href: 'https://linkedin.com/in/ulasynr' },
-      { label: 'Behance',   href: 'https://behance.net/ulasynr' },
-      { label: 'Vimeo',     href: 'https://vimeo.com/ulasyener' },
-      { label: 'Patreon',   href: '#' },
-      { label: 'Substack',  href: '#' },
-      { label: 'GitHub',    href: '#' },
-      { label: 'bauhaus.fm',href: '#' }
-    ];
-    return `
-      <div class="accordion-content social-links">
-        ${links.map(l => `<a class="social-link-btn" href="${l.href}" target="_blank">${l.label}</a>`).join('')}
-      </div>
-    `;
-  }
-  return '';
+function handleContactSubmit(btn) {
+  const form   = btn.closest('.contact-form');
+  const inputs = form.querySelectorAll('.cf-input');
+  const name   = inputs[0].value.trim();
+  const email  = inputs[1].value.trim();
+  const msg    = inputs[3].value.trim();
+  if (!name || !email || !msg) { btn.textContent = 'Fill in required fields'; setTimeout(() => { btn.textContent = 'Send'; }, 2000); return; }
+  btn.textContent = 'Sent —';
+  btn.disabled = true;
+  inputs.forEach(i => { i.disabled = true; });
 }
 
 // ─── Menü bağlantıları ────────────────────────────────────────────────────
