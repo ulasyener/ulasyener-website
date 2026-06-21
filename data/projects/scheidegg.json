@@ -11,7 +11,6 @@
   "cover": "images/projects/architecture/scheidegg/cover.png",
   "images": [
     { "src": "images/projects/architecture/scheidegg/1.png" },
-    { "src": "images/projects/architecture/scheidegg/2.png" },
-    { "src": "images/projects/architecture/scheidegg/3.png" }
+    { "src": "images/projects/architecture/scheidegg/2.png" }
   ]
 }
