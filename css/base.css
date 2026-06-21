@@ -489,3 +489,81 @@ canvas#grain {
   .panel        { padding: 54px 14px 80px 14px; }
   #name         { letter-spacing: .22em; }
 }
+
+/* ─── About accordion içerik satırları ──────────────────────────────────── */
+.about-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.about-row:last-child { border-bottom: none; }
+
+.about-period {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .14em;
+  color: rgba(0,0,0,0.32);
+  padding-top: 2px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.about-title {
+  font-family: var(--f-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.72);
+  letter-spacing: .03em;
+  line-height: 1.5;
+  margin-bottom: 2px;
+}
+
+.about-sub {
+  font-family: var(--f-sans);
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(0,0,0,0.42);
+  letter-spacing: .03em;
+  line-height: 1.5;
+}
+
+.accordion-content p {
+  font-family: var(--f-sans);
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(0,0,0,0.65);
+  letter-spacing: .03em;
+  line-height: 1.85;
+}
+
+@media (max-width: 768px) {
+  .about-row { grid-template-columns: 80px 1fr; gap: 0 12px; }
+  .about-period { font-size: 8px; }
+  .about-title  { font-size: 11px; }
+  .about-sub    { font-size: 10px; }
+}
+
+/* ─── Fremde Türen hover accordion ──────────────────────────────────────── */
+.fremde-sec-item {
+  cursor: default;
+}
+
+.fremde-sec-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.32s ease;
+}
+
+/* Mobilde tıkla aç — hover efekti yok */
+@media (max-width: 768px) {
+  .fremde-sec-item { cursor: pointer; }
+  .fremde-sec-item:hover {
+    background: none;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .fremde-sec-item:hover .cat-label { color: rgba(0,0,0,0.75); }
+}
