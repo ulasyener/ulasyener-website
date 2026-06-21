@@ -14,38 +14,36 @@ const GLITCH_SRCS    = [
 const GLITCH_OPACITY = 0.38;
 
 // ─── Yerleşim sabitleri ───────────────────────────────────────────────────
-// Desktop:
-//   Çizgi (nav alt sınırı) : 235px
-//   Boşluk ritmi           : 88px
-//   Bilgi paneli top       : 235 + 88 = 323px
-//   Bilgi paneli bottom    : 323 + 204 = 527px
-//   Grid başlangıcı        : 527 + 88 = 615px
-//   Fade başlangıcı        : 615 - 44 = 571px  → overlay top buradan
-//   Fade mesafesi          : 44px  → mask-image ile
-// Mobil:
-//   Çizgi                  : 120px
-//   Boşluk ritmi           : 48px  (88'in orantılı küçüğü)
-//   Grid başlangıcı        : 120 + 48 = 168px
-//   Fade başlangıcı        : 168 - 24 = 144px  → overlay top
-//   Fade mesafesi          : 24px
+// RESIDENTIAL bottom : 147px
+// Boşluk ritmi       : 88px
+//
+// Kademe 1 (proje kapak — bilgi paneli yok):
+//   Grid top         : 147 + 88 = 235px
+//   Fade başlangıcı  : 235 - 44 = 191px  → OVERLAY_TOP
+//   Fade mesafesi    : 44px
+//
+// Kademe 2 (fotoğraf — bilgi paneli var):
+//   Bilgi paneli top : 235px  (navigation.js'te)
+//   Bilgi paneli h   : 204px
+//   Bilgi paneli bot : 439px
+//   Grid top         : 439 + 88 = 527px
+//   Fade başlangıcı  : 527 - 44 = 483px  → OVERLAY_TOP
+//   Fade mesafesi    : 44px
+//
+// Mobil (bilgi paneli yok her iki kademede):
+//   RESIDENTIAL bot  : ~80px (orantılı)
+//   Grid top         : 80 + 48 = 128px
+//   Fade başlangıcı  : 128 - 24 = 104px
 
-const D = {
-  LINE:        235,
-  RHYTHM:       88,
-  INFO_TOP:    323,   // LINE + RHYTHM
-  INFO_HEIGHT: 204,
-  GRID_TOP:    615,   // INFO_TOP + INFO_HEIGHT + RHYTHM
-  FADE_OFFSET:  44,
-  OVERLAY_TOP: 571    // GRID_TOP - FADE_OFFSET
-};
+const FADE_PX        = 44;
+const FADE_PX_MOB    = 24;
 
-const M = {
-  LINE:        120,
-  RHYTHM:       48,
-  GRID_TOP:    168,   // LINE + RHYTHM
-  FADE_OFFSET:  24,
-  OVERLAY_TOP: 144    // GRID_TOP - FADE_OFFSET
-};
+// Kademe 1 desktop overlay top
+const K1_OVERLAY_TOP = 191;
+// Kademe 2 desktop overlay top
+const K2_OVERLAY_TOP = 483;
+// Mobil overlay top (her iki kademe)
+const MOB_OVERLAY_TOP = 104;
 
 // ─── Temizleme ────────────────────────────────────────────────────────────
 function destroyGrid() {
@@ -80,30 +78,31 @@ function gridScramble(el, finalText, duration) {
 }
 
 // ─── Çekirdek builder ─────────────────────────────────────────────────────
-function buildGrid(items, onSelect) {
+// overlayTop: hangi kademede çağrıldığına göre K1 veya K2 değeri gelir
+function buildGrid(items, onSelect, overlayTop) {
   destroyGrid();
 
-  const IS_MOB     = window.innerWidth <= 768;
-  const C          = IS_MOB ? M : D;
-  const COLS       = IS_MOB ? 1 : 3;
-  const GAP        = IS_MOB ? 12 : 16;
-  const PAD_H      = IS_MOB ? '16px' : '80px';
-  const FADE_PX    = IS_MOB ? M.FADE_OFFSET : D.FADE_OFFSET;
+  const IS_MOB  = window.innerWidth <= 768;
+  const COLS    = IS_MOB ? 1 : 3;
+  const GAP     = IS_MOB ? 12 : 16;
+  const PAD_H   = IS_MOB ? '16px' : '80px';
+  const FADE    = IS_MOB ? FADE_PX_MOB : FADE_PX;
+  const OV_TOP  = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
 
-  // Overlay — fade başlangıcından başlar, mask ile yumuşar
+  // Overlay
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
     'position:fixed;' +
-    'top:' + C.OVERLAY_TOP + 'px;' +
+    'top:' + OV_TOP + 'px;' +
     'left:0;right:0;bottom:0;' +
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-    'padding:' + FADE_PX + 'px ' + PAD_H + ' 80px;' +
+    'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
     'box-sizing:border-box;' +
-    '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE_PX + 'px);' +
-    'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE_PX + 'px);';
+    '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
+    'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
 
   // Grid container
   const grid = document.createElement('div');
@@ -252,7 +251,7 @@ function showProjectGrid(projects, onProjectClick) {
       data:     proj
     };
   });
-  return buildGrid(items, onProjectClick);
+  return buildGrid(items, onProjectClick, K1_OVERLAY_TOP);
 }
 
 // ─── Kademe 2: Proje fotoğraf grid'i ──────────────────────────────────────
@@ -270,5 +269,5 @@ function showPhotoGrid(project, onPhotoClick) {
     };
   });
 
-  return buildGrid(items, onPhotoClick);
+  return buildGrid(items, onPhotoClick, K2_OVERLAY_TOP);
 }
