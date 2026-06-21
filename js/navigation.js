@@ -746,12 +746,36 @@ function renderAcademic() {
 
 // ─── Academic alt sayfa ────────────────────────────────────────────────────
 function showAcademicSection(section) {
-  // Archive → Fremde Türen için özel sayfa
-  if (section.id === 'archive') {
-    showArchiveSection(section);
-    return;
-  }
+  if (section.id === 'archive')  { showArchiveSection(section); return; }
+  if (section.id === 'projects') { showAcademicProjects(section); return; }
+  if (section.id === 'articles') { showAcademicArticles(section); return; }
+  if (section.id === 'research') { showAcademicResearch(section); return; }
 
+  // fallback
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+    const el = document.createElement('div');
+    el.className = 'panel';
+    el.appendChild(makePanelNav([
+      { label: 'Academic', action: () => showSection('academic') },
+      { label: section.label }
+    ]));
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = section.label;
+    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
+    el.appendChild(label);
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = '— coming soon —';
+    el.appendChild(empty);
+    root.appendChild(el);
+  });
+}
+
+// ─── Academic: Projects ────────────────────────────────────────────────────
+function showAcademicProjects(section) {
   runGlitch(() => {
     const root = getPanelRoot();
     clearPanel();
@@ -759,13 +783,11 @@ function showAcademicSection(section) {
     const el = document.createElement('div');
     el.className = 'panel';
 
-    // Geri: ← ACADEMIC
     el.appendChild(makePanelNav([
       { label: 'Academic', action: () => showSection('academic') },
       { label: section.label }
     ]));
 
-    // Başlık — tıklanınca Academic'e döner
     const label = document.createElement('div');
     label.className = 'sec-label sec-label--home';
     label.textContent = section.label;
@@ -777,15 +799,138 @@ function showAcademicSection(section) {
 
     section.subs.forEach(sub => {
       const item = document.createElement('div');
-      item.className = 'subcat-item empty';
-      item.innerHTML = `
-        <div class="subcat-label">${sub.label}</div>
-        <div class="cat-desc">— coming soon —</div>
-      `;
+      item.className = 'subcat-item';
+      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
+      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicProjects));
       list.appendChild(item);
     });
 
     el.appendChild(list);
+    root.appendChild(el);
+  });
+}
+
+// ─── Academic: Articles (accordion) ───────────────────────────────────────
+function showAcademicArticles(section) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Academic', action: () => showSection('academic') },
+      { label: section.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = section.label;
+    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
+    el.appendChild(label);
+
+    const list = document.createElement('div');
+    list.className = 'category-list';
+
+    section.subs.forEach(sub => {
+      const item = document.createElement('div');
+      item.className = 'category-item accordion-item';
+      item.innerHTML = `
+        <div class="cat-label">${sub.label}</div>
+        <div class="cat-arrow accordion-arrow">&#x002B;</div>
+        <div class="accordion-body"></div>
+      `;
+
+      function toggle() {
+        const isOpen = item.classList.contains('is-open');
+        const arrow  = item.querySelector('.accordion-arrow');
+        const body   = item.querySelector('.accordion-body');
+        if (isOpen) {
+          item.classList.remove('is-open');
+          arrow.innerHTML = '&#x002B;';
+          body.innerHTML  = '';
+          body.style.maxHeight = '0';
+        } else {
+          item.classList.add('is-open');
+          arrow.innerHTML = '&#x2212;';
+          body.innerHTML  = `<div class="accordion-content"><p class="empty-state" style="margin-top:16px;text-align:left;">— coming soon —</p></div>`;
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      }
+
+      item.querySelector('.cat-label').addEventListener('click', toggle);
+      item.querySelector('.accordion-arrow').addEventListener('click', toggle);
+      list.appendChild(item);
+    });
+
+    el.appendChild(list);
+    root.appendChild(el);
+  });
+}
+
+// ─── Academic: Research ────────────────────────────────────────────────────
+function showAcademicResearch(section) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Academic', action: () => showSection('academic') },
+      { label: section.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = section.label;
+    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
+    el.appendChild(label);
+
+    const list = document.createElement('div');
+    list.className = 'subcategory-list';
+
+    section.subs.forEach(sub => {
+      const item = document.createElement('div');
+      item.className = 'subcat-item';
+      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
+      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicResearch));
+      list.appendChild(item);
+    });
+
+    el.appendChild(list);
+    root.appendChild(el);
+  });
+}
+
+// ─── Academic: Coming Soon sayfası ────────────────────────────────────────
+function showAcademicComingSoon(title, parentSection, parentFn) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Academic',          action: () => showSection('academic') },
+      { label: parentSection.label, action: () => parentFn(parentSection) },
+      { label: title }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = title;
+    label.addEventListener('click', () => parentFn(parentSection));
+    el.appendChild(label);
+
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = '— coming soon —';
+    el.appendChild(empty);
+
     root.appendChild(el);
   });
 }
