@@ -331,9 +331,12 @@ height: auto;
 }
 
 // ─── Lightbox ─────────────────────────────────────────────────────────────
-function openLightbox(images, startIndex) {
+function openLightbox(images, startIndex, project) {
   const existing = document.getElementById('lightbox');
   if (existing) existing.remove();
+
+  // Video modunu kontrol et
+  const isVideo = project && project.content_type === 'video' && project.video_provider === 'vimeo';
 
   let current = startIndex;
 
@@ -343,54 +346,6 @@ function openLightbox(images, startIndex) {
     position:fixed;top:0;left:0;width:100%;height:100%;
     z-index:900;background:rgba(14,13,12,0.94);
     display:flex;align-items:center;justify-content:center;
-  `;
-
-  const img = document.createElement('img');
-  img.style.cssText = `
-    max-width:88vw;max-height:88vh;
-    object-fit:contain;display:block;
-    transition:opacity 0.2s ease;
-    user-select:none;
-  `;
-
-  function loadImg(index) {
-    img.style.opacity = '0';
-    setTimeout(() => {
-      img.src = images[index].src;
-      img.onload = () => { img.style.opacity = '1'; };
-    }, 150);
-    counter.textContent = (index + 1) + ' / ' + images.length;
-  }
-
-  function makeArrow(dir) {
-    const btn = document.createElement('button');
-    btn.style.cssText = `
-      position:fixed;top:50%;transform:translateY(-50%);
-      ${dir === 'left' ? 'left:32px' : 'right:32px'};
-      background:none;border:none;cursor:pointer;
-      color:rgba(255,255,255,0.5);font-size:28px;
-      padding:12px;z-index:901;
-      transition:color 0.15s ease;font-family:'IBM Plex Mono',monospace;
-      font-weight:100;letter-spacing:0;
-    `;
-    btn.textContent = dir === 'left' ? '←' : '→';
-    btn.addEventListener('mouseenter', () => { btn.style.color = 'rgba(255,255,255,0.95)'; });
-    btn.addEventListener('mouseleave', () => { btn.style.color = 'rgba(255,255,255,0.5)'; });
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (dir === 'left')  current = (current - 1 + images.length) % images.length;
-      else                 current = (current + 1) % images.length;
-      loadImg(current);
-    });
-    return btn;
-  }
-
-  const counter = document.createElement('div');
-  counter.style.cssText = `
-    position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-    font-family:'IBM Plex Mono',monospace;font-size:10px;
-    letter-spacing:.25em;color:rgba(255,255,255,0.35);
-    z-index:901;user-select:none;
   `;
 
   const closeBtn = document.createElement('div');
@@ -418,25 +373,104 @@ function openLightbox(images, startIndex) {
   });
 
   function onKey(e) {
-    if (e.key === 'Escape')     closeLightbox();
-    if (e.key === 'ArrowRight') { current = (current + 1) % images.length; loadImg(current); }
-    if (e.key === 'ArrowLeft')  { current = (current - 1 + images.length) % images.length; loadImg(current); }
+    if (e.key === 'Escape') closeLightbox();
+    if (!isVideo) {
+      if (e.key === 'ArrowRight') { current = (current + 1) % images.length; loadImg(current); }
+      if (e.key === 'ArrowLeft')  { current = (current - 1 + images.length) % images.length; loadImg(current); }
+    }
   }
   window.addEventListener('keydown', onKey);
 
-  box.appendChild(img);
-  box.appendChild(makeArrow('left'));
-  box.appendChild(makeArrow('right'));
-  box.appendChild(counter);
+  if (isVideo) {
+    // ── Video modu ──────────────────────────────────────────────────────
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+      width:80vw;max-width:1100px;
+      position:relative;
+    `;
+    const ratio = document.createElement('div');
+    ratio.style.cssText = 'padding:56.25% 0 0 0;position:relative;';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.vimeo.com/video/${project.vimeo_id}?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479`;
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;';
+    ratio.appendChild(iframe);
+    wrapper.appendChild(ratio);
+
+    const vimeoScript = document.createElement('script');
+    vimeoScript.src = 'https://player.vimeo.com/api/player.js';
+    document.head.appendChild(vimeoScript);
+
+    box.appendChild(wrapper);
+
+  } else {
+    // ── Görsel modu ─────────────────────────────────────────────────────
+    const img = document.createElement('img');
+    img.style.cssText = `
+      max-width:88vw;max-height:88vh;
+      object-fit:contain;display:block;
+      transition:opacity 0.2s ease;
+      user-select:none;
+    `;
+
+    function loadImg(index) {
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = images[index].src;
+        img.onload = () => { img.style.opacity = '1'; };
+      }, 150);
+      counter.textContent = (index + 1) + ' / ' + images.length;
+    }
+
+    function makeArrow(dir) {
+      const btn = document.createElement('button');
+      btn.style.cssText = `
+        position:fixed;top:50%;transform:translateY(-50%);
+        ${dir === 'left' ? 'left:32px' : 'right:32px'};
+        background:none;border:none;cursor:pointer;
+        color:rgba(255,255,255,0.5);font-size:28px;
+        padding:12px;z-index:901;
+        transition:color 0.15s ease;font-family:'IBM Plex Mono',monospace;
+        font-weight:100;letter-spacing:0;
+      `;
+      btn.textContent = dir === 'left' ? '←' : '→';
+      btn.addEventListener('mouseenter', () => { btn.style.color = 'rgba(255,255,255,0.95)'; });
+      btn.addEventListener('mouseleave', () => { btn.style.color = 'rgba(255,255,255,0.5)'; });
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (dir === 'left')  current = (current - 1 + images.length) % images.length;
+        else                 current = (current + 1) % images.length;
+        loadImg(current);
+      });
+      return btn;
+    }
+
+    const counter = document.createElement('div');
+    counter.style.cssText = `
+      position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+      font-family:'IBM Plex Mono',monospace;font-size:10px;
+      letter-spacing:.25em;color:rgba(255,255,255,0.35);
+      z-index:901;user-select:none;
+    `;
+
+    box.appendChild(img);
+    box.appendChild(makeArrow('left'));
+    box.appendChild(makeArrow('right'));
+    box.appendChild(counter);
+
+    loadImg(current);
+  }
+
   box.appendChild(closeBtn);
   document.body.appendChild(box);
-
-  loadImg(current);
 
   box.style.opacity = '0';
   box.style.transition = 'opacity 0.25s ease';
   requestAnimationFrame(() => { box.style.opacity = '1'; });
 }
+
 
 // ─── Menü bağlantıları ────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
