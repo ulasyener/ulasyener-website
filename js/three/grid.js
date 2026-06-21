@@ -13,12 +13,48 @@ const GLITCH_SRCS    = [
 ];
 const GLITCH_OPACITY = 0.38;
 
+// ─── Yerleşim sabitleri ───────────────────────────────────────────────────
+// Desktop:
+//   Çizgi (nav alt sınırı) : 235px
+//   Boşluk ritmi           : 88px
+//   Bilgi paneli top       : 235 + 88 = 323px
+//   Bilgi paneli bottom    : 323 + 204 = 527px
+//   Grid başlangıcı        : 527 + 88 = 615px
+//   Fade başlangıcı        : 615 - 44 = 571px  → overlay top buradan
+//   Fade mesafesi          : 44px  → mask-image ile
+// Mobil:
+//   Çizgi                  : 120px
+//   Boşluk ritmi           : 48px  (88'in orantılı küçüğü)
+//   Grid başlangıcı        : 120 + 48 = 168px
+//   Fade başlangıcı        : 168 - 24 = 144px  → overlay top
+//   Fade mesafesi          : 24px
+
+const D = {
+  LINE:        235,
+  RHYTHM:       88,
+  INFO_TOP:    323,   // LINE + RHYTHM
+  INFO_HEIGHT: 204,
+  GRID_TOP:    615,   // INFO_TOP + INFO_HEIGHT + RHYTHM
+  FADE_OFFSET:  44,
+  OVERLAY_TOP: 571    // GRID_TOP - FADE_OFFSET
+};
+
+const M = {
+  LINE:        120,
+  RHYTHM:       48,
+  GRID_TOP:    168,   // LINE + RHYTHM
+  FADE_OFFSET:  24,
+  OVERLAY_TOP: 144    // GRID_TOP - FADE_OFFSET
+};
+
 // ─── Temizleme ────────────────────────────────────────────────────────────
 function destroyGrid() {
   if (gridAnimId) { cancelAnimationFrame(gridAnimId); gridAnimId = null; }
   if (gridOverlay && gridOverlay.parentNode) gridOverlay.remove();
   gridOverlay = null;
-  document.querySelectorAll('.grid-glitch-video').forEach(v => { v.pause(); v.remove(); });
+  document.querySelectorAll('.grid-glitch-video').forEach(function(v) {
+    v.pause(); v.remove();
+  });
 }
 
 // ─── Scramble text ────────────────────────────────────────────────────────
@@ -47,24 +83,27 @@ function gridScramble(el, finalText, duration) {
 function buildGrid(items, onSelect) {
   destroyGrid();
 
-  const IS_MOB = window.innerWidth <= 768;
-  const COLS   = IS_MOB ? 1 : 3;
-  const NAV_PX = IS_MOB ? 120 : 235;
-  const GAP    = IS_MOB ? 12 : 16;
-  const PAD_H  = IS_MOB ? '16px' : '80px';
+  const IS_MOB     = window.innerWidth <= 768;
+  const C          = IS_MOB ? M : D;
+  const COLS       = IS_MOB ? 1 : 3;
+  const GAP        = IS_MOB ? 12 : 16;
+  const PAD_H      = IS_MOB ? '16px' : '80px';
+  const FADE_PX    = IS_MOB ? M.FADE_OFFSET : D.FADE_OFFSET;
 
-  // Overlay
+  // Overlay — fade başlangıcından başlar, mask ile yumuşar
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
     'position:fixed;' +
-    'top:' + NAV_PX + 'px;' +
+    'top:' + C.OVERLAY_TOP + 'px;' +
     'left:0;right:0;bottom:0;' +
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-    'padding:24px ' + PAD_H + ' 80px;' +
-    'box-sizing:border-box;';
+    'padding:' + FADE_PX + 'px ' + PAD_H + ' 80px;' +
+    'box-sizing:border-box;' +
+    '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE_PX + 'px);' +
+    'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE_PX + 'px);';
 
   // Grid container
   const grid = document.createElement('div');
@@ -76,7 +115,7 @@ function buildGrid(items, onSelect) {
   gridOverlay.appendChild(grid);
   document.body.appendChild(gridOverlay);
 
-  // Video glitch havuzu — tek set, paylaşımlı
+  // Video glitch havuzu
   const glitchVideos = GLITCH_SRCS.map(function(src) {
     const v = document.createElement('video');
     v.src = src; v.loop = true; v.muted = true;
@@ -153,14 +192,11 @@ function buildGrid(items, onSelect) {
           'letter-spacing:.18em;color:rgba(0,0,0,0.38);margin-top:3px;';
         band.appendChild(subEl);
 
-        // Scramble — IntersectionObserver ile tetikle
         const obs = new IntersectionObserver(function(entries) {
           entries.forEach(function(e) {
             if (e.isIntersecting) {
               gridScramble(titleEl, item.label.toUpperCase(), 1200);
-              setTimeout(function() {
-                gridScramble(subEl, String(item.sublabel), 900);
-              }, 300);
+              setTimeout(function() { gridScramble(subEl, String(item.sublabel), 900); }, 300);
               obs.disconnect();
             }
           });
@@ -196,7 +232,6 @@ function buildGrid(items, onSelect) {
       });
     }
 
-    // Tıklama
     card.addEventListener('click', function() {
       if (onSelect) onSelect(item.data);
     });

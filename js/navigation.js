@@ -131,14 +131,11 @@ function renderProjectInfoPanel(project) {
   const isMobile = window.innerWidth <= 768;
   if (isMobile) return;
 
-  const fovRad     = (50 * Math.PI) / 180;
-  const visibleH   = 2 * Math.tan(fovRad / 2) * 7.5;
-  const tileSize   = 2.8;
-  const tilePx     = Math.round((tileSize / visibleH) * window.innerHeight);
-  const panelTop   = 235;
-  const panelLeft  = 100;
-  const panelWidth = 180;
-  const panelPad   = '20px 18px 22px';
+const panelTop   = 323;
+const panelLeft  = 100;
+const panelWidth = 180;
+const tilePx     = 204;
+const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
   panel.id = 'proj-info-panel';
