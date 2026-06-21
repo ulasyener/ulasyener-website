@@ -1190,6 +1190,45 @@ function renderAbout() {
     list.appendChild(item);
   });
 
+  // Area of Work — ayrı accordion
+  const aowItem = document.createElement('div');
+  aowItem.className = 'category-item accordion-item';
+  aowItem.innerHTML = `
+    <div class="cat-label">Area of Work</div>
+    <div class="cat-arrow accordion-arrow">&#x002B;</div>
+    <div class="accordion-body"></div>
+  `;
+  function toggleAow() {
+    const isOpen = aowItem.classList.contains('is-open');
+    const arrow  = aowItem.querySelector('.accordion-arrow');
+    const body   = aowItem.querySelector('.accordion-body');
+    if (isOpen) {
+      aowItem.classList.remove('is-open');
+      arrow.innerHTML      = '&#x002B;';
+      body.innerHTML       = '';
+      body.style.maxHeight = '0';
+    } else {
+      aowItem.classList.add('is-open');
+      arrow.innerHTML = '&#x2212;';
+      const areas = [
+        { label: 'Architecture',        desc: 'Spatial design, restoration, visualization and competition projects.' },
+        { label: 'Computation',         desc: 'Three.js, TouchDesigner, Unreal Engine, parametric and generative tools.' },
+        { label: 'Culture',             desc: 'Documentary practices, archival research, migration narratives and media archaeology.' },
+        { label: 'Teaching',            desc: 'Lectures and workshops at Bauhaus-Universität Weimar and international institutions.' },
+        { label: 'Event Organisation',  desc: 'Curatorial and production experience across exhibitions, screenings and installations.' }
+      ];
+      body.innerHTML = `<div class="accordion-content">${areas.map(a => `
+        <div class="about-row">
+          <div class="about-period" style="font-family:var(--f-sans);font-size:11px;font-weight:500;color:rgba(0,0,0,0.7);letter-spacing:.04em;">${a.label}</div>
+          <div class="about-detail"><div class="about-sub">${a.desc}</div></div>
+        </div>`).join('')}</div>`;
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  }
+  aowItem.querySelector('.cat-label').addEventListener('click', toggleAow);
+  aowItem.querySelector('.accordion-arrow').addEventListener('click', toggleAow);
+  list.appendChild(aowItem);
+
   // Download bölümü
   const dlItem = document.createElement('div');
   dlItem.className = 'category-item';
@@ -1376,6 +1415,13 @@ function showContactSection(s) {
         <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">Weimar · Stuttgart · Istanbul</span></div>
         <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 Stuttgart</span></div>
         <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">Open to collaboration</span></div>
+        <div class="contact-row" style="padding-top:20px;">
+          <span class="contact-key"></span>
+          <div class="download-btns">
+            <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
+            <a class="dl-btn" href="files/cv.pdf" download>CV</a>
+          </div>
+        </div>
       `;
       el.appendChild(list);
     }
