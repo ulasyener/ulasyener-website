@@ -1,12 +1,5 @@
 let scene, camera, renderer;
 
-// Grid entegrasyonu: grid.js bu değişkeni doldurur, animate() okur
-let _activeGridState = null;
-
-function setActiveGridState(state) {
-  _activeGridState = state;
-}
-
 function initScene() {
   const canvas = document.getElementById('c');
 
@@ -48,7 +41,7 @@ function initScene() {
   animate();
 }
 
-// Terrain loop eşiği: kamera bu değere ulaşınca glitch ile sıfırla
+// ─── Terrain loop ─────────────────────────────────────────────────────────
 const TERRAIN_LOOP_THRESHOLD = -280;
 const TERRAIN_LOOP_START     = 60;
 let   terrainLooping         = false;
@@ -58,7 +51,6 @@ function animate() {
 
   camera.position.z -= 0.015;
 
-  // Loop noktasına yaklaşıldığında glitch tetikle, sonra sıfırla
   if (!terrainLooping && camera.position.z < TERRAIN_LOOP_THRESHOLD) {
     terrainLooping = true;
     const doReset = () => { camera.position.z = TERRAIN_LOOP_START; terrainLooping = false; };
@@ -70,31 +62,5 @@ function animate() {
   }
 
   camera.lookAt(0, 30, camera.position.z - 1);
-
-  // Terrain render
-  renderer.autoClear = true;
   renderer.render(scene, camera);
-
-  // Grid aktifse aynı canvas'a üst üste render et — ikinci WebGL context yok
-  if (_activeGridState) {
-    const gs       = _activeGridState;
-    const W        = window.innerWidth;
-    const H        = window.innerHeight;
-    const dpr      = renderer.getPixelRatio();
-    const clipTop  = gs.clipSafe || 0;          // px — nav alanı yüksekliği
-    const scissorY = 0;                          // canvas altından başla (Three.js Y: aşağı = 0)
-    const scissorH = Math.round((H - clipTop) * dpr);
-    const scissorW = Math.round(W * dpr);
-    const scissorX = 0;
-    // Scissor: clipTop px'in altını render et, üstünü atla
-    renderer.setScissorTest(true);
-    renderer.setScissor(scissorX, scissorY, scissorW, scissorH);
-    renderer.setViewport(0, 0, W, H);
-    renderer.autoClear = false;
-    renderer.clearDepth();
-    renderer.render(gs.scene, gs.camera);
-    renderer.setScissorTest(false);
-    renderer.setViewport(0, 0, W, H);
-    renderer.autoClear = true;
-  }
 }
