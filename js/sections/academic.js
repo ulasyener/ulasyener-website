@@ -73,6 +73,7 @@ function showAcademicSection(section) {
   if (section.id === 'research') { showAcademicResearch(section); return; }
 
   runGlitch(() => {
+    pushHash('academic/' + section.id);
     const root = getPanelRoot();
     clearPanel();
     const el = document.createElement('div');
@@ -97,6 +98,7 @@ function showAcademicSection(section) {
 // ─── Academic: Projects ────────────────────────────────────────────────────
 function showAcademicProjects(section) {
   runGlitch(() => {
+    pushHash('academic/' + section.id);
     const root = getPanelRoot();
     clearPanel();
 
@@ -133,6 +135,7 @@ function showAcademicProjects(section) {
 // ─── Academic: Articles (accordion) ───────────────────────────────────────
 function showAcademicArticles(section) {
   runGlitch(() => {
+    pushHash('academic/' + section.id);
     const root = getPanelRoot();
     clearPanel();
 
@@ -192,6 +195,7 @@ function showAcademicArticles(section) {
 // ─── Academic: Research ────────────────────────────────────────────────────
 function showAcademicResearch(section) {
   runGlitch(() => {
+    pushHash('academic/' + section.id);
     const root = getPanelRoot();
     clearPanel();
 
@@ -258,6 +262,7 @@ function showAcademicComingSoon(title, parentSection, parentFn) {
 // ─── Archive → Fremde Türen listesi ───────────────────────────────────────
 function showArchiveSection(section) {
   runGlitch(() => {
+    pushHash('academic/archive');
     const root = getPanelRoot();
     clearPanel();
 
@@ -330,6 +335,7 @@ const FREMDE_SECTIONS = [
 
 function showFremdeTueren(archiveSection) {
   runGlitch(() => {
+    pushHash('academic/archive/fremde-tueren');
     const root = getPanelRoot();
     clearPanel();
 

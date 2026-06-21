@@ -38,6 +38,7 @@ function renderContact() {
 // ─── Contact alt sayfa ────────────────────────────────────────────────────
 function showContactSection(s) {
   runGlitch(() => {
+    pushHash('contact/' + s.id);
     const root = getPanelRoot();
     clearPanel();
 

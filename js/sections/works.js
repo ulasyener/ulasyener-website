@@ -40,6 +40,7 @@ async function showCategory(categoryId) {
   runGlitch(() => {
     navState.category    = categoryId;
     navState.subcategory = null;
+    pushHash('works/' + categoryId);
 
     const root = getPanelRoot();
     clearPanel();
@@ -93,6 +94,7 @@ async function showSubcategory(categoryId, subcategoryId) {
   runGlitch(async () => {
     navState.subcategory = subcategoryId;
     navState.project     = null;
+    pushHash('works/' + categoryId + '/' + subcategoryId);
 
     const root = getPanelRoot();
     clearPanel();
@@ -136,6 +138,7 @@ async function showSubcategory(categoryId, subcategoryId) {
 function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
   runGlitch(() => {
     navState.project = project.id;
+    pushHash('works/' + categoryId + '/' + subcategoryId + '/' + project.id);
 
     const root        = getPanelRoot();
     const existingNav = root.querySelector('.panel-nav');
@@ -185,6 +188,7 @@ function showRadio(categoryId, catLabel) {
   runGlitch(() => {
     navState.subcategory = 'sound-radio';
     navState.project     = null;
+    pushHash('works/' + categoryId + '/sound-radio');
 
     const root = getPanelRoot();
     clearPanel();
@@ -231,6 +235,8 @@ function showRadio(categoryId, catLabel) {
 // ─── Radio alt sayfa ──────────────────────────────────────────────────────
 function showRadioSection(section, categoryId, catLabel) {
   runGlitch(() => {
+    pushHash('works/' + categoryId + '/sound-radio/' + section.id);
+
     const root = getPanelRoot();
     clearPanel();
 

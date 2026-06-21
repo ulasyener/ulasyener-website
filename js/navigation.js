@@ -38,6 +38,94 @@ let navState = {
   project:     null
 };
 
+// ─── Hash Routing ─────────────────────────────────────────────────────────
+
+// Hash'i güncelle (history stack'e eklemeden)
+function pushHash(hash) {
+  const h = hash ? '#' + hash : '#';
+  if (window.location.hash !== h) {
+    history.pushState(null, '', h);
+  }
+}
+
+// Mevcut hash'i parse edip sayfayı aç
+async function parseAndNavigate() {
+  const raw = window.location.hash.replace(/^#\/?/, '').trim();
+  const parts = raw ? raw.split('/') : [];
+
+  if (parts.length === 0 || parts[0] === '') {
+    // Home
+    clearPanel();
+    getOv().style.opacity = '1';
+    navState = { section: null, category: null, subcategory: null, project: null };
+    return;
+  }
+
+  const [section, category, subcategory, project] = parts;
+
+  switch (section) {
+    case 'works':
+      getOv().style.opacity = '0';
+      navState.section = 'works';
+      if (!category) {
+        clearPanel();
+        renderWorks();
+      } else if (!subcategory) {
+        clearPanel();
+        renderWorks();
+        await showCategory(category);
+      } else if (!project) {
+        clearPanel();
+        renderWorks();
+        await showSubcategory(category, subcategory);
+      } else {
+        // Proje seviyesi — subkategoriyi aç, proje grid'i yükle
+        clearPanel();
+        renderWorks();
+        await showSubcategory(category, subcategory);
+      }
+      break;
+
+    case 'academic':
+      getOv().style.opacity = '0';
+      navState.section = 'academic';
+      clearPanel();
+      renderAcademic();
+      if (category) {
+        const acSections = {
+          projects: { id: 'projects', label: 'Projects', subs: [{ id: 'bachelor', label: 'Bachelor' }, { id: 'master', label: 'Master' }, { id: 'phd', label: 'PhD' }] },
+          articles: { id: 'articles', label: 'Articles', subs: [{ id: 'essays', label: 'Essays' }, { id: 'reviews', label: 'Reviews' }, { id: 'writings', label: 'Writings' }] },
+          research: { id: 'research', label: 'Research', subs: [{ id: 'media-architecture', label: 'Media Architecture' }, { id: 'immersive-media', label: 'Immersive Media' }, { id: 'artistic-research', label: 'Artistic Research' }] },
+          archive:  { id: 'archive',  label: 'Archive',  subs: [{ id: 'fremde-tueren', label: 'Fremde Türen / El Kapıları' }] }
+        };
+        if (acSections[category]) showAcademicSection(acSections[category]);
+      }
+      break;
+
+    case 'about':
+      getOv().style.opacity = '0';
+      navState.section = 'about';
+      clearPanel();
+      renderAbout();
+      break;
+
+    case 'contact':
+      getOv().style.opacity = '0';
+      navState.section = 'contact';
+      clearPanel();
+      renderContact();
+      if (category) {
+        const contactSections = {
+          info:    { id: 'info',    label: 'Info' },
+          social:  { id: 'social',  label: 'Social' },
+          contact: { id: 'contact', label: 'Contact' }
+        };
+        if (contactSections[category]) showContactSection(contactSections[category]);
+      }
+      break;
+  }
+}
+
 // ─── Panel yardımcıları ───────────────────────────────────────────────────
 function getPanelRoot() { return document.getElementById('panel-root'); }
 function getOv()        { return document.getElementById('ov'); }
@@ -58,6 +146,7 @@ function goHome() {
     clearPanel();
     getOv().style.opacity = '1';
     navState = { section: null, category: null, subcategory: null, project: null };
+    pushHash('');
   });
 }
 
@@ -67,6 +156,7 @@ function showSection(sectionId) {
     clearPanel();
     getOv().style.opacity = '0';
     navState = { section: sectionId, category: null, subcategory: null, project: null };
+    pushHash(sectionId);
 
     switch (sectionId) {
       case 'works':    renderWorks();    break;
@@ -133,7 +223,7 @@ function renderProjectInfoPanel(project) {
   const panelTop   = 181;
   const panelLeft  = 100;
   const panelWidth = 520;
-const tilePx     = 'auto';
+  const tilePx     = 'auto';
   const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
@@ -143,14 +233,14 @@ const tilePx     = 'auto';
     left: ${panelLeft}px;
     top: ${panelTop}px;
     width: ${panelWidth}px;
-height: auto;
+    height: auto;
     z-index: 103;
     pointer-events: none;
     background: rgba(225,222,217,0.65);
     backdrop-filter: blur(3px);
     padding: ${panelPad};
     box-sizing: border-box;
- overflow: visible;
+    overflow: visible;
   `;
 
   // Başlık
@@ -170,7 +260,6 @@ height: auto;
 
   const valueEls = [];
 
-  // ── Yardımcı: tek kolon satır ekle ──────────────────────────────────
   function addRow(key, val) {
     const div = document.createElement('div');
     div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
@@ -203,7 +292,6 @@ height: auto;
     valueEls.push({ el: valEl, text: val });
   }
 
-  // ── Yardımcı: çift kolon satır ekle (location + coordinates) ────────
   function addDoubleRow(left, right) {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;flex-direction:row;gap:24px;margin-bottom:10px;';
@@ -244,7 +332,6 @@ height: auto;
     panel.appendChild(row);
   }
 
-  // ── Satırları sırayla ekle ───────────────────────────────────────────
   if (project.year)
     addRow('Year', project.year);
 
@@ -268,7 +355,7 @@ height: auto;
 
   document.body.appendChild(panel);
 
-  // ── Scan line ────────────────────────────────────────────────────────
+  // Scan line
   const scanLine = document.createElement('div');
   scanLine.style.cssText = `
     position: absolute;
@@ -291,7 +378,7 @@ height: auto;
   }
   animateScan();
 
-  // ── Glitch flash ─────────────────────────────────────────────────────
+  // Glitch flash
   let glitchTimeout = null;
   function scheduleGlitch() {
     const delay = 3000 + Math.random() * 5000;
@@ -313,7 +400,6 @@ height: auto;
   }
   scheduleGlitch();
 
-  // Panel kaldırılınca animasyonları temizle
   const observer = new MutationObserver(() => {
     if (!document.body.contains(panel)) {
       if (scanAnimId) cancelAnimationFrame(scanAnimId);
@@ -323,7 +409,6 @@ height: auto;
   });
   observer.observe(document.body, { childList: true });
 
-  // Scramble efektleri
   scrambleText(titleEl, project.title.toUpperCase(), 1400);
   valueEls.forEach(({ el, text }, i) => {
     setTimeout(() => scrambleText(el, text, 1000), 400 + i * 200);
@@ -335,7 +420,6 @@ function openLightbox(images, startIndex, project) {
   const existing = document.getElementById('lightbox');
   if (existing) existing.remove();
 
-  // Video modunu kontrol et
   const isVideo = project && project.content_type === 'video' && project.video_provider === 'vimeo';
 
   let current = startIndex;
@@ -382,12 +466,8 @@ function openLightbox(images, startIndex, project) {
   window.addEventListener('keydown', onKey);
 
   if (isVideo) {
-    // ── Video modu ──────────────────────────────────────────────────────
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = `
-      width:80vw;max-width:1100px;
-      position:relative;
-    `;
+    wrapper.style.cssText = `width:80vw;max-width:1100px;position:relative;`;
     const ratio = document.createElement('div');
     ratio.style.cssText = 'padding:56.25% 0 0 0;position:relative;';
     const iframe = document.createElement('iframe');
@@ -406,7 +486,6 @@ function openLightbox(images, startIndex, project) {
     box.appendChild(wrapper);
 
   } else {
-    // ── Görsel modu ─────────────────────────────────────────────────────
     const img = document.createElement('img');
     img.style.cssText = `
       max-width:88vw;max-height:88vh;
@@ -471,11 +550,18 @@ function openLightbox(images, startIndex, project) {
   requestAnimationFrame(() => { box.style.opacity = '1'; });
 }
 
-
-// ─── Menü bağlantıları ────────────────────────────────────────────────────
+// ─── Menü bağlantıları + Hash Routing init ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('wb')?.addEventListener('click',   () => showSection('works'));
   document.getElementById('ab')?.addEventListener('click',   () => showSection('academic'));
   document.getElementById('abtb')?.addEventListener('click', () => showSection('about'));
   document.getElementById('cb')?.addEventListener('click',   () => showSection('contact'));
+
+  // Geri/ileri buton desteği
+  window.addEventListener('popstate', () => parseAndNavigate());
+
+  // Sayfa ilk yüklendiğinde URL'deki hash'e git
+  if (window.location.hash && window.location.hash !== '#') {
+    parseAndNavigate();
+  }
 });
