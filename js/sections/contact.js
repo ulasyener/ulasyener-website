@@ -104,8 +104,8 @@ function showContactSection(s) {
       wrap.innerHTML = `
         <div class="contact-row" style="padding:0 0 12px;">
           <span class="contact-key">—</span>
-        <span class="contact-val" style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;">
-            For project inquiries, collaborations, or general questions, feel free to reach out directly.
+        <span class="contact-val" style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-weight:500;">
+            Feel free to send me a message!
           </span>
         </div>
         <div class="contact-form">
