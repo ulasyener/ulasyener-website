@@ -1,8 +1,8 @@
 /* ─── Font değişkenleri ──────────────────────────────────────────────── */
 :root {
-  --f-sans: 'Space Grotesk', 'Helvetica Neue', sans-serif;
-  --f-mono: 'IBM Plex Mono', monospace;
-  --f-info: 'IBM Plex Mono', monospace;
+  --f-sans: 'DM Mono', monospace;
+  --f-mono: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  --f-info: 'Space Grotesk', 'Helvetica Neue', sans-serif;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -20,7 +20,7 @@ canvas#grain {
   top: 0; left: 0;
   z-index: 200;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.18;
 }
 
 /* ─── Kimlik overlay ─────────────────────────────────────────────────── */
@@ -33,13 +33,13 @@ canvas#grain {
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 10;
+  z-index: 300;
   transition: opacity 0.4s ease;
 }
 #name {
   font-family: var(--f-sans);
-  font-size: clamp(22px, 4.5vw, 40px);
-  font-weight: 500;
+  font-size: clamp(26px, 5.5vw, 48px);
+  font-weight: 600;
   letter-spacing: .38em;
   color: rgba(0,0,0,0.65);
   opacity: 0;
@@ -47,9 +47,10 @@ canvas#grain {
 }
 #sub {
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: .22em;
-  color: rgba(0,0,0,0.45);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .52em;
+  color: rgba(0,0,0,0.6);
   margin-top: 18px;
   opacity: 0;
   animation: fi 1.2s ease 0.7s forwards;
@@ -70,7 +71,7 @@ canvas#grain {
 }
 #menu a {
   font-family: var(--f-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: .25em;
   color: rgba(0,0,0,0.65);
   text-decoration: none;
@@ -78,6 +79,7 @@ canvas#grain {
   transition: color .2s ease;
   cursor: pointer;
   padding: 6px 10px;
+  font-weight: 500;
 }
 #menu a:hover, #menu a.active { color: rgba(0,0,0,1); }
 
@@ -94,14 +96,15 @@ canvas#grain {
 }
 #social a {
   font-family: var(--f-mono);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: .25em;
-  color: rgba(0,0,0,.5);
+  color: rgba(255,255,255,0.7);
   text-decoration: none;
   text-transform: uppercase;
   transition: color .2s ease;
+  font-weight: 400;
 }
-#social a:hover { color: rgba(0,0,0,1); }
+#social a:hover { color: rgba(255,255,255,1); }
 
 /* ─── Animasyon ──────────────────────────────────────────────────────── */
 @keyframes fi {
@@ -112,16 +115,16 @@ canvas#grain {
 /* ─── Mobil ──────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   #menu { top: 16px; gap: 12px; }
-  #menu a { font-size: 8px; letter-spacing: .15em; padding: 4px 6px; }
+  #menu a { font-size: 9px; letter-spacing: .15em; padding: 4px 6px; font-weight: 500; }
 
-  #name { font-size: clamp(16px, 5.5vw, 26px); letter-spacing: .28em; }
-  #sub  { font-size: 8px; letter-spacing: .14em; margin-top: 12px; }
+  #name { font-size: clamp(18px, 5.5vw, 28px); letter-spacing: .28em; }
+  #sub  { font-size: 9px; letter-spacing: .14em; margin-top: 12px; }
 
   #social { gap: 16px; bottom: 14px; }
-  #social a { font-size: 7px; letter-spacing: .16em; }
+  #social a { font-size: 8px; letter-spacing: .16em; }
 }
 
 @media (max-width: 480px) {
-  #menu a { font-size: 7px; letter-spacing: .12em; padding: 3px 4px; }
+  #menu a { font-size: 8px; letter-spacing: .12em; padding: 3px 4px; font-weight: 500; }
   #name   { letter-spacing: .22em; }
 }
