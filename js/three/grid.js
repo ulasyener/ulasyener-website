@@ -93,6 +93,7 @@ function buildGrid(items, onSelect) {
 
   // Debug: ekran boyutunu göster (geçici)
 
+  getGridRenderer(CLIP_SAFE);
   const gridScene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
   camera.position.set(0, 0, CAM_Z);
@@ -555,7 +556,7 @@ function buildGrid(items, onSelect) {
       m.scale.y += (scales[i] - m.scale.y) * LERP;
     });
 
-    renderer.render(gridScene, camera);
+    gridRenderer.render(gridScene, camera);
     updateGifTextures();
     syncGlitchMeshes();
     updateLabelBands();
