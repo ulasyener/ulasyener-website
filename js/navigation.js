@@ -746,6 +746,12 @@ function renderAcademic() {
 
 // ─── Academic alt sayfa ────────────────────────────────────────────────────
 function showAcademicSection(section) {
+  // Archive → Fremde Türen için özel sayfa
+  if (section.id === 'archive') {
+    showArchiveSection(section);
+    return;
+  }
+
   runGlitch(() => {
     const root = getPanelRoot();
     clearPanel();
@@ -780,6 +786,125 @@ function showAcademicSection(section) {
     });
 
     el.appendChild(list);
+    root.appendChild(el);
+  });
+}
+
+// ─── Archive → Fremde Türen listesi ───────────────────────────────────────
+function showArchiveSection(section) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Academic', action: () => showSection('academic') },
+      { label: section.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = section.label;
+    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
+    el.appendChild(label);
+
+    const list = document.createElement('div');
+    list.className = 'subcategory-list';
+
+    section.subs.forEach(sub => {
+      const item = document.createElement('div');
+      item.className = 'subcat-item';
+      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
+      item.addEventListener('click', () => showFremdeTueren(section));
+      list.appendChild(item);
+    });
+
+    el.appendChild(list);
+    root.appendChild(el);
+  });
+}
+
+// ─── Fremde Türen sayfası ─────────────────────────────────────────────────
+function showFremdeTueren(archiveSection) {
+  runGlitch(() => {
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Academic', action: () => showSection('academic') },
+      { label: 'Archive',  action: () => showArchiveSection(archiveSection) },
+      { label: 'Fremde Türen / El Kapıları' }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = 'Fremde Türen / El Kapıları';
+    label.addEventListener('click', () => runGlitch(() => showArchiveSection(archiveSection)));
+    el.appendChild(label);
+
+    const sections = [
+      {
+        title: 'Archive',
+        items: [
+          { label: 'Texts',         desc: 'Literature, poetry, stories, and written narratives related to Turkish migration to Germany.' },
+          { label: 'Music',         desc: 'Albums, songs, records, and cassette tapes preserving sonic memories and cultural expressions.' },
+          { label: 'Moving Images', desc: 'Films, television programmes, posters, video recordings, and visual representations of migration.' },
+          { label: 'Printed Media', desc: 'Newspapers, magazines, brochures, and other printed materials documenting migration histories.' },
+          { label: 'Voices',        desc: 'Interviews, testimonies, conversations, and audio recordings collected through oral history practices.' },
+          { label: 'Documents',     desc: 'Letters, manuscripts, personal collections, and various archival materials.' },
+          { label: 'Sources',       desc: 'Written, visual, and audiovisual references, bibliographies, and external archives.' }
+        ]
+      },
+      {
+        title: 'Research',
+        items: [
+          { label: 'Methods',   desc: 'Autoethnography · Oral History · Media Archaeology · Practice-Based Artistic Research · Marxist Research Methods' },
+          { label: 'Theory',    desc: 'Marxist Theory · Memory Studies · Migration Studies · Media Theory · Spatial Theory' },
+          { label: 'Practices', desc: 'Documentary Practices · Archival Reconstruction · Spatial Storytelling · Audiovisual Experiments · Interactive Media · Radio & Podcast Production · Digital Heritage · Worldbuilding' },
+          { label: 'Outputs',   desc: 'PhD Project · Essays · Articles · Publications · Conference Papers · Lectures · Documents · Bibliographies' }
+        ]
+      },
+      {
+        title: 'Works',
+        items: [
+          { label: 'Films',            desc: 'Documentary Films · Video Essays' },
+          { label: 'Audio',            desc: 'Radio Programmes · Podcasts · Sound Works' },
+          { label: 'Installations',    desc: 'Multimedia Installations · Spatial Installations' },
+          { label: 'Interactive Media',desc: 'XR Experiences · Interactive Narratives · Digital Archives' },
+          { label: 'Games',            desc: 'Open World Environments · Narrative Experiments' },
+          { label: 'Web',              desc: 'Websites · Online Platforms' },
+          { label: 'Exhibitions',      desc: 'Exhibitions · Screenings · Presentations' }
+        ]
+      }
+    ];
+
+    sections.forEach(sec => {
+      const secLabel = document.createElement('div');
+      secLabel.className = 'sec-label';
+      secLabel.textContent = sec.title;
+      el.appendChild(secLabel);
+
+      const list = document.createElement('div');
+      list.className = 'subcategory-list';
+
+      sec.items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'subcat-item empty';
+        div.innerHTML = `
+          <div class="subcat-label">${item.label}</div>
+          <div class="cat-desc">${item.desc}</div>
+        `;
+        list.appendChild(div);
+      });
+
+      el.appendChild(list);
+    });
+
     root.appendChild(el);
   });
 }
@@ -855,14 +980,91 @@ function toggleAccordion(item, sectionId) {
 }
 
 function getAboutContent(sectionId) {
-  const content = {
-    bio:        '<p>— coming soon —</p>',
-    education:  '<p>— coming soon —</p>',
-    experience: '<p>— coming soon —</p>',
-    teaching:   '<p>— coming soon —</p>',
-    software:   '<p>— coming soon —</p>'
-  };
-  return `<div class="accordion-content">${content[sectionId] || ''}</div>`;
+  if (sectionId === 'bio') {
+    return `
+      <div class="accordion-content">
+        <p>Ulas Yener is an architect, 3D artist, and interdisciplinary media researcher based in Germany. With nearly fifteen years of experience in architecture, visualization, and digital media production, his practice combines spatial design with moving images, photography, sound, and immersive technologies. His work explores memory, migration, and cultural narratives through documentary practices, archives, and interactive storytelling, creating experiences that move between physical and virtual spaces.</p>
+        <p style="margin-top:12px;">Alongside his professional work in architecture and visualization, he develops artistic and research-based projects that investigate new forms of storytelling and the relationship between media, memory, and space.</p>
+      </div>`;
+  }
+
+  if (sectionId === 'education') {
+    const items = [
+      { period: '2022 – Present', title: 'PhD Candidate, Practice-Based Artistic Research', sub: 'Bauhaus-Universität Weimar' },
+      { period: '2017 – 2021',    title: 'M.Sc., MediaArchitecture',                        sub: 'Bauhaus-Universität Weimar' },
+      { period: '2014 – 2017',    title: 'M.Sc., Architectural Design Computing',            sub: 'Istanbul Technical University' },
+      { period: '2013',           title: 'Guest Student, M.Sc. Industrial Design',           sub: 'Istanbul Technical University' },
+      { period: '2008 – 2012',    title: 'B.F.A., Interior Architecture and Environmental Design', sub: 'Hacettepe University' }
+    ];
+    return `<div class="accordion-content">${items.map(it => `
+      <div class="about-row">
+        <div class="about-period">${it.period}</div>
+        <div class="about-detail">
+          <div class="about-title">${it.title}</div>
+          <div class="about-sub">${it.sub}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  if (sectionId === 'experience') {
+    const items = [
+      { period: '2023 – 2026', title: 'Competition Management Architect (Pre-Examiner)', sub: 'Kohler Grohe Architekten, Stuttgart' },
+      { period: '2022 – 2023', title: 'Freelance XR Designer',                           sub: 'Aesculap AG, Tuttlingen' },
+      { period: '2018 – 2024', title: 'Freelance Lecturer',                              sub: 'Bauhaus-Universität Weimar, Faculty of Architecture and Urbanism' },
+      { period: '2017 – 2023', title: 'Freelance Architectural Designer',                sub: 'Schmitz-Riol Architekten, Weimar' },
+      { period: '2014 – 2016', title: 'Interior Architect and Product Designer',         sub: '304 Design, Istanbul' },
+      { period: '2013 – 2014', title: 'Interior Architect and Product Designer',         sub: 'cisimdesign, Istanbul' },
+      { period: '2012 – 2013', title: 'Interior Architect and Product Designer',         sub: 'projemasif, Istanbul' }
+    ];
+    return `<div class="accordion-content">${items.map(it => `
+      <div class="about-row">
+        <div class="about-period">${it.period}</div>
+        <div class="about-detail">
+          <div class="about-title">${it.title}</div>
+          <div class="about-sub">${it.sub}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  if (sectionId === 'teaching') {
+    const items = [
+      { period: '2023 – 2024', title: 'Spatial Narratives, Lecturer',                    sub: 'Bauhaus Spring School 2024, Bauhaus-Universität Weimar' },
+      { period: '2023 – 2024', title: 'Re-Located Stories, Lecturer',                    sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
+      { period: '2021 – 2022', title: 'Contemporary Tools for Design, Lecturer',         sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
+      { period: '2020 – 2021', title: 'Modelling Bauhaus Workshop, Workshop Instructor', sub: 'Faculty of Art and Design, Kadir Has University' },
+      { period: '2019 – 2020', title: 'Professional Presentation Methods, Lecturer',     sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
+      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen, Workshop Instructor', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
+      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling, Lecturer', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' }
+    ];
+    return `<div class="accordion-content">${items.map(it => `
+      <div class="about-row">
+        <div class="about-period">${it.period}</div>
+        <div class="about-detail">
+          <div class="about-title">${it.title}</div>
+          <div class="about-sub">${it.sub}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  if (sectionId === 'software') {
+    const categories = [
+      { label: '2D · 3D · BIM',        items: ['Autodesk 3ds Max', 'Autodesk AutoCAD', 'Vectorworks', 'Blender', 'Cinema 4D', 'V-Ray Renderer'] },
+      { label: 'Image · Video · Sound', items: ['Adobe Photoshop', 'Adobe Lightroom', 'Adobe Illustrator', 'Adobe InDesign', 'Adobe After Effects', 'Adobe Premiere Pro', 'Adobe Audition', 'Reaper', 'Audacity', 'Ableton Live', 'Serato'] },
+      { label: 'Game Engine',           items: ['Unreal Engine', 'Unity 3D'] },
+      { label: '3D & Photogrammetry',   items: ['Adobe Substance 3D Painter', 'Adobe Substance 3D Designer', 'Autodesk Recap Pro', 'Reality Capture', 'Polycam'] },
+      { label: 'Computational Tools',   items: ['Python', 'TouchDesigner', 'Three.js', 'ChatGPT', 'Claude', 'Leonardo AI', 'Midjourney', 'RunwayML'] },
+      { label: 'Digital Tools',         items: ['Microsoft Office', 'Canva', 'WordPress'] }
+    ];
+    return `<div class="accordion-content">${categories.map(cat => `
+      <div class="about-row">
+        <div class="about-period">${cat.label}</div>
+        <div class="about-detail">
+          <div class="about-sub">${cat.items.join(', ')}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  return `<div class="accordion-content"><p>— coming soon —</p></div>`;
 }
 
 // ─── CONTACT ──────────────────────────────────────────────────────────────
