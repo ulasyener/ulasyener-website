@@ -99,7 +99,7 @@ function buildGrid(items, onSelect, overlayTop) {
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-   'padding:0 ' + PAD_H + ' 80px;' +
+  'padding:0 ' + PAD_H + ' 80px;' +
     'box-sizing:border-box;' +
     '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
     'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
