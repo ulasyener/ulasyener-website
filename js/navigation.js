@@ -1369,8 +1369,12 @@ function showContactSection(s) {
       const list = document.createElement('div');
       list.className = 'category-list';
       list.innerHTML = `
-        <div class="contact-row"><span class="contact-key">Email</span><a href="mailto:hello@ulasyener.com" class="contact-val">hello@ulasyener.com</a></div>
-        <div class="contact-row"><span class="contact-key">Location</span><span class="contact-val">Weimar / Stuttgart, Germany</span></div>
+        <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val">hello [at] ulasyener.com</span></div>
+        <div class="contact-row"><span class="contact-key">Phone</span><a href="tel:+491632078616" class="contact-val">+49 163 207 8616</a></div>
+        <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
+        <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
+        <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">Weimar · Stuttgart · Istanbul</span></div>
+        <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 Stuttgart</span></div>
         <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">Open to collaboration</span></div>
       `;
       el.appendChild(list);
