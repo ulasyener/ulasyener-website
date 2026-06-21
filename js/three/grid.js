@@ -2,7 +2,6 @@
 // Kademe 1: showProjectGrid(projects, onProjectClick)
 // Kademe 2: showPhotoGrid(project)
 
-let gridRenderer = null;
 let gridAnimId   = null;
 let gridOverlay  = null;
 
@@ -11,40 +10,12 @@ const SCROLL_SPD  = 0.8;
 const SCROLL_LERP = 0.1;
 const LERP        = 0.09;
 
-// ─── Renderer ─────────────────────────────────────────────────────────────
-function getGridRenderer(clipSafe) {
-  const clip = clipSafe || 120;
-  if (gridRenderer) {
-    gridRenderer.domElement.style.clipPath = 'inset(' + clip + 'px 0 0 0)';
-    return gridRenderer;
-  }
-  gridRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
-  gridRenderer.setSize(window.innerWidth, window.innerHeight);
-  gridRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  gridRenderer.setClearColor(0x000000, 0);
-  gridRenderer.domElement.style.cssText =
-    'position:fixed;top:0;left:0;z-index:101;pointer-events:none;' +
-    'clip-path:inset(' + clip + 'px 0 0 0);';
-  document.body.appendChild(gridRenderer.domElement);
-  window.addEventListener('resize', onGridResize);
-  return gridRenderer;
-}
-
-function onGridResize() {
-  if (!gridRenderer) return;
-  gridRenderer.setSize(window.innerWidth, window.innerHeight);
-}
-
 function destroyGrid() {
   if (gridAnimId)  { cancelAnimationFrame(gridAnimId); gridAnimId = null; }
   if (gridOverlay) { gridOverlay.remove(); gridOverlay = null; }
   document.querySelectorAll('.grid-label, .grid-info-panel').forEach(e => e.remove());
-  if (gridRenderer) {
-    window.removeEventListener('resize', onGridResize);
-    gridRenderer.dispose();
-    gridRenderer.domElement.remove();
-    gridRenderer = null;
-  }
+  // scene.js'e grid'in kapandığını bildir
+  if (typeof setActiveGridState === 'function') setActiveGridState(null);
 }
 
 // ─── Scramble Text ────────────────────────────────────────────────────────
@@ -85,13 +56,15 @@ function buildGrid(items, onSelect) {
   const CLIP_SAFE = IS_MOB ? 60   : 120;
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
-  // ── Grid renderer (terrain'den bağımsız) ──────────────────────────────
-  const r = getGridRenderer(CLIP_SAFE);
-
   const gridScene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
-  camera.position.set(0, 0, CAM_Z);
-  camera.lookAt(0, 0, 0);
+  const gridCam   = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
+  gridCam.position.set(0, 0, CAM_Z);
+  gridCam.lookAt(0, 0, 0);
+
+  // scene.js'teki animate()'e bu scene+camera'yı ver
+  if (typeof setActiveGridState === 'function') {
+    setActiveGridState({ scene: gridScene, camera: gridCam });
+  }
 
   const loader = new THREE.TextureLoader();
   const meshes = [];
@@ -119,10 +92,10 @@ function buildGrid(items, onSelect) {
   const visibleW = visibleH * (W / H);
   const navUnits = (NAV_SAFE / H) * visibleH;
 
-  const ROWS     = Math.ceil(items.length / PER_ROW);
-  const topEdge  = visibleH / 2;
-  const startY   = topEdge - navUnits - TILE / 2;
-  const gridH    = ROWS * TILE + (ROWS - 1) * GAP;
+  const ROWS      = Math.ceil(items.length / PER_ROW);
+  const topEdge   = visibleH / 2;
+  const startY    = topEdge - navUnits - TILE / 2;
+  const gridH     = ROWS * TILE + (ROWS - 1) * GAP;
   const maxScroll = Math.max(0, gridH - (visibleH - navUnits) + TILE * 0.3);
   const scrollMax = maxScroll;
 
@@ -282,7 +255,7 @@ function buildGrid(items, onSelect) {
       lb.band.scale.y = mesh.scale.y;
 
       if (!bandInited.has(i)) {
-        const pos = mesh.position.clone().project(camera);
+        const pos = mesh.position.clone().project(gridCam);
         const sy  = (-pos.y * 0.5 + 0.5) * H;
         if (sy > CLIP_SAFE && sy < H + 60) {
           bandInited.add(i);
@@ -302,13 +275,21 @@ function buildGrid(items, onSelect) {
   }
 
   // ── Overlay ───────────────────────────────────────────────────────────
+  // clip-path artık bu overlay div'inde — canvas#c'ye dokunmuyoruz
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
-    'position:fixed;top:' + NAV_SAFE + 'px;left:0;' +
-    'width:100%;height:calc(100% - ' + NAV_SAFE + 'px);' +
-    'z-index:102;cursor:default;';
+    'position:fixed;top:0;left:0;width:100%;height:100%;' +
+    'z-index:102;cursor:default;' +
+    'clip-path:inset(' + CLIP_SAFE + 'px 0 0 0);';
   document.body.appendChild(gridOverlay);
+
+  // pointer olayları için üst kısımda (nav alanı) geçirgen bir div
+  const navBlocker = document.createElement('div');
+  navBlocker.style.cssText =
+    'position:fixed;top:0;left:0;width:100%;height:' + NAV_SAFE + 'px;' +
+    'z-index:103;pointer-events:none;';
+  document.body.appendChild(navBlocker);
 
   // ── Raycaster ─────────────────────────────────────────────────────────
   const raycaster = new THREE.Raycaster();
@@ -329,7 +310,7 @@ function buildGrid(items, onSelect) {
 
   function onMove(e) {
     toNDC(e);
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, gridCam);
     const hits = raycaster.intersectObjects(meshes, false);
     gridOverlay.style.cursor = hits.length ? 'pointer' : 'default';
     if (hits.length) {
@@ -356,7 +337,7 @@ function buildGrid(items, onSelect) {
   function onClick(e) {
     if (!introComplete) return;
     toNDC(e);
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, gridCam);
     const hits = raycaster.intersectObjects(meshes);
     if (!hits.length) { deselect(); return; }
     const hit = hits[0].object;
@@ -472,7 +453,7 @@ function buildGrid(items, onSelect) {
     const touch = e.changedTouches[0];
     mouse.x =  (touch.clientX / W) * 2 - 1;
     mouse.y = -(touch.clientY / H) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, gridCam);
     const hits = raycaster.intersectObjects(meshes);
     if (!hits.length) { deselect(); return; }
     const hit = hits[0].object;
@@ -486,7 +467,7 @@ function buildGrid(items, onSelect) {
   gridOverlay.addEventListener('touchmove',  onTouchMove,  { passive: false });
   gridOverlay.addEventListener('touchend',   onTouchEnd,   { passive: true });
 
-  // ── Render loop ───────────────────────────────────────────────────────
+  // ── State güncelleme loop'u (render scene.js'de) ──────────────────────
   function loop() {
     gridAnimId = requestAnimationFrame(loop);
 
@@ -496,8 +477,8 @@ function buildGrid(items, onSelect) {
 
     const camX = smoothMX * CAM_ROT_MAX * -1.2;
     const camY = smoothMY * CAM_ROT_MAX *  0.6;
-    camera.position.set(camX, camY, CAM_Z);
-    camera.lookAt(0, 0, 0);
+    gridCam.position.set(camX, camY, CAM_Z);
+    gridCam.lookAt(0, 0, 0);
 
     meshes.forEach((m, i) => {
       const ud  = m.userData;
@@ -533,7 +514,7 @@ function buildGrid(items, onSelect) {
       m.scale.y += (scales[i] - m.scale.y) * LERP;
     });
 
-    r.render(gridScene, camera);
+    // render scene.js/animate()'den geliyor — burada sadece state güncellenir
     updateGifTextures();
     syncGlitchMeshes();
     updateLabelBands();
@@ -549,6 +530,7 @@ function buildGrid(items, onSelect) {
       gridOverlay?.removeEventListener('touchstart', onTouchStart);
       gridOverlay?.removeEventListener('touchmove',  onTouchMove);
       gridOverlay?.removeEventListener('touchend',   onTouchEnd);
+      if (navBlocker && document.body.contains(navBlocker)) navBlocker.remove();
       _destroyGlitch();
       destroyGrid();
     }
