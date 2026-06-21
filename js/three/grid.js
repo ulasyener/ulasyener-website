@@ -7,12 +7,6 @@ let gridAnimId   = null;
 let gridOverlay  = null;
 
 // ─── Sabitler ─────────────────────────────────────────────────────────────
-// PER_ROW — buildGrid içinde dinamik
-// GAP — buildGrid içinde dinamik
-// TILE — buildGrid içinde dinamik
-// CAM_Z — buildGrid içinde dinamik
-// NAV_SAFE — buildGrid içinde dinamik
-// CLIP_SAFE — buildGrid içinde dinamik
 const SCROLL_SPD  = 0.8;
 const SCROLL_LERP = 0.1;
 const LERP        = 0.09;
@@ -91,9 +85,9 @@ function buildGrid(items, onSelect) {
   const CLIP_SAFE = IS_MOB ? 60   : 120;
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
-  // Debug: ekran boyutunu göster (geçici)
+  // ── Grid renderer (terrain'den bağımsız) ──────────────────────────────
+  const r = getGridRenderer(CLIP_SAFE);
 
-  getGridRenderer(CLIP_SAFE);
   const gridScene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
   camera.position.set(0, 0, CAM_Z);
@@ -130,7 +124,6 @@ function buildGrid(items, onSelect) {
   const startY   = topEdge - navUnits - TILE / 2;
   const gridH    = ROWS * TILE + (ROWS - 1) * GAP;
   const maxScroll = Math.max(0, gridH - (visibleH - navUnits) + TILE * 0.3);
-  // Scroll: grid NAV_SAFE çizgisinin üstüne çıkmasın
   const scrollMax = maxScroll;
 
   const DEPTH   = 0.08;
@@ -141,9 +134,8 @@ function buildGrid(items, onSelect) {
   const INTRO_DURATION = 1400;
   const INTRO_STAGGER  = 80;
   let   introStartTime = useIntro ? performance.now() : null;
-  let   introComplete  = !useIntro; // intro yoksa direkt tamamlanmış say
+  let   introComplete  = !useIntro;
 
-  // Her plane için başlangıç: daha yakın, daha kontrollü
   const directions = [
     { x: -4,  y:  3, z: -4, rx:  0.3, ry: -0.5 },
     { x:  0,  y:  5, z: -5, rx:  0.5, ry:  0.0 },
@@ -204,13 +196,9 @@ function buildGrid(items, onSelect) {
     scales[i] = 1;
   });
 
-  // Intro başladı
-
-  // ── Info Panel'ler ────────────────────────────────────────────────────
-  // Her plane'in altında bilgi penceresi — plane genişliği kadar
   // ── 3D Alt Bant (Label Band) ──────────────────────────────────────────
   const BAND_H   = 0.42;
-  const BAND_Z   = DEPTH / 2 + 0.06;  // önceki 0.02 → daha önde
+  const BAND_Z   = DEPTH / 2 + 0.06;
   const CHARS    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const labelBands = [];
   const bandInited = new Set();
@@ -227,11 +215,9 @@ function buildGrid(items, onSelect) {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, 512, 80);
 
-    // Arka plan
     ctx.fillStyle = 'rgba(218,215,210,0.90)';
     ctx.fillRect(0, 0, 512, 80);
 
-    // Scan line
     const sy = ((Date.now() % 1800) / 1800) * 80;
     const g  = ctx.createLinearGradient(0, sy-2, 0, sy+2);
     g.addColorStop(0,   'rgba(0,0,0,0)');
@@ -240,7 +226,6 @@ function buildGrid(items, onSelect) {
     ctx.fillStyle = g;
     ctx.fillRect(0, sy-2, 512, 4);
 
-    // Scramble reveal
     const revCount = Math.ceil(progress * title.length);
     let display = '';
     for (let k = 0; k < title.length; k++) {
@@ -267,7 +252,6 @@ function buildGrid(items, onSelect) {
     if (!item.label) { labelBands.push(null); return; }
 
     const { canvas, texture } = makeCanvasTex();
-    // Sabit rastgele karakterler
     canvas._fixed = Array.from(item.label.toUpperCase()).map(c =>
       c === ' ' ? ' ' : CHARS[Math.floor(Math.random() * CHARS.length)]
     );
@@ -290,7 +274,6 @@ function buildGrid(items, onSelect) {
       if (!lb) return;
       const mesh = meshes[i];
 
-      // Ana plane ile tam senkron — intro dahil
       lb.band.position.x = mesh.position.x;
       lb.band.position.y = mesh.position.y - TILE / 2 - BAND_H / 2 - 0.18;
       lb.band.position.z = mesh.position.z + BAND_Z;
@@ -298,7 +281,6 @@ function buildGrid(items, onSelect) {
       lb.band.scale.x = mesh.scale.x;
       lb.band.scale.y = mesh.scale.y;
 
-      // İlk göründüğünde scramble başlat
       if (!bandInited.has(i)) {
         const pos = mesh.position.clone().project(camera);
         const sy  = (-pos.y * 0.5 + 0.5) * H;
@@ -372,7 +354,7 @@ function buildGrid(items, onSelect) {
   }
 
   function onClick(e) {
-    if (!introComplete) return; // intro bitmeden tıklama yok
+    if (!introComplete) return;
     toNDC(e);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(meshes);
@@ -392,7 +374,6 @@ function buildGrid(items, onSelect) {
   function onWheel(e) {
     e.preventDefault();
     scrollTarget += e.deltaY * 0.003 * SCROLL_SPD;
-    // Yukarı sınır: ilk satır NAV_SAFE çizgisinin altında kalsın
     const upLimit = navUnits * 0.15;
     scrollTarget = Math.max(-upLimit, Math.min(maxScroll, scrollTarget));
   }
@@ -522,11 +503,9 @@ function buildGrid(items, onSelect) {
       const ud  = m.userData;
       const now = performance.now();
 
-      // ── Giriş animasyonu ──────────────────────────────────────────────
       if (!introComplete) {
         const elapsed = now - introStartTime - ud.staggerDelay;
         if (elapsed < 0) {
-          // Henüz başlamadı — başlangıç pozisyonunda bekle
           m.position.set(ud.startX, ud.startY + scrollY, ud.startZ);
           m.rotation.set(ud.startRX, ud.startRY, 0);
           return;
@@ -540,11 +519,9 @@ function buildGrid(items, onSelect) {
         m.rotation.x = ud.startRX * (1 - e) + (smoothMY * -0.04) * e;
         m.rotation.y = ud.startRY + (PLANE_ROT - ud.startRY) * e + (smoothMX * -0.08) * e;
 
-        // Tüm plane'ler tamamlandı mı?
         const lastDone = now - introStartTime - (meshes.length - 1) * INTRO_STAGGER;
         if (lastDone > INTRO_DURATION) introComplete = true;
       } else {
-        // ── Normal mod ────────────────────────────────────────────────
         m.position.y = ud.baseY + scrollY;
         smoothRotY[i] += (hoverRotY[i] - smoothRotY[i]) * 0.08;
         smoothRotX[i] += (hoverRotX[i] - smoothRotX[i]) * 0.08;
@@ -556,7 +533,7 @@ function buildGrid(items, onSelect) {
       m.scale.y += (scales[i] - m.scale.y) * LERP;
     });
 
-    gridRenderer.render(gridScene, camera);
+    r.render(gridScene, camera);
     updateGifTextures();
     syncGlitchMeshes();
     updateLabelBands();
@@ -585,7 +562,7 @@ function showProjectGrid(projects, onProjectClick) {
     label:    proj.title,
     sublabel: proj.year,
     data:     proj,
-    intro:    true   // giriş animasyonu aktif
+    intro:    true
   }));
   return buildGrid(items, onProjectClick);
 }
@@ -601,7 +578,7 @@ function showPhotoGrid(project, onPhotoClick) {
     label:    null,
     sublabel: null,
     data:     { index: i, project },
-    intro:    false  // fotoğraf grid'inde animasyon yok
+    intro:    false
   }));
 
   return buildGrid(items, onPhotoClick);
