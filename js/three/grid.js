@@ -63,7 +63,7 @@ function buildGrid(items, onSelect) {
 
   // scene.js'teki animate()'e bu scene+camera'yı ver
   if (typeof setActiveGridState === 'function') {
-    setActiveGridState({ scene: gridScene, camera: gridCam });
+    setActiveGridState({ scene: gridScene, camera: gridCam, clipSafe: CLIP_SAFE });
   }
 
   const loader = new THREE.TextureLoader();
