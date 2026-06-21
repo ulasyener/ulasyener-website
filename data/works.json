@@ -9,7 +9,7 @@
           "id": "arch-projects",
           "label": "Projects",
           "description": "Original design projects ranging from residential to public and cultural buildings.",
-          "projects": [],
+          "projects": ["kupferberg", "scheidegg"],
           "subgroups": [
             { "id": "arch-projects-design", "label": "Design", "description": "Original design projects ranging from residential to public and cultural buildings." },
             { "id": "arch-projects-restoration", "label": "Restoration & Renovation", "description": "Conservation and adaptive reuse projects. Sensitive interventions within existing historic and contemporary structures." }

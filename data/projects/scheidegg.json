@@ -1,0 +1,17 @@
+{
+  "id": "scheidegg",
+  "title": "SCHEIDEGG",
+  "year": "2019",
+  "location": "Scheidegg",
+  "coordinates": [47.56760181467346, 9.8493256505508],
+  "office": "Schmitz-Riol Architects",
+  "responsibilities": ["Design Architect", "Project Architect", "Visualisation", "LPH 1–5"],
+  "program": "Residential Building Design",
+  "type": "image-grid",
+  "cover": "images/projects/architecture/scheidegg/cover.png",
+  "images": [
+    { "src": "images/projects/architecture/scheidegg/1.png" },
+    { "src": "images/projects/architecture/scheidegg/2.png" },
+    { "src": "images/projects/architecture/scheidegg/3.png" }
+  ]
+}
