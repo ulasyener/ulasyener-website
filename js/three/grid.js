@@ -113,17 +113,21 @@ function buildGrid(items, onSelect) {
   const IS_MOB    = W <= 768;
   const PER_ROW   = IS_MOB ? 1    : 3;
   const GAP       = IS_MOB ? 0.10 : 0.18;
-const TILE  = IS_MOB ? 1.4  : 2.8;
-const CAM_Z = IS_MOB ? 5.0  : 7.5;
-  // NAV_SAFE: kırmızı çerçeve üst kenarı (nav+breadcrumb+label+150px)
-const NAV_SAFE = IS_MOB ? 310 : 280;
-  const CLIP_SAFE = NAV_SAFE;
+  const TILE      = IS_MOB ? 1.4  : 2.8;
+  const CAM_Z     = IS_MOB ? 5.0  : 7.5;
+  // GRID_TOP: grid kartlarının ekranda başladığı px (nav yüksekliği)
+  // → navUnits hesabı için küçük tutulmalı, kartlar ortalı çıksın
+  const GRID_TOP  = IS_MOB ? 56   : 68;
+  // FADE_TOP: mask fade + overlay'in başladığı px (kırmızı çerçeve üst kenarı)
+  const FADE_TOP  = IS_MOB ? 160  : 130;
+  const NAV_SAFE  = GRID_TOP;   // layout hesapları GRID_TOP kullanır
+  const CLIP_SAFE = FADE_TOP;   // label band görünürlük eşiği
   const PLANE_ROT = IS_MOB ? 0.0  : 0.28;
 
   // FIX [1]: Grid kendi özel scene'ini kullanıyor
   const gridScene  = new THREE.Scene();
-  // NAV_SAFE: mask-gradient fade başlangıcı (menü çizgisi)
-  const renderer   = getGridRenderer(NAV_SAFE);
+  // FADE_TOP: mask-gradient fade başlangıcı (kırmızı çerçeve üst kenarı)
+  const renderer   = getGridRenderer(FADE_TOP);
 
   const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
   camera.position.set(0, 0, CAM_Z);
@@ -339,8 +343,8 @@ const NAV_SAFE = IS_MOB ? 310 : 280;
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
-    'position:fixed;top:' + NAV_SAFE + 'px;left:0;' +
-    'width:100%;height:calc(100% - ' + NAV_SAFE + 'px);' +
+    'position:fixed;top:' + FADE_TOP + 'px;left:0;' +
+    'width:100%;height:calc(100% - ' + FADE_TOP + 'px);' +
     'z-index:102;cursor:default;' +
     'touch-action:none;';
   document.body.appendChild(gridOverlay);
