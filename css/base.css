@@ -545,25 +545,13 @@ canvas#grain {
   .about-sub    { font-size: 10px; }
 }
 
-/* ─── Fremde Türen hover accordion ──────────────────────────────────────── */
+/* ─── Fremde Türen accordion ─────────────────────────────────────────────── */
 .fremde-sec-item {
-  cursor: default;
+  cursor: pointer;
 }
 
 .fremde-sec-body {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.32s ease;
-}
-
-/* Mobilde tıkla aç — hover efekti yok */
-@media (max-width: 768px) {
-  .fremde-sec-item { cursor: pointer; }
-  .fremde-sec-item:hover {
-    background: none;
-    margin: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .fremde-sec-item:hover .cat-label { color: rgba(0,0,0,0.75); }
 }

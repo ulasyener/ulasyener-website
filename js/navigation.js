@@ -914,20 +914,8 @@ function showFremdeTueren(archiveSection) {
         body.appendChild(list);
       }
 
-      // Desktop: hover
-      secItem.addEventListener('mouseenter', () => {
-        buildBody();
-        body.style.maxHeight = body.scrollHeight + 'px';
-        secItem.classList.add('is-open');
-      });
-      secItem.addEventListener('mouseleave', () => {
-        body.style.maxHeight = '0';
-        secItem.classList.remove('is-open');
-      });
-
-      // Mobil: tıkla aç/kapat
+      // Desktop + mobil: tıkla aç/kapat
       secItem.addEventListener('click', () => {
-        if (window.innerWidth > 768) return;
         buildBody();
         const isOpen = secItem.classList.contains('is-open');
         if (isOpen) {
