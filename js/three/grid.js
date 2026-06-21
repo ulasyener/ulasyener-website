@@ -41,7 +41,7 @@ const FADE_PX_MOB    = 24;
 // Kademe 1 desktop overlay top
 const K1_OVERLAY_TOP = 191;
 // Kademe 2 desktop overlay top
-const K2_OVERLAY_TOP = 483;
+const K2_OVERLAY_TOP = 429;
 // Mobil overlay top (her iki kademe)
 const MOB_OVERLAY_TOP = 104;
 
