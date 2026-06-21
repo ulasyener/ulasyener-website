@@ -113,9 +113,12 @@ function buildGrid(items, onSelect) {
   const IS_MOB    = W <= 768;
   const PER_ROW   = IS_MOB ? 1    : 3;
   const GAP       = IS_MOB ? 0.10 : 0.18;
-  const TILE      = IS_MOB ? 1.0  : 2.8;   // mobil portrait için daha küçük
-  const CAM_Z     = IS_MOB ? 3.5  : 7.5;   // yakın kamera → kart ortalı görünür
+  // Mobil: FOV=50, CAM_Z=4.0 → visibleW≈1.73 (aspect 0.46) → TILE=1.2 ekranın ~%70'i
+  const TILE      = IS_MOB ? 1.2  : 2.8;
+  const CAM_Z     = IS_MOB ? 4.0  : 7.5;
+  // GRID_TOP: navUnits hesabı — küçük tutulur, kartlar üstten boşlukla başlar
   const GRID_TOP  = IS_MOB ? 56   : 68;
+  // FADE_TOP: mask fade başlangıcı — kırmızı çerçeve üst kenarı
   const FADE_TOP  = IS_MOB ? 160  : 130;
   const NAV_SAFE  = GRID_TOP;
   const CLIP_SAFE = FADE_TOP;
@@ -154,7 +157,8 @@ function buildGrid(items, onSelect) {
   const fovRad   = (50 * Math.PI) / 180;
   const visibleH = 2 * Math.tan(fovRad / 2) * CAM_Z;
   const visibleW = visibleH * (W / H);
-  const navUnits = (NAV_SAFE / H) * visibleH;
+  // navUnits: FADE_TOP'a göre hesapla → kartlar maskin bittiği noktadan başlar
+  const navUnits = (FADE_TOP / H) * visibleH;
 
   const ROWS     = Math.ceil(items.length / PER_ROW);
   const topEdge  = visibleH / 2;
