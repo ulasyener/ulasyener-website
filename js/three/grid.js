@@ -289,7 +289,7 @@ function showVideoEmbed(project) {
     'display:flex;' +
     'flex-direction:column;' +
     'justify-content:center;' +
-    'padding:' + (IS_MOB ? '70px 16px 60px' : '70px ' + PAD_H + ' 40px') + ';' +
+'padding:' + (IS_MOB ? '60px 16px 50px' : '60px ' + PAD_H + ' 30px') + ';' +
     'box-sizing:border-box;' +
     'overflow:hidden;';
 

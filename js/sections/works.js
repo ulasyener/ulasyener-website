@@ -184,7 +184,9 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       });
     }
 
-    renderProjectInfoPanel(project);
+  if (project.content_type !== 'video') {
+      renderProjectInfoPanel(project);
+    }
   });
 }
 
