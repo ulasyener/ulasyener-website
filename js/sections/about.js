@@ -118,11 +118,11 @@ function getAboutContent(sectionId) {
 
   if (sectionId === 'education') {
     const items = [
-      { period: '2022 – Present', title: 'PhD Candidate, Practice-Based Artistic Research', sub: 'Bauhaus-Universität Weimar' },
-      { period: '2017 – 2021',    title: 'M.Sc., MediaArchitecture',                        sub: 'Bauhaus-Universität Weimar' },
-      { period: '2014 – 2017',    title: 'M.Sc., Architectural Design Computing',            sub: 'Istanbul Technical University' },
-      { period: '2013',           title: 'Guest Student, M.Sc. Industrial Design',           sub: 'Istanbul Technical University' },
-      { period: '2008 – 2012',    title: 'B.F.A., Interior Architecture and Environmental Design', sub: 'Hacettepe University' }
+      { period: '2022 – Present', title: 'Ph.D. Candidate, Practice-Based Artistic Research', sub: 'Bauhaus-Universität Weimar' },
+      { period: '2017 – 2021',    title: 'M.Sc. Media Architecture',                          sub: 'Bauhaus-Universität Weimar' },
+      { period: '2014 – 2017',    title: 'M.Sc. Architectural Design Computing',              sub: 'Istanbul Technical University' },
+      { period: '2013',           title: 'M.Sc. Industrial Design, Guest Student',            sub: 'Istanbul Technical University' },
+      { period: '2008 – 2012',    title: 'B.F.A. Interior Architecture and Environmental Design', sub: 'Hacettepe University' }
     ];
     return `<div class="accordion-content">${items.map(it => `
       <div class="about-row">
@@ -138,7 +138,7 @@ function getAboutContent(sectionId) {
     const items = [
       { period: '2023 – 2026', title: 'Competition Management Architect (Pre-Examiner)', sub: 'Kohler Grohe Architekten, Stuttgart' },
       { period: '2022 – 2023', title: 'Freelance XR Designer',                           sub: 'Aesculap AG, Tuttlingen' },
-      { period: '2018 – 2024', title: 'Freelance Lecturer',                              sub: 'Bauhaus-Universität Weimar, Faculty of Architecture and Urbanism' },
+      { period: '2018 – 2024', title: 'Freelance Lecturer',                              sub: 'Bauhaus-Universität Weimar, Weimar' },
       { period: '2017 – 2023', title: 'Freelance Architectural Designer',                sub: 'Schmitz-Riol Architekten, Weimar' },
       { period: '2014 – 2016', title: 'Interior Architect and Product Designer',         sub: '304 Design, Istanbul' },
       { period: '2013 – 2014', title: 'Interior Architect and Product Designer',         sub: 'cisimdesign, Istanbul' },
@@ -157,12 +157,12 @@ function getAboutContent(sectionId) {
   if (sectionId === 'teaching') {
     const items = [
       { period: '2023 – 2024', title: 'Spatial Narratives,<br>Lecturer',                    sub: 'Bauhaus Spring School 2024,<br>Bauhaus-Universität Weimar' },
-      { period: '2023 – 2024', title: 'Re-Located Stories,<br>Lecturer',                    sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
-      { period: '2021 – 2022', title: 'Contemporary Tools for Design,<br>Lecturer',         sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
+      { period: '2023 – 2024', title: 'Re-Located Stories,<br>Lecturer',                    sub: 'Bauhaus-Universität Weimar, Weimar' },
+      { period: '2021 – 2022', title: 'Contemporary Tools for Design,<br>Lecturer',         sub: 'Bauhaus-Universität Weimar, Weimar' },
       { period: '2020 – 2021', title: 'Modelling Bauhaus Workshop,<br>Workshop Instructor', sub: 'Faculty of Art and Design,<br>Kadir Has University' },
-      { period: '2019 – 2020', title: 'Professional Presentation Methods,<br>Lecturer',     sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen,<br>Workshop Instructor', sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling,<br>Lecturer', sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' }
+      { period: '2019 – 2020', title: 'Professional Presentation Methods,<br>Lecturer',     sub: 'Bauhaus-Universität Weimar, Weimar' },
+      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen,<br>Workshop Instructor', sub: 'Bauhaus-Universität Weimar, Weimar' },
+      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling,<br>Lecturer', sub: 'Bauhaus-Universität Weimar, Weimar' }
     ];
     return `<div class="accordion-content">${items.map(it => `
       <div class="about-row">
