@@ -100,7 +100,7 @@
 .category-item:not(.empty):hover .cat-desc  { color: rgba(0,0,0,0.65); }
 
 .cat-label {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 19px;
   font-weight: 700;
   letter-spacing: .10em;
@@ -110,11 +110,11 @@
 }
 
 .cat-desc {
-  font-family: var(--f-sans);
-  font-size: 11px;
-  font-weight: 300;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 500;
   color: rgba(0,0,0,0.42);
-  letter-spacing: .04em;
+  letter-spacing: .02em;
   margin-top: 6px;
   transition: color .2s ease;
   line-height: 1.65;
@@ -151,7 +151,7 @@
 .subcat-item:not(.empty):hover .cat-desc     { color: rgba(0,0,0,0.65); }
 
 .subcat-label {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: .08em;
