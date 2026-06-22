@@ -427,41 +427,120 @@ function showVideoEmbed(project) {
   wrapper.appendChild(iframe);
   videoCol.appendChild(wrapper);
 
-  // Mobilde bilgi paneli videonun altında
+  // Mobilde bilgi paneli videonun altında — accordion
   if (IS_MOB) {
     const mobInfo = document.createElement('div');
     mobInfo.style.cssText =
-      'margin-top:14px;' +
-      'padding:14px 0;' +
-      'border-top:1px solid rgba(0,0,0,0.08);';
+      'margin-top:12px;' +
+      'background:rgba(225,222,217,0.65);' +
+      'backdrop-filter:blur(3px);' +
+      'padding:16px 16px 18px;' +
+      'box-sizing:border-box;' +
+      'pointer-events:all;' +
+      'cursor:pointer;' +
+      'overflow:hidden;' +
+      'flex-shrink:0;';
+
+    // Başlık
+    const mobTitleEl = document.createElement('span');
+    mobTitleEl.style.cssText =
+      'font-family:"Space Grotesk",sans-serif;' +
+      'font-size:11px;font-weight:700;' +
+      'letter-spacing:.10em;text-transform:uppercase;' +
+      'color:rgba(0,0,0,0.78);' +
+      'display:block;line-height:1.5;';
+    mobInfo.appendChild(mobTitleEl);
+
+    // Detay alanı — accordion
+    const mobDetailsEl = document.createElement('div');
+    mobDetailsEl.style.cssText =
+      'overflow:hidden;' +
+      'max-height:0;' +
+      'opacity:0;' +
+      'transition:max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;' +
+      'margin-top:0;';
+    mobInfo.appendChild(mobDetailsEl);
 
     function addMobRow(key, val) {
       if (!val) return;
       const div = document.createElement('div');
-      div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
+      div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:8px;';
 
       const keyEl = document.createElement('span');
       keyEl.style.cssText =
         'font-family:"IBM Plex Mono",monospace;' +
         'font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
-        'color:rgba(0,0,0,0.35);margin-bottom:2px;';
+        'color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = key;
 
       const valEl = document.createElement('span');
       valEl.style.cssText =
         'font-family:"Space Grotesk",sans-serif;' +
         'font-size:11px;font-weight:300;letter-spacing:.03em;' +
-        'color:rgba(0,0,0,0.65);line-height:1.5;';
+        'color:rgba(0,0,0,0.68);line-height:1.5;';
       valEl.textContent = val;
 
       div.appendChild(keyEl);
       div.appendChild(valEl);
-      mobInfo.appendChild(div);
+      mobDetailsEl.appendChild(div);
     }
 
     if (project.year)        addMobRow('Year', project.year);
+    if (project.location)    addMobRow('Location', project.location);
+    if (project.office)      addMobRow('Office', project.office);
+    if (project.firm)        addMobRow('Firm', project.firm);
     if (project.description) addMobRow('Info', project.description);
     if (project.software)    addMobRow('Software', project.software);
+
+    // Accordion toggle
+    let mobIsOpen = false;
+
+    function mobOpen() {
+      if (mobIsOpen) return;
+      mobIsOpen = true;
+      mobDetailsEl.style.maxHeight = '300px';
+      mobDetailsEl.style.opacity   = '1';
+      mobDetailsEl.style.marginTop = '12px';
+    }
+
+    function mobClose() {
+      if (!mobIsOpen) return;
+      mobIsOpen = false;
+      mobDetailsEl.style.maxHeight = '0';
+      mobDetailsEl.style.opacity   = '0';
+      mobDetailsEl.style.marginTop = '0';
+    }
+
+    mobInfo.addEventListener('click', function() {
+      mobIsOpen ? mobClose() : mobOpen();
+    });
+
+    // 1sn sonra aç, 4sn sonra kapat
+    setTimeout(mobOpen, 1000);
+    setTimeout(mobClose, 4000);
+
+    // Scan line
+    const mobScanLine = document.createElement('div');
+    mobScanLine.style.cssText =
+      'position:absolute;left:0;top:0;width:100%;height:2px;' +
+      'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,0.08),rgba(0,0,0,0));' +
+      'pointer-events:none;z-index:1;';
+    mobInfo.style.position = 'relative';
+    mobInfo.appendChild(mobScanLine);
+
+    let mobScanPos = 0;
+    function mobAnimateScan() {
+      mobScanPos += 0.4;
+      if (mobScanPos > mobInfo.offsetHeight) mobScanPos = -2;
+      mobScanLine.style.top = mobScanPos + 'px';
+      requestAnimationFrame(mobAnimateScan);
+    }
+    mobAnimateScan();
+
+    // Scramble başlık
+    setTimeout(function() {
+      gridScramble(mobTitleEl, project.title.toUpperCase(), 1200);
+    }, 100);
 
     videoCol.appendChild(mobInfo);
   }
