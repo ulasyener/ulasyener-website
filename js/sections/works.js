@@ -172,16 +172,19 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       existingNav.appendChild(title);
     }
 
-    if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
-    window.grid3d = showPhotoGrid(project, (data) => {
-      if (project.images && project.images.length) {
-        openLightbox(project.images, data.index, project);
-      }
-    });
+   if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
+
+    if (project.content_type === 'video') {
+      window.grid3d = showVideoEmbed(project);
+    } else {
+      window.grid3d = showPhotoGrid(project, (data) => {
+        if (project.images && project.images.length) {
+          openLightbox(project.images, data.index, project);
+        }
+      });
+    }
 
     renderProjectInfoPanel(project);
-  });
-}
 
 // ─── SOUND / RADIO — özel sayfa ───────────────────────────────────────────
 function showRadio(categoryId, catLabel) {

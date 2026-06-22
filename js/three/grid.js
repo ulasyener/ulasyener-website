@@ -87,6 +87,7 @@ const COLS    = IS_MOB ? 1 : 3;
   const FADE    = IS_MOB ? FADE_PX_MOB : FADE_PX;
   const OV_TOP  = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
   const PAD_H   = IS_MOB ? '16px' : '80px';
+  const PAD_TOP = IS_MOB ? FADE + 'px' : FADE + 'px';
 
   // Overlay
   gridOverlay = document.createElement('div');
@@ -99,7 +100,7 @@ const COLS    = IS_MOB ? 1 : 3;
     'z-index:102;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
-    'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
+'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
     'box-sizing:border-box;' +
     '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
     'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
@@ -270,4 +271,58 @@ function showPhotoGrid(project, onPhotoClick) {
   });
 
   return buildGrid(items, onPhotoClick, K2_OVERLAY_TOP);
+}
+
+// ─── Video Embed Sayfası ──────────────────────────────────────────────────
+function showVideoEmbed(project) {
+  destroyGrid();
+
+  const IS_MOB = window.innerWidth <= 768;
+  const OV_TOP = IS_MOB ? MOB_OVERLAY_TOP : K2_OVERLAY_TOP;
+  const PAD_H  = IS_MOB ? '16px' : '80px';
+  const FADE   = IS_MOB ? FADE_PX_MOB : FADE_PX;
+
+  gridOverlay = document.createElement('div');
+  gridOverlay.id = 'grid-overlay';
+  gridOverlay.style.cssText =
+    'position:fixed;' +
+    'top:' + OV_TOP + 'px;' +
+    'left:0;right:0;bottom:0;' +
+    'z-index:102;' +
+    'overflow-y:auto;overflow-x:hidden;' +
+    '-webkit-overflow-scrolling:touch;' +
+    'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
+    'box-sizing:border-box;' +
+    '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
+    'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
+
+  // 16:9 wrapper
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText =
+    'width:100%;' +
+    'max-width:960px;' +
+    'position:relative;' +
+    'padding-bottom:56.25%;' +
+    'height:0;' +
+    'overflow:hidden;';
+
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText =
+    'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
+  iframe.setAttribute('allowfullscreen', '');
+  iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+
+  if (project.video_provider === 'vimeo' && project.vimeo_id) {
+    iframe.src = 'https://player.vimeo.com/video/' + project.vimeo_id +
+      '?title=0&byline=0&portrait=0&badge=0';
+  } else if (project.video_provider === 'youtube' && project.youtube_id) {
+    iframe.src = 'https://www.youtube.com/embed/' + project.youtube_id +
+      '?rel=0&modestbranding=1';
+  }
+
+  wrapper.appendChild(iframe);
+  gridOverlay.appendChild(wrapper);
+  document.body.appendChild(gridOverlay);
+
+  return { destroy: destroyGrid };
 }
