@@ -102,9 +102,8 @@ function showContactSection(s) {
       const wrap = document.createElement('div');
       wrap.style.paddingTop = '16px';
       wrap.innerHTML = `
-        <div class="contact-row" style="padding:0 0 12px;">
-          <span class="contact-key">—</span>
-        <span class="contact-val" style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-weight:500;">
+   <div style="padding:0 0 12px;">
+          <span style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:rgba(0,0,0,0.65);">
             Feel free to send me a message!
           </span>
         </div>
