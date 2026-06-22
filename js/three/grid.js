@@ -278,25 +278,20 @@ function showVideoEmbed(project) {
   destroyGrid();
 
   const IS_MOB = window.innerWidth <= 768;
-  const OV_TOP = IS_MOB ? MOB_OVERLAY_TOP : K2_OVERLAY_TOP;
-  const PAD_H  = IS_MOB ? '16px' : '80px';
-  const FADE   = IS_MOB ? FADE_PX_MOB : FADE_PX;
 
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
     'position:fixed;' +
-    'top:' + OV_TOP + 'px;' +
-    'left:0;right:0;bottom:0;' +
+    'top:0;left:0;right:0;bottom:0;' +
     'z-index:102;' +
-    'overflow-y:auto;overflow-x:hidden;' +
-    '-webkit-overflow-scrolling:touch;' +
-    'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
+    'display:flex;' +
+    'align-items:center;' +
+    'justify-content:center;' +
+    'padding:' + (IS_MOB ? '60px 16px 60px' : '80px 80px 60px') + ';' +
     'box-sizing:border-box;' +
-    '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
-    'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
+    'overflow:hidden;';
 
-  // 16:9 wrapper
   const wrapper = document.createElement('div');
   wrapper.style.cssText =
     'width:100%;' +
@@ -304,7 +299,8 @@ function showVideoEmbed(project) {
     'position:relative;' +
     'padding-bottom:56.25%;' +
     'height:0;' +
-    'overflow:hidden;';
+    'overflow:hidden;' +
+    'flex-shrink:0;';
 
   const iframe = document.createElement('iframe');
   iframe.style.cssText =
