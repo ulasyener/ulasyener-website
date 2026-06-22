@@ -163,11 +163,12 @@
 /* ─── Inline subcat list (Academic) ─────────────────────────────────── */
 .subcat-list-inline {
   font-family: var(--f-mono);
-  font-size: 10px;
-  color: rgba(0,0,0,0.32);
-  letter-spacing: .1em;
-  margin-top: 7px;
-  line-height: 1.7;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.42);
+  letter-spacing: .02em;
+  margin-top: 6px;
+  line-height: 1.65;
 }
 
 /* ─── Empty state ────────────────────────────────────────────────────── */
