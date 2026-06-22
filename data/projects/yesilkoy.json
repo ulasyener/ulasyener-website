@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "yesilkoy",
   "title": "Yeşilköy Residence",
   "category": "interior",
@@ -11,22 +11,22 @@
   "coworkers": [],
   "description": "",
   "type": "image-grid",
-  "cover": "images/projects/interior/yesilkoy/cover.jpg",
+  "cover": "images/projects/interior/yesilkoy/cover.webp",
   "images": [
-    { "src": "images/projects/interior/yesilkoy/1.jpg" },
-    { "src": "images/projects/interior/yesilkoy/2.jpg" },
-    { "src": "images/projects/interior/yesilkoy/3.jpg" },
-    { "src": "images/projects/interior/yesilkoy/4.jpg" },
-    { "src": "images/projects/interior/yesilkoy/5.jpg" },
-    { "src": "images/projects/interior/yesilkoy/6.jpg" },
-    { "src": "images/projects/interior/yesilkoy/7.jpg" },
-    { "src": "images/projects/interior/yesilkoy/8.jpg" },
-    { "src": "images/projects/interior/yesilkoy/9.jpg" },
-    { "src": "images/projects/interior/yesilkoy/10.jpg" },
-    { "src": "images/projects/interior/yesilkoy/11.jpg" },
-    { "src": "images/projects/interior/yesilkoy/12.jpg" },
-    { "src": "images/projects/interior/yesilkoy/13.jpg" },
-    { "src": "images/projects/interior/yesilkoy/14.jpg" },
-    { "src": "images/projects/interior/yesilkoy/15.jpg" }
+    { "src": "images/projects/interior/yesilkoy/1.webp" },
+    { "src": "images/projects/interior/yesilkoy/2.webp" },
+    { "src": "images/projects/interior/yesilkoy/3.webp" },
+    { "src": "images/projects/interior/yesilkoy/4.webp" },
+    { "src": "images/projects/interior/yesilkoy/5.webp" },
+    { "src": "images/projects/interior/yesilkoy/6.webp" },
+    { "src": "images/projects/interior/yesilkoy/7.webp" },
+    { "src": "images/projects/interior/yesilkoy/8.webp" },
+    { "src": "images/projects/interior/yesilkoy/9.webp" },
+    { "src": "images/projects/interior/yesilkoy/10.webp" },
+    { "src": "images/projects/interior/yesilkoy/11.webp" },
+    { "src": "images/projects/interior/yesilkoy/12.webp" },
+    { "src": "images/projects/interior/yesilkoy/13.webp" },
+    { "src": "images/projects/interior/yesilkoy/14.webp" },
+    { "src": "images/projects/interior/yesilkoy/15.webp" }
   ]
 }

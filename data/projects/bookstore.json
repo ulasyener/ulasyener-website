@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "bookstore",
   "title": "Read & Rest Bookstore Cafe",
   "year": "2014",
@@ -8,20 +8,20 @@
   "responsibilities": ["Interior Architect", "Project Architect", "Construction Management"],
   "program": "Bookstore + Cafe",
   "type": "image-grid",
-  "cover": "images/projects/interior/bookstore/cover.jpg",
+  "cover": "images/projects/interior/bookstore/cover.webp",
   "images": [
-    { "src": "images/projects/interior/bookstore/1.jpg" },
-    { "src": "images/projects/interior/bookstore/2.jpg" },
-    { "src": "images/projects/interior/bookstore/3.jpg" },
-    { "src": "images/projects/interior/bookstore/4.jpg" },
-    { "src": "images/projects/interior/bookstore/5.jpg" },
-    { "src": "images/projects/interior/bookstore/6.jpg" },
-    { "src": "images/projects/interior/bookstore/7.jpg" },
-    { "src": "images/projects/interior/bookstore/8.jpg" },
-    { "src": "images/projects/interior/bookstore/9.jpg" },
-    { "src": "images/projects/interior/bookstore/10.jpg" },
-    { "src": "images/projects/interior/bookstore/11.jpg" },
-    { "src": "images/projects/interior/bookstore/12.jpg" },
-    { "src": "images/projects/interior/bookstore/13.jpg" }
+    { "src": "images/projects/interior/bookstore/1.webp" },
+    { "src": "images/projects/interior/bookstore/2.webp" },
+    { "src": "images/projects/interior/bookstore/3.webp" },
+    { "src": "images/projects/interior/bookstore/4.webp" },
+    { "src": "images/projects/interior/bookstore/5.webp" },
+    { "src": "images/projects/interior/bookstore/6.webp" },
+    { "src": "images/projects/interior/bookstore/7.webp" },
+    { "src": "images/projects/interior/bookstore/8.webp" },
+    { "src": "images/projects/interior/bookstore/9.webp" },
+    { "src": "images/projects/interior/bookstore/10.webp" },
+    { "src": "images/projects/interior/bookstore/11.webp" },
+    { "src": "images/projects/interior/bookstore/12.webp" },
+    { "src": "images/projects/interior/bookstore/13.webp" }
   ]
 }

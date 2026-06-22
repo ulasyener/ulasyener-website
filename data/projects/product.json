@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "product",
   "title": "Product Design",
   "category": ["product-furniture"],
@@ -9,21 +9,21 @@
   "role": "",
   "description": "Product designs for various fields.",
   "type": "image-grid",
-  "cover": "images/projects/product/cover.jpg",
+  "cover": "images/projects/product/cover.webp",
   "images": [
-    { "src": "images/projects/product/1.jpg" },
-    { "src": "images/projects/product/2.jpg" },
-    { "src": "images/projects/product/3.jpg" },
-    { "src": "images/projects/product/4.jpg" },
-    { "src": "images/projects/product/5.jpg" },
-    { "src": "images/projects/product/6.jpg" },
-    { "src": "images/projects/product/7.jpg" },
-    { "src": "images/projects/product/8.jpg" },
-    { "src": "images/projects/product/9.jpg" },
-    { "src": "images/projects/product/10.jpg" },
-    { "src": "images/projects/product/11.jpg" },
-    { "src": "images/projects/product/12.jpg" },
-    { "src": "images/projects/product/13.jpg" },
-    { "src": "images/projects/product/14.jpg" }
+    { "src": "images/projects/product/1.webp" },
+    { "src": "images/projects/product/2.webp" },
+    { "src": "images/projects/product/3.webp" },
+    { "src": "images/projects/product/4.webp" },
+    { "src": "images/projects/product/5.webp" },
+    { "src": "images/projects/product/6.webp" },
+    { "src": "images/projects/product/7.webp" },
+    { "src": "images/projects/product/8.webp" },
+    { "src": "images/projects/product/9.webp" },
+    { "src": "images/projects/product/10.webp" },
+    { "src": "images/projects/product/11.webp" },
+    { "src": "images/projects/product/12.webp" },
+    { "src": "images/projects/product/13.webp" },
+    { "src": "images/projects/product/14.webp" }
   ]
 }
