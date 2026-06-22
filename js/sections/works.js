@@ -1,3 +1,4 @@
+
 // ─── WORKS ────────────────────────────────────────────────────────────────
 async function renderWorks() {
   const res  = await fetch('data/works.json');
@@ -30,7 +31,7 @@ async function renderWorks() {
   root.appendChild(el);
 }
 
-// ─── Kategori (ör. Interior) ──────────────────────────────────────────────
+// ─── Kategori ─────────────────────────────────────────────────────────────
 async function showCategory(categoryId) {
   const res  = await fetch('data/works.json');
   const data = await res.json();
@@ -240,3 +241,31 @@ function showRadio(categoryId, catLabel) {
 function showRadioSection(section, categoryId, catLabel) {
   runGlitch(() => {
     pushHash('works/' + categoryId + '/sound-radio/' + section.id);
+
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Works',   action: () => showSection('works') },
+      { label: catLabel,  action: () => showCategory(categoryId) },
+      { label: 'Radio',   action: () => showRadio(categoryId, catLabel) },
+      { label: section.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = section.label;
+    label.addEventListener('click', () => runGlitch(() => showRadio(categoryId, catLabel)));
+    el.appendChild(label);
+
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = '— coming soon —';
+    el.appendChild(empty);
+
+    root.appendChild(el);
+  });
+}
