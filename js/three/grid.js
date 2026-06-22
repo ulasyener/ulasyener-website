@@ -322,11 +322,17 @@ const wrapper = document.createElement('div');
   gridOverlay.appendChild(wrapper);
 
   // Bilgi satırı — videonun altında
+ // Bilgi bandı — videonun altında
   const info = document.createElement('div');
   info.style.cssText =
     'display:flex;' +
-    'gap:32px;' +
-    'margin-top:16px;' +
+    'flex-wrap:wrap;' +
+    'gap:24px 40px;' +
+    'margin-top:12px;' +
+    'padding:14px 18px;' +
+    'background:rgba(225,222,217,0.65);' +
+    'backdrop-filter:blur(3px);' +
+    'box-sizing:border-box;' +
     'flex-shrink:0;';
 
   function addInfoItem(key, val) {
@@ -337,15 +343,15 @@ const wrapper = document.createElement('div');
     const keyEl = document.createElement('span');
     keyEl.style.cssText =
       'font-family:"IBM Plex Mono",monospace;' +
-      'font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
-      'color:rgba(0,0,0,0.35);margin-bottom:2px;';
+      'font-size:8px;letter-spacing:.24em;text-transform:uppercase;' +
+      'color:rgba(0,0,0,0.38);margin-bottom:2px;';
     keyEl.textContent = key;
 
     const valEl = document.createElement('span');
     valEl.style.cssText =
       'font-family:"Space Grotesk",sans-serif;' +
-      'font-size:11px;font-weight:300;letter-spacing:.03em;' +
-      'color:rgba(0,0,0,0.65);line-height:1.5;';
+      'font-size:11px;font-weight:300;letter-spacing:.04em;' +
+      'color:rgba(0,0,0,0.68);line-height:1.5;';
     valEl.textContent = val;
 
     item.appendChild(keyEl);
@@ -358,6 +364,7 @@ const wrapper = document.createElement('div');
   if (project.software)    addInfoItem('Software', project.software);
 
   gridOverlay.appendChild(info);
+  
   document.body.appendChild(gridOverlay);
 
   return { destroy: destroyGrid };
