@@ -61,8 +61,8 @@ function initHeroScramble() {
     }, delay);
   }
 
-  scramble(nameEl, nameFinal, 1200, 400);
-  scramble(subEl,  subFinal,  1000, 900);
+  scramble(nameEl, nameFinal, 3200, 400);
+  scramble(subEl,  subFinal,  3000, 900);
 }
 
 function initGrain() {
