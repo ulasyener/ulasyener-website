@@ -738,8 +738,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Footer email linki → contact formu
   document.getElementById('email-link')?.addEventListener('click', (e) => {
     e.preventDefault();
-    showSection('contact');
-    setTimeout(() => showContactSection({ id: 'contact', label: 'Contact' }), 320);
+    runGlitch(() => {
+      clearPanel();
+      getOv().style.opacity = '0';
+      navState = { section: 'contact', category: 'contact', subcategory: null, project: null };
+      pushHash('contact/contact');
+      renderContact();
+      showContactSection({ id: 'contact', label: 'Contact' });
+    });
   });
 
   // Geri/ileri buton desteği
