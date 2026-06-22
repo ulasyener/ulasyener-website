@@ -272,11 +272,13 @@ function showPhotoGrid(project, onPhotoClick) {
 
   return buildGrid(items, onPhotoClick, K2_OVERLAY_TOP);
 }
+
 // ─── Video Embed Sayfası ──────────────────────────────────────────────────
 function showVideoEmbed(project) {
   destroyGrid();
 
   const IS_MOB = window.innerWidth <= 768;
+  const PAD_H  = IS_MOB ? '16px' : '80px';
 
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
@@ -285,12 +287,13 @@ function showVideoEmbed(project) {
     'top:0;left:0;right:0;bottom:0;' +
     'z-index:102;' +
     'display:flex;' +
-    'align-items:center;' +
-    'justify-content:' + (IS_MOB ? 'center' : 'flex-end') + ';' +
-    'padding:' + (IS_MOB ? '80px 16px 60px' : '80px 80px 60px 640px') + ';' +
+    'flex-direction:column;' +
+    'justify-content:center;' +
+    'padding:' + (IS_MOB ? '70px 16px 60px' : '70px ' + PAD_H + ' 40px') + ';' +
     'box-sizing:border-box;' +
     'overflow:hidden;';
 
+  // 16:9 video wrapper
   const wrapper = document.createElement('div');
   wrapper.style.cssText =
     'width:100%;' +
@@ -316,6 +319,44 @@ function showVideoEmbed(project) {
 
   wrapper.appendChild(iframe);
   gridOverlay.appendChild(wrapper);
+
+  // Bilgi satırı — videonun altında
+  const info = document.createElement('div');
+  info.style.cssText =
+    'display:flex;' +
+    'gap:32px;' +
+    'margin-top:16px;' +
+    'flex-shrink:0;';
+
+  function addInfoItem(key, val) {
+    if (!val) return;
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;flex-direction:column;';
+
+    const keyEl = document.createElement('span');
+    keyEl.style.cssText =
+      'font-family:"IBM Plex Mono",monospace;' +
+      'font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
+      'color:rgba(0,0,0,0.35);margin-bottom:2px;';
+    keyEl.textContent = key;
+
+    const valEl = document.createElement('span');
+    valEl.style.cssText =
+      'font-family:"Space Grotesk",sans-serif;' +
+      'font-size:11px;font-weight:300;letter-spacing:.03em;' +
+      'color:rgba(0,0,0,0.65);line-height:1.5;';
+    valEl.textContent = val;
+
+    item.appendChild(keyEl);
+    item.appendChild(valEl);
+    info.appendChild(item);
+  }
+
+  if (project.year)        addInfoItem('Year', project.year);
+  if (project.description) addInfoItem('Info', project.description);
+  if (project.software)    addInfoItem('Software', project.software);
+
+  gridOverlay.appendChild(info);
   document.body.appendChild(gridOverlay);
 
   return { destroy: destroyGrid };
