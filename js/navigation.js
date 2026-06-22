@@ -211,7 +211,6 @@ function scrambleText(el, finalText, duration = 1800) {
     }
   }, 60);
 }
-
 // ─── Proje Bilgi Paneli ───────────────────────────────────────────────────
 function renderProjectInfoPanel(project) {
   const existing = document.getElementById('proj-info-panel');
@@ -223,7 +222,6 @@ function renderProjectInfoPanel(project) {
   const panelTop   = 181;
   const panelLeft  = 100;
   const panelWidth = 520;
-  const tilePx     = 'auto';
   const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
@@ -235,12 +233,13 @@ function renderProjectInfoPanel(project) {
     width: ${panelWidth}px;
     height: auto;
     z-index: 103;
-    pointer-events: none;
+    pointer-events: all;
     background: rgba(225,222,217,0.65);
     backdrop-filter: blur(3px);
     padding: ${panelPad};
     box-sizing: border-box;
-    overflow: visible;
+    overflow: hidden;
+    cursor: pointer;
   `;
 
   // Başlık
@@ -252,11 +251,22 @@ function renderProjectInfoPanel(project) {
     letter-spacing: .10em;
     text-transform: uppercase;
     color: rgba(0,0,0,0.78);
-    margin-bottom: 18px;
     display: block;
     line-height: 1.5;
   `;
   panel.appendChild(titleEl);
+
+  // Detay alanı — collapse olacak kısım
+  const detailsEl = document.createElement('div');
+  detailsEl.id = 'proj-info-details';
+  detailsEl.style.cssText = `
+    overflow: hidden;
+    max-height: 300px;
+    opacity: 1;
+    transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;
+    margin-top: 18px;
+  `;
+  panel.appendChild(detailsEl);
 
   const valueEls = [];
 
@@ -288,7 +298,7 @@ function renderProjectInfoPanel(project) {
 
     div.appendChild(keyEl);
     div.appendChild(valEl);
-    panel.appendChild(div);
+    detailsEl.appendChild(div);
     valueEls.push({ el: valEl, text: val });
   }
 
@@ -329,7 +339,7 @@ function renderProjectInfoPanel(project) {
       valueEls.push({ el: valEl, text: col.val });
     });
 
-    panel.appendChild(row);
+    detailsEl.appendChild(row);
   }
 
   if (project.year)
@@ -344,6 +354,8 @@ function renderProjectInfoPanel(project) {
 
   if (project.office)
     addRow('Office', project.office);
+  if (project.firm)
+    addRow('Firm', project.firm);
   if (project.program)
     addRow('Program', project.program);
   if (project.responsibilities && project.responsibilities.length)
@@ -355,7 +367,70 @@ function renderProjectInfoPanel(project) {
 
   document.body.appendChild(panel);
 
-  // Scan line
+  // ─── Collapse / Expand ───────────────────────────────────────────────
+  let isCollapsed = false;
+
+  function collapse() {
+    if (isCollapsed) return;
+    isCollapsed = true;
+    detailsEl.style.maxHeight = '0';
+    detailsEl.style.opacity   = '0';
+    detailsEl.style.marginTop = '0';
+    // Grid overlay'i yukarı kaydır
+    const ov = document.getElementById('grid-overlay');
+    if (ov) {
+      ov.style.transition = 'top 0.45s ease';
+      ov.style.top = (panelTop + 52) + 'px'; // başlık yüksekliği ~52px
+    }
+  }
+
+  function expand() {
+    if (!isCollapsed) return;
+    isCollapsed = false;
+    detailsEl.style.maxHeight = '300px';
+    detailsEl.style.opacity   = '1';
+    detailsEl.style.marginTop = '18px';
+    // Grid overlay'i aşağı kaydır
+    const ov = document.getElementById('grid-overlay');
+    if (ov) {
+      ov.style.transition = 'top 0.45s ease';
+      ov.style.top = K2_OVERLAY_TOP + 'px';
+    }
+  }
+
+  // Tıklayınca toggle
+  panel.addEventListener('click', () => {
+    isCollapsed ? expand() : collapse();
+  });
+
+  // 2.5 sn sonra otomatik collapse
+  const autoTimer = setTimeout(collapse, 2500);
+
+  // Scroll başlayınca collapse, yukarı scroll edince expand
+  const ov = document.getElementById('grid-overlay');
+  let lastScrollTop = 0;
+  function onGridScroll() {
+    const st = ov ? ov.scrollTop : 0;
+    if (st > lastScrollTop && st > 10) {
+      clearTimeout(autoTimer);
+      collapse();
+    } else if (st < lastScrollTop && st < 20) {
+      expand();
+    }
+    lastScrollTop = st;
+  }
+  if (ov) ov.addEventListener('scroll', onGridScroll);
+
+  // Panel DOM'dan çıkınca temizle
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(panel)) {
+      if (ov) ov.removeEventListener('scroll', onGridScroll);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true });
+
+  // ─── Scan line ───────────────────────────────────────────────────────
   const scanLine = document.createElement('div');
   scanLine.style.cssText = `
     position: absolute;
@@ -372,24 +447,23 @@ function renderProjectInfoPanel(project) {
   let scanAnimId = null;
   function animateScan() {
     scanPos += 0.4;
-    if (scanPos > tilePx) scanPos = -2;
+    const panelH = panel.offsetHeight;
+    if (scanPos > panelH) scanPos = -2;
     scanLine.style.top = scanPos + 'px';
     scanAnimId = requestAnimationFrame(animateScan);
   }
   animateScan();
 
-  // Glitch flash
+  // ─── Glitch flash ────────────────────────────────────────────────────
   let glitchTimeout = null;
   function scheduleGlitch() {
     const delay = 3000 + Math.random() * 5000;
     glitchTimeout = setTimeout(() => {
       if (!document.body.contains(panel)) return;
-
       const offsetX = (Math.random() - 0.5) * 6;
       const offsetY = (Math.random() - 0.5) * 3;
       panel.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       panel.style.opacity = '0.7';
-
       setTimeout(() => {
         if (!document.body.contains(panel)) return;
         panel.style.transform = 'translate(0,0)';
@@ -400,15 +474,7 @@ function renderProjectInfoPanel(project) {
   }
   scheduleGlitch();
 
-  const observer = new MutationObserver(() => {
-    if (!document.body.contains(panel)) {
-      if (scanAnimId) cancelAnimationFrame(scanAnimId);
-      if (glitchTimeout) clearTimeout(glitchTimeout);
-      observer.disconnect();
-    }
-  });
-  observer.observe(document.body, { childList: true });
-
+  // ─── Scramble ────────────────────────────────────────────────────────
   scrambleText(titleEl, project.title.toUpperCase(), 1400);
   valueEls.forEach(({ el, text }, i) => {
     setTimeout(() => scrambleText(el, text, 1000), 400 + i * 200);
