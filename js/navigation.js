@@ -735,6 +735,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('abtb')?.addEventListener('click', () => showSection('about'));
   document.getElementById('cb')?.addEventListener('click',   () => showSection('contact'));
 
+  // Footer email linki → contact formu
+  document.getElementById('email-link')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('contact');
+    setTimeout(() => showContactSection({ id: 'contact', label: 'Contact' }), 320);
+  });
+
   // Geri/ileri buton desteği
   window.addEventListener('popstate', () => parseAndNavigate());
 
