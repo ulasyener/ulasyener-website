@@ -272,7 +272,6 @@ function showPhotoGrid(project, onPhotoClick) {
 
   return buildGrid(items, onPhotoClick, K2_OVERLAY_TOP);
 }
-
 // ─── Video Embed Sayfası ──────────────────────────────────────────────────
 function showVideoEmbed(project) {
   destroyGrid();
@@ -287,15 +286,14 @@ function showVideoEmbed(project) {
     'z-index:102;' +
     'display:flex;' +
     'align-items:center;' +
-    'justify-content:center;' +
-    'padding:' + (IS_MOB ? '60px 16px 60px' : '80px 80px 60px') + ';' +
+    'justify-content:' + (IS_MOB ? 'center' : 'flex-end') + ';' +
+    'padding:' + (IS_MOB ? '80px 16px 60px' : '80px 80px 60px 640px') + ';' +
     'box-sizing:border-box;' +
     'overflow:hidden;';
 
   const wrapper = document.createElement('div');
   wrapper.style.cssText =
     'width:100%;' +
-    'max-width:960px;' +
     'position:relative;' +
     'padding-bottom:56.25%;' +
     'height:0;' +
