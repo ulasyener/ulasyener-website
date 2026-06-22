@@ -14,15 +14,12 @@ const GLITCH_SRCS    = [
 ];
 const GLITCH_OPACITY = 0.38;
 
-// ─── Yerleşim sabitleri ───────────────────────────────────────────────────
+// ─── Yerlesim sabitleri ───────────────────────────────────────────────────
 const FADE_PX        = 44;
 const FADE_PX_MOB    = 24;
 
-// Kademe 1 desktop overlay top
-const K1_OVERLAY_TOP = 129;
-// Kademe 2 desktop overlay top
-const K2_OVERLAY_TOP = 429;
-// Mobil overlay top (her iki kademe)
+const K1_OVERLAY_TOP  = 129;
+const K2_OVERLAY_TOP  = 429;
 const MOB_OVERLAY_TOP = 104;
 
 // ─── Temizleme ────────────────────────────────────────────────────────────
@@ -58,18 +55,17 @@ function gridScramble(el, finalText, duration) {
   }, 60);
 }
 
-// ─── Çekirdek builder ─────────────────────────────────────────────────────
+// ─── Cekirdek builder ─────────────────────────────────────────────────────
 function buildGrid(items, onSelect, overlayTop) {
   destroyGrid();
 
-  const IS_MOB  = window.innerWidth <= 768;
-  const COLS    = IS_MOB ? 1 : 3;
-  const GAP     = IS_MOB ? 12 : 16;
-  const FADE    = IS_MOB ? FADE_PX_MOB : FADE_PX;
-  const OV_TOP  = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
-  const PAD_H   = IS_MOB ? '16px' : '80px';
+  const IS_MOB = window.innerWidth <= 768;
+  const COLS   = IS_MOB ? 1 : 3;
+  const GAP    = IS_MOB ? 12 : 16;
+  const FADE   = IS_MOB ? FADE_PX_MOB : FADE_PX;
+  const OV_TOP = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
+  const PAD_H  = IS_MOB ? '16px' : '80px';
 
-  // Overlay
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
   gridOverlay.style.cssText =
@@ -85,7 +81,6 @@ function buildGrid(items, onSelect, overlayTop) {
     '-webkit-mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);' +
     'mask-image:linear-gradient(to bottom,transparent 0px,black ' + FADE + 'px);';
 
-  // Grid container
   const grid = document.createElement('div');
   grid.style.cssText =
     'display:grid;' +
@@ -122,7 +117,9 @@ function buildGrid(items, onSelect, overlayTop) {
 
     if (item.src) {
       const img = document.createElement('img');
-      img.src = item.src;
+      img.src     = item.src;
+      img.loading = i < 3 ? 'eager' : 'lazy'; // ilk 3 kart aninda, gerisi lazy
+      img.decoding = 'async';
       img.style.cssText =
         'position:absolute;inset:0;' +
         'width:100%;height:100%;' +
@@ -231,7 +228,7 @@ function showProjectGrid(projects, onProjectClick) {
   return buildGrid(items, onProjectClick, K1_OVERLAY_TOP);
 }
 
-// ─── Kademe 2: Proje fotoğraf grid'i ──────────────────────────────────────
+// ─── Kademe 2: Proje fotograf grid'i ──────────────────────────────────────
 function showPhotoGrid(project, onPhotoClick) {
   const imgs = (project.images && project.images.length > 0)
     ? project.images
@@ -249,15 +246,13 @@ function showPhotoGrid(project, onPhotoClick) {
   return buildGrid(items, onPhotoClick, K2_OVERLAY_TOP);
 }
 
-// ─── Video Embed Sayfası ──────────────────────────────────────────────────
-// Layout: sol = accordion bilgi paneli, sağ = 16:9 video
-// Mobilde: üstte bilgi, altta video (tek kolon)
+// ─── Video Embed Sayfasi ──────────────────────────────────────────────────
 function showVideoEmbed(project) {
   destroyGrid();
 
-  const IS_MOB  = window.innerWidth <= 768;
-  const TOP_PX  = IS_MOB ? 60 : 185;  // nav + breadcrumb boşluğu
-  const PAD_SIDE = IS_MOB ? 16 : 100; // sol kenar boşluğu (navigation.js panelLeft ile aynı)
+  const IS_MOB   = window.innerWidth <= 768;
+  const TOP_PX   = IS_MOB ? 60 : 185;
+  const PAD_SIDE = IS_MOB ? 16 : 100;
 
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
@@ -269,7 +264,7 @@ function showVideoEmbed(project) {
     'display:flex;' +
     'flex-direction:' + (IS_MOB ? 'column' : 'row') + ';' +
     'align-items:' + (IS_MOB ? 'stretch' : 'flex-start') + ';' +
-'padding:' + (IS_MOB ? '16px 16px 60px' : '0 216px 40px ' + PAD_SIDE + 'px') + ';' +
+    'padding:' + (IS_MOB ? '16px 16px 60px' : '0 216px 40px ' + PAD_SIDE + 'px') + ';' +
     'gap:' + (IS_MOB ? '20px' : '0') + ';' +
     'box-sizing:border-box;' +
     'overflow:hidden;';
@@ -278,34 +273,21 @@ function showVideoEmbed(project) {
   if (!IS_MOB) {
     const infoPanel = document.createElement('div');
     infoPanel.style.cssText =
-      'flex-shrink:0;' +
-      'width:220px;' +
-      'margin-right:32px;' +
-      'background:rgba(225,222,217,0.65);' +
-      'backdrop-filter:blur(3px);' +
-      'padding:20px 18px 22px;' +
-      'box-sizing:border-box;' +
-      'pointer-events:all;' +
-      'cursor:pointer;' +
-      'overflow:hidden;';
+      'flex-shrink:0;width:220px;margin-right:32px;' +
+      'background:rgba(225,222,217,0.65);backdrop-filter:blur(3px);' +
+      'padding:20px 18px 22px;box-sizing:border-box;' +
+      'pointer-events:all;cursor:pointer;overflow:hidden;';
 
-    // Başlık
     const titleEl = document.createElement('span');
     titleEl.style.cssText =
       'font-family:"Space Grotesk",sans-serif;' +
-      'font-size:12px;font-weight:700;' +
-      'letter-spacing:.10em;text-transform:uppercase;' +
-      'color:rgba(0,0,0,0.78);' +
-      'display:block;line-height:1.5;';
-
+      'font-size:12px;font-weight:700;letter-spacing:.10em;' +
+      'text-transform:uppercase;color:rgba(0,0,0,0.78);display:block;line-height:1.5;';
     infoPanel.appendChild(titleEl);
 
-    // Detay alanı — accordion
     const detailsEl = document.createElement('div');
     detailsEl.style.cssText =
-      'overflow:hidden;' +
-      'max-height:0;' +
-      'opacity:0;' +
+      'overflow:hidden;max-height:0;opacity:0;' +
       'transition:max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;' +
       'margin-top:0;';
     infoPanel.appendChild(detailsEl);
@@ -314,112 +296,82 @@ function showVideoEmbed(project) {
       if (!val) return;
       const div = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
-
       const keyEl = document.createElement('span');
       keyEl.style.cssText =
         'font-family:"DM Mono",monospace;' +
         'font-size:8px;letter-spacing:.24em;text-transform:uppercase;' +
         'color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = key;
-
       const valEl = document.createElement('span');
       valEl.style.cssText =
         'font-family:"Space Grotesk",sans-serif;' +
         'font-size:11px;font-weight:300;letter-spacing:.04em;' +
         'color:rgba(0,0,0,0.68);line-height:1.5;';
       valEl.textContent = val;
-
       div.appendChild(keyEl);
       div.appendChild(valEl);
       detailsEl.appendChild(div);
     }
 
-    if (project.year)         addRow('Year', project.year);
-    if (project.location)     addRow('Location', project.location);
-    if (project.office)       addRow('Office', project.office);
-    if (project.firm)         addRow('Firm', project.firm);
-    if (project.description)  addRow('Info', project.description);
-    if (project.software)     addRow('Software', project.software);
+    if (project.year)        addRow('Year', project.year);
+    if (project.location)    addRow('Location', project.location);
+    if (project.office)      addRow('Office', project.office);
+    if (project.firm)        addRow('Firm', project.firm);
+    if (project.description) addRow('Info', project.description);
+    if (project.software)    addRow('Software', project.software);
 
-    // Accordion toggle
     let isOpen = false;
-
     function openPanel() {
-      if (isOpen) return;
-      isOpen = true;
+      if (isOpen) return; isOpen = true;
       detailsEl.style.maxHeight = '400px';
       detailsEl.style.opacity   = '1';
       detailsEl.style.marginTop = '14px';
     }
-
     function closePanel() {
-      if (!isOpen) return;
-      isOpen = false;
+      if (!isOpen) return; isOpen = false;
       detailsEl.style.maxHeight = '0';
       detailsEl.style.opacity   = '0';
       detailsEl.style.marginTop = '0';
     }
-
-    infoPanel.addEventListener('click', function() {
-      isOpen ? closePanel() : openPanel();
-    });
-
-    // 1sn sonra aç, 4sn sonra kapat
-    setTimeout(openPanel, 1000);
+    infoPanel.addEventListener('click', function() { isOpen ? closePanel() : openPanel(); });
+    setTimeout(openPanel,  1000);
     setTimeout(closePanel, 4000);
 
     gridOverlay.appendChild(infoPanel);
 
-    // Scramble başlık
-    setTimeout(function() {
-      gridScramble(titleEl, project.title.toUpperCase(), 1200);
-    }, 100);
+    setTimeout(function() { gridScramble(titleEl, project.title.toUpperCase(), 1200); }, 100);
 
-    // Scan line efekti
     const scanLine = document.createElement('div');
     scanLine.style.cssText =
       'position:absolute;left:0;top:0;width:100%;height:2px;' +
       'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,0.08),rgba(0,0,0,0));' +
       'pointer-events:none;z-index:1;';
     infoPanel.appendChild(scanLine);
-
     let scanPos = 0;
-    let scanId = null;
     function animateScan() {
       scanPos += 0.4;
       if (scanPos > infoPanel.offsetHeight) scanPos = -2;
       scanLine.style.top = scanPos + 'px';
-      scanId = requestAnimationFrame(animateScan);
+      scanAnimIds.push(requestAnimationFrame(animateScan));
     }
-    scanId = requestAnimationFrame(animateScan);
-    scanAnimIds.push(scanId);
+    scanAnimIds.push(requestAnimationFrame(animateScan));
   }
 
-  // ─── Sağ: Video ─────────────────────────────────────────────────────
+  // ─── Sag: Video ──────────────────────────────────────────────────────
   const videoCol = document.createElement('div');
   videoCol.style.cssText =
-    'flex:1;' +
-    'display:flex;' +
-    'flex-direction:column;' +
-    'justify-content:center;' +
-    'min-width:0;' +
-    (IS_MOB ? '' : 'padding-top:0;');
+    'flex:1;display:flex;flex-direction:column;justify-content:center;min-width:0;';
 
   const wrapper = document.createElement('div');
   wrapper.style.cssText =
-    'width:100%;' +
-    'max-height:65vh;' +
-    'position:relative;' +
-    'padding-bottom:min(56.25%, 65vh);' +
-    'height:0;' +
-    'overflow:hidden;' +
-    'flex-shrink:0;';
+    'width:100%;max-height:65vh;position:relative;' +
+    'padding-bottom:min(56.25%, 65vh);height:0;overflow:hidden;flex-shrink:0;';
 
   const iframe = document.createElement('iframe');
-  iframe.style.cssText =
-    'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
+  iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
   iframe.setAttribute('allowfullscreen', '');
   iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+  iframe.setAttribute('loading', 'lazy');
 
   if (project.video_provider === 'vimeo' && project.vimeo_id) {
     iframe.src = 'https://player.vimeo.com/video/' + project.vimeo_id +
@@ -432,36 +384,24 @@ function showVideoEmbed(project) {
   wrapper.appendChild(iframe);
   videoCol.appendChild(wrapper);
 
-  // Mobilde bilgi paneli videonun altında — accordion
+  // Mobilde bilgi paneli videonun altinda
   if (IS_MOB) {
     const mobInfo = document.createElement('div');
     mobInfo.style.cssText =
-      'margin-top:12px;' +
-      'background:rgba(225,222,217,0.65);' +
-      'backdrop-filter:blur(3px);' +
-      'padding:16px 16px 18px;' +
-      'box-sizing:border-box;' +
-      'pointer-events:all;' +
-      'cursor:pointer;' +
-      'overflow:hidden;' +
-      'flex-shrink:0;';
+      'margin-top:12px;background:rgba(225,222,217,0.65);backdrop-filter:blur(3px);' +
+      'padding:16px 16px 18px;box-sizing:border-box;pointer-events:all;cursor:pointer;' +
+      'overflow:hidden;flex-shrink:0;position:relative;';
 
-    // Başlık
     const mobTitleEl = document.createElement('span');
     mobTitleEl.style.cssText =
-      'font-family:"Space Grotesk",sans-serif;' +
-      'font-size:11px;font-weight:700;' +
-      'letter-spacing:.10em;text-transform:uppercase;' +
-      'color:rgba(0,0,0,0.78);' +
+      'font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:700;' +
+      'letter-spacing:.10em;text-transform:uppercase;color:rgba(0,0,0,0.78);' +
       'display:block;line-height:1.5;';
     mobInfo.appendChild(mobTitleEl);
 
-    // Detay alanı — accordion
     const mobDetailsEl = document.createElement('div');
     mobDetailsEl.style.cssText =
-      'overflow:hidden;' +
-      'max-height:0;' +
-      'opacity:0;' +
+      'overflow:hidden;max-height:0;opacity:0;' +
       'transition:max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;' +
       'margin-top:0;';
     mobInfo.appendChild(mobDetailsEl);
@@ -470,21 +410,16 @@ function showVideoEmbed(project) {
       if (!val) return;
       const div = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:8px;';
-
       const keyEl = document.createElement('span');
       keyEl.style.cssText =
-        'font-family:"DM Mono",monospace;' +
-        'font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
-        'color:rgba(0,0,0,0.38);margin-bottom:2px;';
+        'font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.22em;' +
+        'text-transform:uppercase;color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = key;
-
       const valEl = document.createElement('span');
       valEl.style.cssText =
-        'font-family:"Space Grotesk",sans-serif;' +
-        'font-size:11px;font-weight:300;letter-spacing:.03em;' +
-        'color:rgba(0,0,0,0.68);line-height:1.5;';
+        'font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:300;' +
+        'letter-spacing:.03em;color:rgba(0,0,0,0.68);line-height:1.5;';
       valEl.textContent = val;
-
       div.appendChild(keyEl);
       div.appendChild(valEl);
       mobDetailsEl.appendChild(div);
@@ -497,57 +432,39 @@ function showVideoEmbed(project) {
     if (project.description) addMobRow('Info', project.description);
     if (project.software)    addMobRow('Software', project.software);
 
-    // Accordion toggle
     let mobIsOpen = false;
-
     function mobOpen() {
-      if (mobIsOpen) return;
-      mobIsOpen = true;
+      if (mobIsOpen) return; mobIsOpen = true;
       mobDetailsEl.style.maxHeight = '300px';
       mobDetailsEl.style.opacity   = '1';
       mobDetailsEl.style.marginTop = '12px';
     }
-
     function mobClose() {
-      if (!mobIsOpen) return;
-      mobIsOpen = false;
+      if (!mobIsOpen) return; mobIsOpen = false;
       mobDetailsEl.style.maxHeight = '0';
       mobDetailsEl.style.opacity   = '0';
       mobDetailsEl.style.marginTop = '0';
     }
-
-    mobInfo.addEventListener('click', function() {
-      mobIsOpen ? mobClose() : mobOpen();
-    });
-
-    // 1sn sonra aç, 4sn sonra kapat
-    setTimeout(mobOpen, 1000);
+    mobInfo.addEventListener('click', function() { mobIsOpen ? mobClose() : mobOpen(); });
+    setTimeout(mobOpen,  1000);
     setTimeout(mobClose, 4000);
 
-    // Scan line
     const mobScanLine = document.createElement('div');
     mobScanLine.style.cssText =
       'position:absolute;left:0;top:0;width:100%;height:2px;' +
       'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,0.08),rgba(0,0,0,0));' +
       'pointer-events:none;z-index:1;';
-    mobInfo.style.position = 'relative';
     mobInfo.appendChild(mobScanLine);
-
     let mobScanPos = 0;
-    let mobScanId = null;
     function mobAnimateScan() {
       mobScanPos += 0.4;
       if (mobScanPos > mobInfo.offsetHeight) mobScanPos = -2;
       mobScanLine.style.top = mobScanPos + 'px';
-      mobScanId = requestAnimationFrame(mobAnimateScan);
+      scanAnimIds.push(requestAnimationFrame(mobAnimateScan));
     }
-    mobScanId = requestAnimationFrame(mobAnimateScan);
-    scanAnimIds.push(mobScanId);
+    scanAnimIds.push(requestAnimationFrame(mobAnimateScan));
 
-    // Scramble başlık
-    setTimeout(function() {
-      gridScramble(mobTitleEl, project.title.toUpperCase(), 1200);
-    }, 100);
+    setTimeout(function() { gridScramble(mobTitleEl, project.title.toUpperCase(), 1200); }, 100);
 
     videoCol.appendChild(mobInfo);
   }
