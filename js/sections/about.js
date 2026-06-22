@@ -5,6 +5,7 @@ function renderAbout() {
     { id: 'education',  label: 'Education' },
     { id: 'experience', label: 'Work Experience' },
     { id: 'teaching',   label: 'Teaching' },
+    { id: 'practice',   label: 'Practice' },
     { id: 'software',   label: 'Software' }
   ];
 
@@ -174,6 +175,97 @@ function getAboutContent(sectionId) {
           <div class="about-sub">${it.sub}</div>
         </div>
       </div>`).join('')}</div>`;
+  }
+
+  if (sectionId === 'practice') {
+    const firms = [
+      {
+        name: '304 DESIGN',
+        role: 'Brand Architect · Interior Architect',
+        period: '2014 – 2016 · Istanbul, Turkey',
+        projects: [
+          { year: '2015–2016', project: 'Mambocino Coffee',               type: 'Franchise Coffee Shops',      location: 'Istanbul · Tekirdağ · N. Cyprus' },
+          { year: '2015–2016', project: 'Coffee Manifesto',               type: 'Coffee Shops',                location: 'Moda · Kadıköy, Istanbul' },
+          { year: '2015–2016', project: 'Cup\'n Go Coffee',               type: 'Franchise Coffee Kiosks',     location: 'Istanbul · Antalya' },
+          { year: '2015–2016', project: 'Coffee Sapiens',                 type: 'Modular Coffee Kiosk',        location: 'Karaköy, Istanbul' },
+          { year: '2015–2016', project: 'Probador Colectiva Coffee Roastery', type: 'Roastery',               location: 'Karaköy, Istanbul' },
+          { year: '2015–2016', project: 'Tramplen Roastery & Headquarters', type: 'Office / Roastery',        location: 'Ataşehir, Istanbul' },
+          { year: '2015–2016', project: 'Kaffesa Headquarters',           type: 'Office / Workplace',          location: 'Istanbul' },
+          { year: '2015–2016', project: 'Isis Restaurant',                type: 'Restaurant',                  location: 'Moda, Istanbul' },
+          { year: '2015–2016', project: 'Bahane Cafe & Bar',              type: 'Café · Bar',                  location: 'Moda, Istanbul' },
+          { year: '2015–2016', project: 'Paria Restaurant',               type: 'Restaurant',                  location: 'Bostancı, Istanbul' },
+          { year: '2015–2016', project: 'Drip Third Wave Coffee Shop',    type: 'Coffee Shop',                 location: 'Istanbul' },
+          { year: '2015–2016', project: 'Karaköy Gümrük Restaurant',      type: 'Restaurant',                  location: 'Karaköy, Istanbul' },
+          { year: '2015–2016', project: 'Take Five Jazz Bar',             type: 'Jazz Bar',                    location: 'Alaçatı, İzmir' },
+          { year: '2015–2016', project: 'Serdar-i Ekrem Boutique Hotel',  type: 'Boutique Hotel',              location: 'Beyoğlu, Istanbul' },
+          { year: '2015–2016', project: 'Gökçe Kozanoğlu House',          type: 'Residential',                 location: 'Göztepe, Istanbul' },
+          { year: '2015–2016', project: 'Ali Osman Yener House',          type: 'Residential',                 location: 'Kadıköy, Istanbul' },
+          { year: '2015–2016', project: 'Lisani Atasayan House',          type: 'Residential',                 location: 'Istanbul' },
+          { year: '2015–2016', project: 'İbrahim Şimşek House',           type: 'Residential',                 location: 'Göztepe, Istanbul' },
+          { year: '2015–2016', project: 'Gökçe & Selim Kocaoğlu House',   type: 'Residential',                 location: 'Ulus, Istanbul' },
+          { year: '2015–2016', project: 'Soy Copper Shop Loft',           type: 'Retail / Loft',               location: 'Istanbul' },
+          { year: '2015–2016', project: 'Uniq Shop',                      type: 'Pop-up Store',                location: 'Maslak, Istanbul' },
+          { year: '2014–2016', project: 'Retail Store Products & Systems', type: 'Product Design',             location: 'Istanbul' },
+          { year: '2014–2016', project: 'Custom Furniture & Product Systems', type: 'Furniture & Product Design', location: 'Istanbul' },
+          { year: '2014',      project: 'Istanbul Coffee Festival',        type: 'Event Design',                location: 'Istanbul' },
+          { year: '2015',      project: 'Istanbul Coffee Festival',        type: 'Event Design',                location: 'Istanbul' },
+          { year: '2016',      project: 'Istanbul Coffee Festival',        type: 'Event Design',                location: 'Istanbul' }
+        ]
+      },
+      {
+        name: 'CISIMDESIGN',
+        role: 'Interior Architect · Product Designer',
+        period: '2013 – 2014 · Istanbul, Turkey',
+        projects: [
+          { year: '2013',      project: 'Mum\'s Cafe',                    type: 'Hospitality / Café',          location: 'Karaköy, Istanbul' },
+          { year: '2013',      project: 'Forneria Restaurant',            type: 'Hospitality / Restaurant',    location: 'Karaköy, Istanbul' },
+          { year: '2014',      project: 'Mükellef Restaurant',            type: 'Hospitality / Restaurant',    location: 'Karaköy, Istanbul' },
+          { year: '2014',      project: 'Read & Rest Bookstore Café',     type: 'Hospitality / Bookstore Café', location: 'Göktürk, Istanbul' },
+          { year: '2013–2014', project: 'One Ortaköy Family House',       type: 'Residential',                 location: 'Ortaköy, Istanbul' },
+          { year: '2013–2014', project: 'Dilek Seferoğlu House',          type: 'Residential',                 location: 'Şişli, Istanbul' },
+          { year: '2013–2014', project: 'Alafortanfoni Headquarters',     type: 'Office / Workplace',          location: 'Maslak, Istanbul' },
+          { year: '2013–2014', project: 'Portakal Family',                type: 'Hospitality / Café · Restaurant · Bar', location: 'Karaköy, Istanbul' }
+        ]
+      },
+      {
+        name: 'PROJEMASIF',
+        role: 'Interior Architect · Furniture Designer',
+        period: '2012 – 2013 · Istanbul, Turkey',
+        projects: [
+          { year: '2012–2013', project: 'Bilgitek Headquarters',          type: 'Office / Workplace',          location: 'Zeytinburnu, Istanbul' },
+          { year: '2012–2013', project: 'AGCA House',                     type: 'Residential / Restoration',   location: 'Istanbul' }
+        ]
+      }
+    ];
+
+    return `<div class="accordion-content practice-list">
+      ${firms.map(f => `
+        <div class="practice-firm">
+          <div class="practice-firm-header">
+            <span class="practice-firm-name">${f.name}</span>
+            <span class="practice-firm-meta">${f.role} · ${f.period}</span>
+          </div>
+          <table class="practice-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${f.projects.map(p => `
+                <tr>
+                  <td>${p.year}</td>
+                  <td>${p.project}</td>
+                  <td>${p.type}</td>
+                  <td>${p.location}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`).join('')}
+    </div>`;
   }
 
   if (sectionId === 'software') {
