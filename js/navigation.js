@@ -367,8 +367,9 @@ function renderProjectInfoPanel(project) {
 
   document.body.appendChild(panel);
 
-  // ─── Collapse / Expand ───────────────────────────────────────────────
+// ─── Collapse / Expand ───────────────────────────────────────────────
   let isCollapsed = false;
+  let scrollListenerAttached = false;
 
   function collapse() {
     if (isCollapsed) return;
@@ -376,11 +377,10 @@ function renderProjectInfoPanel(project) {
     detailsEl.style.maxHeight = '0';
     detailsEl.style.opacity   = '0';
     detailsEl.style.marginTop = '0';
-    // Grid overlay'i yukarı kaydır
     const ov = document.getElementById('grid-overlay');
     if (ov) {
       ov.style.transition = 'top 0.45s ease';
-      ov.style.top = (panelTop + 52) + 'px'; // başlık yüksekliği ~52px
+      ov.style.top = (panelTop + 52) + 'px';
     }
   }
 
@@ -390,7 +390,6 @@ function renderProjectInfoPanel(project) {
     detailsEl.style.maxHeight = '300px';
     detailsEl.style.opacity   = '1';
     detailsEl.style.marginTop = '18px';
-    // Grid overlay'i aşağı kaydır
     const ov = document.getElementById('grid-overlay');
     if (ov) {
       ov.style.transition = 'top 0.45s ease';
@@ -403,33 +402,47 @@ function renderProjectInfoPanel(project) {
     isCollapsed ? expand() : collapse();
   });
 
-  // 2.5 sn sonra otomatik collapse
-  const autoTimer = setTimeout(collapse, 2500);
+  // grid-overlay hazır olunca scroll listener + timer bağla
+  let pollCount = 0;
+  function waitForOverlay() {
+    const ov = document.getElementById('grid-overlay');
+    if (ov) {
+      // Scroll listener
+      let lastScrollTop = 0;
+      function onGridScroll() {
+        const st = ov.scrollTop;
+        if (st > lastScrollTop && st > 10) {
+          collapse();
+        } else if (st < lastScrollTop && st < 20) {
+          expand();
+        }
+        lastScrollTop = st;
+      }
+      if (!scrollListenerAttached) {
+        ov.addEventListener('scroll', onGridScroll);
+        scrollListenerAttached = true;
+      }
 
-  // Scroll başlayınca collapse, yukarı scroll edince expand
-  const ov = document.getElementById('grid-overlay');
-  let lastScrollTop = 0;
-  function onGridScroll() {
-    const st = ov ? ov.scrollTop : 0;
-    if (st > lastScrollTop && st > 10) {
-      clearTimeout(autoTimer);
-      collapse();
-    } else if (st < lastScrollTop && st < 20) {
-      expand();
+      // Observer: panel DOM'dan çıkınca temizle
+      const observer = new MutationObserver(() => {
+        if (!document.body.contains(panel)) {
+          ov.removeEventListener('scroll', onGridScroll);
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true });
+
+      // 2.5 sn sonra otomatik collapse
+      setTimeout(collapse, 2500);
+
+    } else if (pollCount < 30) {
+      pollCount++;
+      requestAnimationFrame(waitForOverlay);
     }
-    lastScrollTop = st;
   }
-  if (ov) ov.addEventListener('scroll', onGridScroll);
+  waitForOverlay();
 
-  // Panel DOM'dan çıkınca temizle
-  const observer = new MutationObserver(() => {
-    if (!document.body.contains(panel)) {
-      if (ov) ov.removeEventListener('scroll', onGridScroll);
-      observer.disconnect();
-    }
-  });
-  observer.observe(document.body, { childList: true });
-
+  
   // ─── Scan line ───────────────────────────────────────────────────────
   const scanLine = document.createElement('div');
   scanLine.style.cssText = `
