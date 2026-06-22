@@ -216,9 +216,94 @@ function renderProjectInfoPanel(project) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
-  const isMobile = window.innerWidth <= 768;
-  if (isMobile) return;
+const isMobile = window.innerWidth <= 768;
 
+  // ─── MOBİL: grid-overlay içine inline panel ───────────────────────────
+  if (isMobile) {
+    // grid-overlay hazır olana kadar bekle
+    let pollCount = 0;
+    function injectMobileInfo() {
+      const ov = document.getElementById('grid-overlay');
+      if (!ov) {
+        if (pollCount++ < 30) requestAnimationFrame(injectMobileInfo);
+        return;
+      }
+
+      const mob = document.createElement('div');
+      mob.id = 'proj-info-mobile';
+      mob.style.cssText = `
+        width: 100%;
+        padding: 16px 0 24px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        box-sizing: border-box;
+      `;
+
+      const titleEl = document.createElement('div');
+      titleEl.style.cssText = `
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+        color: rgba(0,0,0,0.78);
+        margin-bottom: 14px;
+        display: block;
+        line-height: 1.5;
+      `;
+      mob.appendChild(titleEl);
+
+      function addMobRow(key, val) {
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:8px;';
+
+        const keyEl = document.createElement('span');
+        keyEl.style.cssText = `
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 8px;
+          letter-spacing: .22em;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.35);
+          margin-bottom: 2px;
+        `;
+        keyEl.textContent = key;
+
+        const valEl = document.createElement('span');
+        valEl.style.cssText = `
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 11px;
+          font-weight: 300;
+          letter-spacing: .03em;
+          color: rgba(0,0,0,0.65);
+          line-height: 1.5;
+        `;
+        valEl.textContent = val;
+
+        div.appendChild(keyEl);
+        div.appendChild(valEl);
+        mob.appendChild(div);
+      }
+
+      if (project.year)           addMobRow('Year', project.year);
+      if (project.location)       addMobRow('Location', project.location);
+      if (project.office)         addMobRow('Office', project.office);
+      if (project.firm)           addMobRow('Firm', project.firm);
+      if (project.program)        addMobRow('Program', project.program);
+      if (project.responsibilities && project.responsibilities.length)
+        addMobRow('Role', project.responsibilities.join(', '));
+      if (project.description)    addMobRow('Info', project.description);
+
+      // Grid container'ın önüne ekle
+      const gridEl = ov.querySelector('div');
+      ov.insertBefore(mob, gridEl);
+
+      scrambleText(titleEl, project.title.toUpperCase(), 1200);
+    }
+    injectMobileInfo();
+    return;
+  }
+  // ─────────────────────────────────────────────────────────────────────
+  
   const panelTop   = 181;
   const panelLeft  = 100;
   const panelWidth = 520;
@@ -442,7 +527,7 @@ function renderProjectInfoPanel(project) {
   }
   waitForOverlay();
 
-  
+
   // ─── Scan line ───────────────────────────────────────────────────────
   const scanLine = document.createElement('div');
   scanLine.style.cssText = `
