@@ -34,9 +34,9 @@
       "label": "Interior",
       "description": "Interior design projects ranging from residential to commercial.",
       "subcategories": [
-        { "id": "interior-residential", "label": "Residential", "description": "Private living spaces designed around daily life and personal narrative.", "projects": ["yesilkoy"] },
-        { "id": "interior-retail", "label": "Retail", "description": "Spatial identities for retail environments including cafes, bookstores and shops.", "projects": ["bookstore", "cafe"] },
-        { "id": "interior-hospitality", "label": "Hospitality", "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.", "projects": [] },
+{ "id": "interior-residential", "label": "Residential", "description": "Private living spaces designed around daily life and personal narrative.", "projects": ["yesilkoy", "kupferberg"] },
+{ "id": "interior-retail", "label": "Retail", "description": "Spatial identities for retail environments including cafes, bookstores and shops.", "projects": ["bookstore", "cafe", "isis"] },
+{ "id": "interior-hospitality", "label": "Hospitality", "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.", "projects": ["isis"] },
         { "id": "interior-workspace", "label": "Workspace", "description": "Office and studio environments designed for focus, collaboration and culture.", "projects": [] }
       ]
     },

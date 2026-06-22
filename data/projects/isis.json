@@ -1,0 +1,29 @@
+{
+  "id": "isis",
+  "title": "Isis Restaurant & Cafe",
+  "year": "2016",
+  "location": "Kadıköy, Istanbul",
+  "coordinates": [40.9866, 29.0264],
+  "office": "Cisim Design",
+  "responsibilities": ["Interior Architect", "Project Architect", "Visualisation"],
+  "program": "Restaurant + Cafe",
+  "type": "image-grid",
+  "cover": "images/projects/interior/isis/cover.jpg",
+  "images": [
+    { "src": "images/projects/interior/isis/1.jpg" },
+    { "src": "images/projects/interior/isis/2.jpg" },
+    { "src": "images/projects/interior/isis/3.jpg" },
+    { "src": "images/projects/interior/isis/4.jpg" },
+    { "src": "images/projects/interior/isis/5.jpg" },
+    { "src": "images/projects/interior/isis/6.jpg" },
+    { "src": "images/projects/interior/isis/7.jpg" },
+    { "src": "images/projects/interior/isis/8.jpg" },
+    { "src": "images/projects/interior/isis/9.jpg" },
+    { "src": "images/projects/interior/isis/10.jpg" },
+    { "src": "images/projects/interior/isis/11.jpg" },
+    { "src": "images/projects/interior/isis/12.jpg" },
+    { "src": "images/projects/interior/isis/13.jpg" },
+    { "src": "images/projects/interior/isis/14.jpg" },
+    { "src": "images/projects/interior/isis/15.jpg" }
+  ]
+}
