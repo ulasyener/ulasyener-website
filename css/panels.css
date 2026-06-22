@@ -226,12 +226,13 @@
 }
 
 .accordion-content p {
-  font-family: var(--f-sans);
-  font-size: 13px;
-  font-weight: 300;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
   color: rgba(0,0,0,0.65);
-  letter-spacing: .03em;
-  line-height: 1.85;
+  letter-spacing: .06em;
+  line-height: 1.9;
+  text-transform: uppercase;
 }
 
 /* ─── About accordion içerik satırları ──────────────────────────────── */
@@ -246,31 +247,35 @@
 
 .about-period {
   font-family: var(--f-mono);
-  font-size: 9px;
-  letter-spacing: .14em;
-  color: rgba(0,0,0,0.32);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.55);
   padding-top: 2px;
   line-height: 1.6;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .about-title {
-  font-family: var(--f-sans);
-  font-size: 12px;
-  font-weight: 500;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
   color: rgba(0,0,0,0.72);
-  letter-spacing: .03em;
-  line-height: 1.5;
+  letter-spacing: .06em;
+  line-height: 1.6;
   margin-bottom: 2px;
+  text-transform: uppercase;
 }
 
 .about-sub {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 11px;
-  font-weight: 300;
+  font-weight: 700;
   color: rgba(0,0,0,0.42);
-  letter-spacing: .03em;
-  line-height: 1.5;
+  letter-spacing: .06em;
+  line-height: 1.6;
+  text-transform: uppercase;
 }
 
 /* ─── Fremde Türen accordion ─────────────────────────────────────────── */
@@ -448,9 +453,9 @@
   .empty-state         { font-size: 8px; margin-top: 32px; }
 
   .about-row { grid-template-columns: 80px 1fr; gap: 0 12px; }
-  .about-period { font-size: 8px; }
-  .about-title  { font-size: 11px; }
-  .about-sub    { font-size: 10px; }
+  .about-period { font-size: 10px; font-weight: 700; }
+  .about-title  { font-size: 11px; font-weight: 700; }
+  .about-sub    { font-size: 10px; font-weight: 700; }
 
   /* Hover efektleri mobilde kapalı */
   .category-item:not(.empty):hover,

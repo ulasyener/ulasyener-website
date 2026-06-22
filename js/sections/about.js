@@ -55,15 +55,15 @@ function renderAbout() {
       aowItem.classList.add('is-open');
       arrow.innerHTML = '&#x2212;';
       const areas = [
-        { label: 'Architecture',        desc: 'Spatial design, restoration, visualization and competition projects.' },
-        { label: 'Computation',         desc: 'Three.js, TouchDesigner, Unreal Engine, parametric and generative tools.' },
-        { label: 'Culture',             desc: 'Documentary practices, archival research, migration narratives and media archaeology.' },
-        { label: 'Teaching',            desc: 'Lectures and workshops at Bauhaus-Universität Weimar and international institutions.' },
-        { label: 'Event Organisation',  desc: 'Curatorial and production experience across exhibitions, screenings and installations.' }
+        { label: 'Architecture', desc: 'Spatial design, restoration, visualization and competition projects.' },
+        { label: 'Computation',  desc: 'Three.js, TouchDesigner, Unreal Engine, parametric and generative tools.' },
+        { label: 'Culture',      desc: 'Documentary practices, archival research, migration narratives and media archaeology.' },
+        { label: 'Teaching',     desc: 'Lectures and workshops at Bauhaus-Universität Weimar and international institutions.' },
+        { label: 'Event',        desc: 'Curatorial and production experience across exhibitions, screenings and installations.' }
       ];
       body.innerHTML = `<div class="accordion-content">${areas.map(a => `
         <div class="about-row">
-          <div class="about-period" style="font-family:var(--f-sans);font-size:11px;font-weight:500;color:rgba(0,0,0,0.7);letter-spacing:.04em;">${a.label}</div>
+          <div class="about-period" style="font-family:var(--f-mono);font-size:11px;font-weight:700;text-transform:uppercase;color:rgba(0,0,0,0.55);letter-spacing:.06em;">${a.label}</div>
           <div class="about-detail"><div class="about-sub">${a.desc}</div></div>
         </div>`).join('')}</div>`;
       body.style.maxHeight = body.scrollHeight + 'px';
@@ -111,8 +111,8 @@ function getAboutContent(sectionId) {
   if (sectionId === 'bio') {
     return `
       <div class="accordion-content">
-        <p>Ulas Yener is an architect, 3D artist, and interdisciplinary media researcher based in Germany. With nearly fifteen years of experience in architecture, visualization, and digital media production, his practice combines spatial design with moving images, photography, sound, and immersive technologies. His work explores memory, migration, and cultural narratives through documentary practices, archives, and interactive storytelling, creating experiences that move between physical and virtual spaces.</p>
-        <p style="margin-top:12px;">Alongside his professional work in architecture and visualization, he develops artistic and research-based projects that investigate new forms of storytelling and the relationship between media, memory, and space.</p>
+        <p style="font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.9;color:rgba(0,0,0,0.65);">Ulas Yener is an architect, 3D artist, and interdisciplinary media researcher based in Germany. With nearly fifteen years of experience in architecture, visualization, and digital media production, his practice combines spatial design with moving images, photography, sound, and immersive technologies. His work explores memory, migration, and cultural narratives through documentary practices, archives, and interactive storytelling, creating experiences that move between physical and virtual spaces.</p>
+        <p style="margin-top:12px;font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.9;color:rgba(0,0,0,0.65);">Alongside his professional work in architecture and visualization, he develops artistic and research-based projects that investigate new forms of storytelling and the relationship between media, memory, and space.</p>
       </div>`;
   }
 
@@ -156,13 +156,13 @@ function getAboutContent(sectionId) {
 
   if (sectionId === 'teaching') {
     const items = [
-      { period: '2023 – 2024', title: 'Spatial Narratives, Lecturer',                    sub: 'Bauhaus Spring School 2024, Bauhaus-Universität Weimar' },
-      { period: '2023 – 2024', title: 'Re-Located Stories, Lecturer',                    sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2021 – 2022', title: 'Contemporary Tools for Design, Lecturer',         sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2020 – 2021', title: 'Modelling Bauhaus Workshop, Workshop Instructor', sub: 'Faculty of Art and Design, Kadir Has University' },
-      { period: '2019 – 2020', title: 'Professional Presentation Methods, Lecturer',     sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen, Workshop Instructor', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' },
-      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling, Lecturer', sub: 'Faculty of Architecture and Urbanism, Bauhaus-Universität Weimar' }
+      { period: '2023 – 2024', title: 'Spatial Narratives,<br>Lecturer',                    sub: 'Bauhaus Spring School 2024,<br>Bauhaus-Universität Weimar' },
+      { period: '2023 – 2024', title: 'Re-Located Stories,<br>Lecturer',                    sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
+      { period: '2021 – 2022', title: 'Contemporary Tools for Design,<br>Lecturer',         sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
+      { period: '2020 – 2021', title: 'Modelling Bauhaus Workshop,<br>Workshop Instructor', sub: 'Faculty of Art and Design,<br>Kadir Has University' },
+      { period: '2019 – 2020', title: 'Professional Presentation Methods,<br>Lecturer',     sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
+      { period: '2018 – 2019', title: 'Bauhaus-Oasen-trans-lokal vernetzen,<br>Workshop Instructor', sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' },
+      { period: '2018 – 2019', title: 'Introduction to Architectural Modelling,<br>Lecturer', sub: 'Faculty of Architecture and Urbanism,<br>Bauhaus-Universität Weimar' }
     ];
     return `<div class="accordion-content">${items.map(it => `
       <div class="about-row">
