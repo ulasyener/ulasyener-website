@@ -79,8 +79,10 @@ function renderAbout() {
   dlItem.innerHTML = `
     <div class="cat-label">Download</div>
     <div class="download-btns">
-      <a class="dl-btn" href="files/portfolio.pdf" download>Portfolio</a>
       <a class="dl-btn" href="files/cv.pdf" download>CV</a>
+      <a class="dl-btn" href="files/portfolio-architectural.pdf" download>Architectural Portfolio</a>
+      <a class="dl-btn" href="files/portfolio-artistic.pdf" download>Artistic Portfolio</a>
+      <a class="dl-btn" href="files/portfolio-academic.pdf" download>Academic Portfolio</a>
     </div>
   `;
   list.appendChild(dlItem);
