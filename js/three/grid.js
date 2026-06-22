@@ -253,7 +253,7 @@ function showVideoEmbed(project) {
   destroyGrid();
 
   const IS_MOB  = window.innerWidth <= 768;
-  const TOP_PX  = IS_MOB ? 60 : 225;  // nav + breadcrumb boşluğu
+  const TOP_PX  = IS_MOB ? 60 : 185;  // nav + breadcrumb boşluğu
   const PAD_SIDE = IS_MOB ? 16 : 100; // sol kenar boşluğu (navigation.js panelLeft ile aynı)
 
   gridOverlay = document.createElement('div');
@@ -396,13 +396,13 @@ function showVideoEmbed(project) {
     'flex:1;' +
     'display:flex;' +
     'flex-direction:column;' +
+    'justify-content:center;' +
     'min-width:0;' +
     (IS_MOB ? '' : 'padding-top:0;');
 
   const wrapper = document.createElement('div');
   wrapper.style.cssText =
     'width:100%;' +
-    'max-width:calc(100vw - 100px - 220px - 32px - 80px);' +
     'max-height:65vh;' +
     'position:relative;' +
     'padding-bottom:min(56.25%, 65vh);' +
