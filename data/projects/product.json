@@ -1,0 +1,29 @@
+{
+  "id": "product",
+  "title": "Product Design",
+  "category": ["product-furniture"],
+  "year": "2012–2026",
+  "location": "",
+  "client": "",
+  "firm": "Ulas Yener",
+  "role": "",
+  "description": "Product designs for various fields.",
+  "type": "image-grid",
+  "cover": "images/projects/product/cover.jpg",
+  "images": [
+    "images/projects/product/1.jpg",
+    "images/projects/product/2.jpg",
+    "images/projects/product/3.jpg",
+    "images/projects/product/4.jpg",
+    "images/projects/product/5.jpg",
+    "images/projects/product/6.jpg",
+    "images/projects/product/7.jpg",
+    "images/projects/product/8.jpg",
+    "images/projects/product/9.jpg",
+    "images/projects/product/10.jpg",
+    "images/projects/product/11.jpg",
+    "images/projects/product/12.jpg",
+    "images/projects/product/13.jpg",
+    "images/projects/product/14.jpg"
+  ]
+}
