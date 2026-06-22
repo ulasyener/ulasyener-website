@@ -85,7 +85,6 @@ async function showSubcategory(categoryId, subcategoryId) {
   const sub  = cat?.subcategories.find(s => s.id === subcategoryId);
   if (!sub) return;
 
-  // Sound/Radio özel sayfası
   if (subcategoryId === 'sound-radio') {
     showRadio(categoryId, cat.label);
     return;
@@ -172,7 +171,7 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       existingNav.appendChild(title);
     }
 
-   if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
+    if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
 
     if (project.content_type === 'video') {
       window.grid3d = showVideoEmbed(project);
@@ -185,6 +184,8 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
     }
 
     renderProjectInfoPanel(project);
+  });
+}
 
 // ─── SOUND / RADIO — özel sayfa ───────────────────────────────────────────
 function showRadio(categoryId, catLabel) {
@@ -239,31 +240,3 @@ function showRadio(categoryId, catLabel) {
 function showRadioSection(section, categoryId, catLabel) {
   runGlitch(() => {
     pushHash('works/' + categoryId + '/sound-radio/' + section.id);
-
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Works',   action: () => showSection('works') },
-      { label: catLabel,  action: () => showCategory(categoryId) },
-      { label: 'Radio',   action: () => showRadio(categoryId, catLabel) },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showRadio(categoryId, catLabel)));
-    el.appendChild(label);
-
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-
-    root.appendChild(el);
-  });
-}
