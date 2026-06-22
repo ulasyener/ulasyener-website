@@ -60,7 +60,7 @@ function showContactSection(s) {
       const list = document.createElement('div');
       list.className = 'category-list';
       list.innerHTML = `
-        <div class="contact-row"><span class="contact-key">Email</span><a href="mailto:hello@ulasyener.com" class="contact-val">HELLO@ULASYENER.COM</a></div>
+        <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val">HELLO [AT] ULASYENER.COM</span></div>
         <div class="contact-row"><span class="contact-key">Phone</span><a href="tel:+491632078616" class="contact-val">+49 163 207 8616</a></div>
         <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">OPEN WHATSAPP</a></div>
         <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">OPEN TELEGRAM</a></div>
