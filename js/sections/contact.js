@@ -1,7 +1,23 @@
 // ─── CONTACT ──────────────────────────────────────────────────────────────
-// Formspree form ID — https://formspree.io adresinden hesap açıp form oluşturduktan
-// sonra aldığın ID'yi aşağıya yapıştır (örn: 'xpzgkwqr')
 const FORMSPREE_ID = 'mvzjpvda';
+
+// Scraper koruması: veriler parçalanmış + encode edilmiş, runtime'da birleştirilir
+function _d(b) { return atob(b); }
+const _C = {
+  eA: 'aGVsbG8=',             // hello
+  eB: 'QA==',                 // @
+  eC: 'dWxhc3llbmVyLmNvbQ==', // ulasyener.com
+  pA: 'KzQ5',                 // +49
+  pB: 'IDE2Mw==',             // 163
+  pC: 'IDIwNyA4NjE2',         // 207 8616
+  wP: 'NDkxNjMyMDc4NjE2',     // 491632078616
+  tP: 'KzQ5MTYzMjA3ODYxNg==', // +491632078616
+};
+function _email()  { return _d(_C.eA) + _d(_C.eB) + _d(_C.eC); }
+function _phone()  { return _d(_C.pA) + ' ' + _d(_C.pB).trim() + ' ' + _d(_C.pC).trim(); }
+function _waHref() { return 'https://wa' + '.me/' + _d(_C.wP); }
+function _tgHref() { return 'https://t'  + '.me/' + _d(_C.tP); }
+function _telHref(){ return 'tel:' + _d(_C.pA) + _d(_C.pB).replace(/\s/g,'') + _d(_C.pC).replace(/\s/g,''); }
 
 function renderContact() {
   const root = getPanelRoot();
@@ -59,22 +75,48 @@ function showContactSection(s) {
     if (s.id === 'info') {
       const list = document.createElement('div');
       list.className = 'category-list';
-      list.innerHTML = `
-        <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val">HELLO [AT] ULASYENER.COM</span></div>
-        <div class="contact-row"><span class="contact-key">Phone</span><a href="tel:+491632078616" class="contact-val">+49 163 207 8616</a></div>
-        <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">OPEN WHATSAPP</a></div>
-        <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">OPEN TELEGRAM</a></div>
-        <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">WEIMAR · STUTTGART · ISTANBUL</span></div>
-        <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 STUTTGART</span></div>
-        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">OPEN TO COLLABORATION</span></div>
-        <div class="contact-row" style="padding-top:20px;">
-          <span class="contact-key"></span>
-          <div class="download-btns">
-            <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
-            <a class="dl-btn" href="files/cv.pdf" download>CV</a>
-          </div>
+
+      const rows = [
+        { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: _email,           },
+        { key: 'Phone',        tag: 'a',    getHref: _telHref,                   getText: _phone,           },
+        { key: 'WhatsApp',     tag: 'a',    getHref: _waHref,                    getText: () => 'OPEN WHATSAPP', target: '_blank' },
+        { key: 'Telegram',     tag: 'a',    getHref: _tgHref,                    getText: () => 'OPEN TELEGRAM', target: '_blank' },
+        { key: 'Based',        tag: 'span',                                       getText: () => 'WEIMAR · STUTTGART · ISTANBUL' },
+        { key: 'Currently',    tag: 'span',                                       getText: () => '70599 STUTTGART' },
+        { key: 'Availability', tag: 'span',                                       getText: () => 'OPEN TO COLLABORATION' },
+      ];
+
+      rows.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'contact-row';
+
+        const keyEl = document.createElement('span');
+        keyEl.className = 'contact-key';
+        keyEl.textContent = r.key;
+        row.appendChild(keyEl);
+
+        const valEl = document.createElement(r.tag);
+        valEl.className = 'contact-val';
+        valEl.textContent = r.getText();
+        if (r.getHref) valEl.href = r.getHref();
+        if (r.target)  valEl.target = r.target;
+        row.appendChild(valEl);
+
+        list.appendChild(row);
+      });
+
+      const dlRow = document.createElement('div');
+      dlRow.className = 'contact-row';
+      dlRow.style.paddingTop = '20px';
+      dlRow.innerHTML = `
+        <span class="contact-key"></span>
+        <div class="download-btns">
+          <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
+          <a class="dl-btn" href="files/cv.pdf" download>CV</a>
         </div>
       `;
+      list.appendChild(dlRow);
+
       el.appendChild(list);
     }
 
@@ -83,11 +125,11 @@ function showContactSection(s) {
         {
           label: 'Social',
           links: [
-            { label: 'Instagram', href: 'https://www.instagram.com/ulasynr/' },
-            { label: 'Twitter / X', href: 'https://x.com/ulasynr' },
-            { label: 'Facebook',  href: 'https://www.facebook.com/ulasynr' },
-            { label: 'Bluesky',   href: 'https://bsky.app/profile/ulasyener.bsky.social' },
-            { label: 'Tumblr',    href: 'https://ulasynr.tumblr.com/' },
+            { label: 'Instagram',  href: 'https://www.instagram.com/ulasynr/' },
+            { label: 'Twitter / X',href: 'https://x.com/ulasynr' },
+            { label: 'Facebook',   href: 'https://www.facebook.com/ulasynr' },
+            { label: 'Bluesky',    href: 'https://bsky.app/profile/ulasyener.bsky.social' },
+            { label: 'Tumblr',     href: 'https://ulasynr.tumblr.com/' },
           ]
         },
         {
@@ -167,7 +209,7 @@ function showContactSection(s) {
       const wrap = document.createElement('div');
       wrap.style.paddingTop = '16px';
       wrap.innerHTML = `
-   <div style="padding:0 0 12px;">
+        <div style="padding:0 0 12px;">
           <span style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:rgba(0,0,0,0.65);">
             Feel free to send me a message!
           </span>
@@ -182,7 +224,6 @@ function showContactSection(s) {
       `;
       el.appendChild(wrap);
 
-      // Formspree submit
       el.querySelector('#cf-submit').addEventListener('click', handleContactSubmit);
     }
 
