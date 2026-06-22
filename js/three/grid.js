@@ -266,7 +266,7 @@ function showVideoEmbed(project) {
     'display:flex;' +
     'flex-direction:' + (IS_MOB ? 'column' : 'row') + ';' +
     'align-items:' + (IS_MOB ? 'stretch' : 'flex-start') + ';' +
-    'padding:' + (IS_MOB ? '16px 16px 60px' : '0 80px 40px ' + PAD_SIDE + 'px') + ';' +
+'padding:' + (IS_MOB ? '16px 16px 60px' : '0 216px 40px ' + PAD_SIDE + 'px') + ';' +
     'gap:' + (IS_MOB ? '20px' : '0') + ';' +
     'box-sizing:border-box;' +
     'overflow:hidden;';
