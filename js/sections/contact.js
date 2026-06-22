@@ -60,13 +60,13 @@ function showContactSection(s) {
       const list = document.createElement('div');
       list.className = 'category-list';
       list.innerHTML = `
-        <div class="contact-row"><span class="contact-key">Email</span><a href="mailto:hello@ulasyener.com" class="contact-val">HELLO@ULASYENER.COM</a></div>
+        <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val">hello [at] ulasyener.com</span></div>
         <div class="contact-row"><span class="contact-key">Phone</span><a href="tel:+491632078616" class="contact-val">+49 163 207 8616</a></div>
-        <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">OPEN WHATSAPP</a></div>
-        <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">OPEN TELEGRAM</a></div>
-        <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">WEIMAR · STUTTGART · ISTANBUL</span></div>
-        <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 STUTTGART</span></div>
-        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">OPEN TO COLLABORATION</span></div>
+        <div class="contact-row"><span class="contact-key">WhatsApp</span><a href="https://wa.me/491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
+        <div class="contact-row"><span class="contact-key">Telegram</span><a href="https://t.me/+491632078616" target="_blank" class="contact-val">+49 163 207 8616</a></div>
+        <div class="contact-row"><span class="contact-key">Based</span><span class="contact-val">Weimar · Stuttgart · Istanbul</span></div>
+        <div class="contact-row"><span class="contact-key">Currently</span><span class="contact-val">70599 Stuttgart</span></div>
+        <div class="contact-row"><span class="contact-key">Availability</span><span class="contact-val">Open to collaboration</span></div>
         <div class="contact-row" style="padding-top:20px;">
           <span class="contact-key"></span>
           <div class="download-btns">
@@ -79,22 +79,87 @@ function showContactSection(s) {
     }
 
     if (s.id === 'social') {
-      const links = [
-        { label: 'Instagram', href: '#' },
-        { label: 'LinkedIn',  href: 'https://linkedin.com/in/ulasynr' },
-        { label: 'Behance',   href: 'https://behance.net/ulasynr' },
-        { label: 'Vimeo',     href: 'https://vimeo.com/ulasyener' },
-        { label: 'Patreon',   href: '#' },
-        { label: 'Substack',  href: '#' },
-        { label: 'GitHub',    href: '#' },
-        { label: 'bauhaus.fm',href: '#' }
+      const groups = [
+        {
+          label: 'Social',
+          links: [
+            { label: 'Instagram', href: 'https://www.instagram.com/ulasynr/' },
+            { label: 'X',         href: 'https://x.com/ulasynr' },
+            { label: 'Facebook',  href: 'https://www.facebook.com/ulasynr' },
+            { label: 'Bluesky',   href: 'https://bsky.app/profile/ulasyener.bsky.social' },
+            { label: 'Tumblr',    href: 'https://ulasynr.tumblr.com/' },
+          ]
+        },
+        {
+          label: 'Portfolio & Creative',
+          links: [
+            { label: 'Behance',  href: 'https://www.behance.net/ulasynr' },
+            { label: 'Flickr',   href: 'https://www.flickr.com/photos/ulasyener' },
+            { label: 'Vimeo',    href: 'https://vimeo.com/ulasyener' },
+            { label: 'YouTube',  href: 'https://www.youtube.com/@theulasyener' },
+            { label: 'Patreon',  href: 'https://www.patreon.com/c/ulasyener' },
+          ]
+        },
+        {
+          label: 'Music & Audio',
+          links: [
+            { label: 'SoundCloud', href: 'https://soundcloud.com/ulasyener-1' },
+            { label: 'Mixcloud',   href: 'https://www.mixcloud.com/ula%C5%9F-yener/' },
+          ]
+        },
+        {
+          label: 'Live',
+          links: [
+            { label: 'Twitch', href: 'https://www.twitch.tv/barbar__turk' },
+            { label: 'Kick',   href: 'https://kick.com/barbarturko' },
+          ]
+        },
+        {
+          label: 'Academic & Writing',
+          links: [
+            { label: 'Academia.edu', href: 'https://uni-weimar.academia.edu/Ula%C5%9FYener' },
+            { label: 'Medium',       href: 'https://medium.com/@ulasyener' },
+            { label: 'Substack',     href: 'https://substack.com/@ulasyener' },
+          ]
+        },
+        {
+          label: 'Professional',
+          links: [
+            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ulasynr/' },
+            { label: 'Xing',     href: 'https://www.xing.com/profile/Ulas_Yener2/web_profiles?nwt_nav=profile_icon' },
+            { label: 'GitHub',   href: 'https://github.com/ulasyener' },
+          ]
+        },
       ];
+
       const wrap = document.createElement('div');
-      wrap.className = 'social-links';
-      wrap.style.paddingTop = '16px';
-      wrap.innerHTML = links.map(l =>
-        `<a class="social-link-btn" href="${l.href}" target="_blank">${l.label}</a>`
-      ).join('');
+      wrap.style.paddingTop = '8px';
+
+      groups.forEach(group => {
+        const groupEl = document.createElement('div');
+        groupEl.style.cssText = 'margin-bottom:24px;';
+
+        const groupLabel = document.createElement('div');
+        groupLabel.style.cssText = 'font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.32);margin-bottom:10px;';
+        groupLabel.textContent = group.label;
+        groupEl.appendChild(groupLabel);
+
+        const btnWrap = document.createElement('div');
+        btnWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
+
+        group.links.forEach(l => {
+          const a = document.createElement('a');
+          a.className = 'social-link-btn';
+          a.href = l.href;
+          a.target = '_blank';
+          a.textContent = l.label;
+          btnWrap.appendChild(a);
+        });
+
+        groupEl.appendChild(btnWrap);
+        wrap.appendChild(groupEl);
+      });
+
       el.appendChild(wrap);
     }
 
