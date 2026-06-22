@@ -399,11 +399,12 @@ function showVideoEmbed(project) {
     'min-width:0;' +
     (IS_MOB ? '' : 'padding-top:0;');
 
-  const wrapper = document.createElement('div');
+const wrapper = document.createElement('div');
   wrapper.style.cssText =
     'width:100%;' +
+    'max-height:65vh;' +
     'position:relative;' +
-    'padding-bottom:56.25%;' +
+    'padding-bottom:min(56.25%, 65vh);' +
     'height:0;' +
     'overflow:hidden;' +
     'flex-shrink:0;';
