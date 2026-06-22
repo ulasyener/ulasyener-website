@@ -212,7 +212,7 @@ function scrambleText(el, finalText, duration = 1800) {
   }, 60);
 }
 // ─── Proje Bilgi Paneli ───────────────────────────────────────────────────
-function renderProjectInfoPanel(project) {
+function renderProjectInfoPanel(project, startCollapsed) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
@@ -517,9 +517,13 @@ const isMobile = window.innerWidth <= 768;
       });
       observer.observe(document.body, { childList: true });
 
-      // 2.5 sn sonra otomatik collapse
-      setTimeout(collapse, 2500);
-
+// Video sayfasında direkt collapsed başla, diğerlerinde 2.5sn sonra
+      if (startCollapsed) {
+        collapse();
+      } else {
+        setTimeout(collapse, 2500);
+      }
+      
     } else if (pollCount < 30) {
       pollCount++;
       requestAnimationFrame(waitForOverlay);
