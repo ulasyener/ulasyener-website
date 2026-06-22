@@ -42,19 +42,18 @@ canvas#grain {
   font-weight: 600;
   letter-spacing: .38em;
   color: rgba(0,0,0,0.65);
-  opacity: 0;
-  animation: fi 2s ease .5s forwards;
+
+
 }
 #sub {
   font-family: var(--f-mono);
   font-weight: 500;
   font-size: 11px;
-  letter-spacing: .52em;
+letter-spacing: .28em;
   color: rgba(0,0,0,0.6);
   margin-top: 18px;
-  opacity: 0;
-  animation: fi 1.2s ease 0.7s forwards;
   text-transform: uppercase;
+  text-align: center;
 }
 
 /* ─── Ana menü ───────────────────────────────────────────────────────── */
