@@ -4,6 +4,7 @@
 
 let gridAnimId  = null;
 let gridOverlay = null;
+let scanAnimIds = [];
 
 const GLITCH_SRCS    = [
   'images/effects/ledglitch/01.mp4',
@@ -27,6 +28,8 @@ const MOB_OVERLAY_TOP = 104;
 // ─── Temizleme ────────────────────────────────────────────────────────────
 function destroyGrid() {
   if (gridAnimId) { cancelAnimationFrame(gridAnimId); gridAnimId = null; }
+  scanAnimIds.forEach(function(id) { cancelAnimationFrame(id); });
+  scanAnimIds = [];
   if (gridOverlay && gridOverlay.parentNode) { gridOverlay.remove(); gridOverlay = null; }
   document.querySelectorAll('.grid-glitch-video').forEach(function(v) {
     v.pause(); v.remove();
@@ -161,7 +164,7 @@ function buildGrid(items, onSelect, overlayTop) {
       if (item.sublabel) {
         const subEl = document.createElement('div');
         subEl.style.cssText =
-          'font-family:"IBM Plex Mono",monospace;' +
+          'font-family:"DM Mono",monospace;' +
           'font-size:' + (IS_MOB ? '9px' : '10px') + ';' +
           'letter-spacing:.18em;color:rgba(0,0,0,0.38);margin-top:3px;';
         band.appendChild(subEl);
@@ -314,7 +317,7 @@ function showVideoEmbed(project) {
 
       const keyEl = document.createElement('span');
       keyEl.style.cssText =
-        'font-family:"IBM Plex Mono",monospace;' +
+        'font-family:"DM Mono",monospace;' +
         'font-size:8px;letter-spacing:.24em;text-transform:uppercase;' +
         'color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = key;
@@ -381,13 +384,15 @@ function showVideoEmbed(project) {
     infoPanel.appendChild(scanLine);
 
     let scanPos = 0;
+    let scanId = null;
     function animateScan() {
       scanPos += 0.4;
       if (scanPos > infoPanel.offsetHeight) scanPos = -2;
       scanLine.style.top = scanPos + 'px';
-      requestAnimationFrame(animateScan);
+      scanId = requestAnimationFrame(animateScan);
     }
-    animateScan();
+    scanId = requestAnimationFrame(animateScan);
+    scanAnimIds.push(scanId);
   }
 
   // ─── Sağ: Video ─────────────────────────────────────────────────────
@@ -468,7 +473,7 @@ function showVideoEmbed(project) {
 
       const keyEl = document.createElement('span');
       keyEl.style.cssText =
-        'font-family:"IBM Plex Mono",monospace;' +
+        'font-family:"DM Mono",monospace;' +
         'font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
         'color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = key;
@@ -529,13 +534,15 @@ function showVideoEmbed(project) {
     mobInfo.appendChild(mobScanLine);
 
     let mobScanPos = 0;
+    let mobScanId = null;
     function mobAnimateScan() {
       mobScanPos += 0.4;
       if (mobScanPos > mobInfo.offsetHeight) mobScanPos = -2;
       mobScanLine.style.top = mobScanPos + 'px';
-      requestAnimationFrame(mobAnimateScan);
+      mobScanId = requestAnimationFrame(mobAnimateScan);
     }
-    mobAnimateScan();
+    mobScanId = requestAnimationFrame(mobAnimateScan);
+    scanAnimIds.push(mobScanId);
 
     // Scramble başlık
     setTimeout(function() {

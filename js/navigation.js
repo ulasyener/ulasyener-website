@@ -259,7 +259,7 @@ const isMobile = window.innerWidth <= 768;
 
         const keyEl = document.createElement('span');
         keyEl.style.cssText = `
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'DM Mono', monospace;
           font-size: 8px;
           letter-spacing: .22em;
           text-transform: uppercase;
@@ -361,7 +361,7 @@ const isMobile = window.innerWidth <= 768;
 
     const keyEl = document.createElement('span');
     keyEl.style.cssText = `
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'DM Mono', monospace;
       font-size: 8px;
       letter-spacing: .24em;
       text-transform: uppercase;
@@ -398,7 +398,7 @@ const isMobile = window.innerWidth <= 768;
 
       const keyEl = document.createElement('span');
       keyEl.style.cssText = `
-        font-family: 'IBM Plex Mono', monospace;
+        font-family: 'DM Mono', monospace;
         font-size: 8px;
         letter-spacing: .24em;
         text-transform: uppercase;
@@ -430,12 +430,13 @@ const isMobile = window.innerWidth <= 768;
   if (project.year)
     addRow('Year', project.year);
 
-  addDoubleRow(
-    project.location ? { key: 'Location', val: project.location } : null,
-    project.coordinates && project.coordinates.length === 2
-      ? { key: 'Coordinates', val: project.coordinates[0].toFixed(2) + ', ' + project.coordinates[1].toFixed(2) }
-      : null
-  );
+  const locationCol    = project.location ? { key: 'Location', val: project.location } : null;
+  const coordinatesCol = project.coordinates && project.coordinates.length === 2
+    ? { key: 'Coordinates', val: project.coordinates[0].toFixed(2) + ', ' + project.coordinates[1].toFixed(2) }
+    : null;
+  if (locationCol || coordinatesCol) {
+    addDoubleRow(locationCol, coordinatesCol);
+  }
 
   if (project.office)
     addRow('Office', project.office);
@@ -554,7 +555,16 @@ const isMobile = window.innerWidth <= 768;
     scanLine.style.top = scanPos + 'px';
     scanAnimId = requestAnimationFrame(animateScan);
   }
-  animateScan();
+  scanAnimId = requestAnimationFrame(animateScan);
+
+  // Panel DOM'dan çıkınca scan line'ı durdur
+  const scanObserver = new MutationObserver(() => {
+    if (!document.body.contains(panel)) {
+      cancelAnimationFrame(scanAnimId);
+      scanObserver.disconnect();
+    }
+  });
+  scanObserver.observe(document.body, { childList: true, subtree: true });
 
   // ─── Glitch flash ────────────────────────────────────────────────────
   let glitchTimeout = null;
@@ -603,7 +613,7 @@ function openLightbox(images, startIndex, project) {
   const closeBtn = document.createElement('div');
   closeBtn.style.cssText = `
     position:fixed;top:24px;right:32px;
-    font-family:'IBM Plex Mono',monospace;font-size:10px;
+    font-family:'DM Mono',monospace;font-size:10px;
     letter-spacing:.25em;text-transform:uppercase;
     color:rgba(255,255,255,0.35);cursor:pointer;z-index:901;
     transition:color 0.15s ease;
@@ -679,7 +689,7 @@ function openLightbox(images, startIndex, project) {
         background:none;border:none;cursor:pointer;
         color:rgba(255,255,255,0.5);font-size:28px;
         padding:12px;z-index:901;
-        transition:color 0.15s ease;font-family:'IBM Plex Mono',monospace;
+        transition:color 0.15s ease;font-family:'DM Mono',monospace;
         font-weight:100;letter-spacing:0;
       `;
       btn.textContent = dir === 'left' ? '←' : '→';
@@ -697,7 +707,7 @@ function openLightbox(images, startIndex, project) {
     const counter = document.createElement('div');
     counter.style.cssText = `
       position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-      font-family:'IBM Plex Mono',monospace;font-size:10px;
+      font-family:'DM Mono',monospace;font-size:10px;
       letter-spacing:.25em;color:rgba(255,255,255,0.35);
       z-index:901;user-select:none;
     `;
