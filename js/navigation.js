@@ -147,6 +147,10 @@ function goHome() {
     getOv().style.opacity = '1';
     navState = { section: null, category: null, subcategory: null, project: null };
     pushHash('');
+    // Text'i temizle, sonra scramble başlat
+    document.getElementById('name').textContent = '';
+    document.getElementById('sub').textContent  = '';
+    initHeroScramble();
   });
 }
 
