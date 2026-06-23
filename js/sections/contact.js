@@ -102,7 +102,7 @@ function renderContact() {
   // Info satırları
   const infoList = document.createElement('div');
   const rows = [
-    { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: _email },
+    { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: () => (_d(_C.eA) + '[AT]' + _d(_C.eC)).toUpperCase() },
     { key: 'Phone',        tag: 'a',    getHref: _telHref,                   getText: _phone },
     { key: 'WhatsApp',     tag: 'a',    getHref: _waHref,                    getText: () => 'OPEN WHATSAPP', target: '_blank' },
     { key: 'Telegram',     tag: 'a',    getHref: _tgHref,                    getText: () => 'OPEN TELEGRAM', target: '_blank' },
