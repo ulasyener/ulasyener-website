@@ -1,38 +1,47 @@
 {
   "categories": [
     {
-      "id": "architecture",
-      "label": "Architecture",
-      "description": "Design, restoration, visualization and competition projects.",
+      "id": "architecture-interior",
+      "label": "Architecture & Interior",
+      "description": "Architectural design and interior projects ranging from residential to commercial and public buildings.",
       "subcategories": [
         {
-          "id": "arch-projects",
+          "id": "ai-projects",
           "label": "Projects",
-          "description": "Original design projects ranging from residential to public and cultural buildings.",
-          "projects": ["kupferberg", "scheidegg"],
-          "subgroups": [
-            { "id": "arch-projects-design", "label": "Design", "description": "Original design projects ranging from residential to public and cultural buildings." },
-            { "id": "arch-projects-restoration", "label": "Restoration & Renovation", "description": "Conservation and adaptive reuse projects. Sensitive interventions within existing historic and contemporary structures." }
+          "description": "Design projects across residential, retail, hospitality and workspace typologies.",
+          "subcategories": [
+            {
+              "id": "ai-residential",
+              "label": "Residential",
+              "description": "Private living spaces and residential building design.",
+              "projects": ["yesilkoy", "kupferberg", "scheidegg"]
+            },
+            {
+              "id": "ai-retail",
+              "label": "Retail",
+              "description": "Spatial identities for retail environments including cafes, bookstores and shops.",
+              "projects": ["bookstore", "cafe", "isis"]
+            },
+            {
+              "id": "ai-hospitality",
+              "label": "Hospitality",
+              "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.",
+              "projects": ["isis"]
+            },
+            {
+              "id": "ai-workspace",
+              "label": "Workspace",
+              "description": "Office and studio environments designed for focus, collaboration and culture.",
+              "projects": []
+            }
           ]
         },
         {
-          "id": "arch-visualization",
+          "id": "ai-practice",
           "label": "Practice",
           "description": "Interior architecture and design practice across residential, hospitality and retail projects.",
           "projects": []
         }
-      ]
-    },
-    {
-      "id": "interior",
-      "label": "Interior",
-      "description": "Interior design projects ranging from residential to commercial.",
-      "subcategories": [
-        { "id": "interior-residential", "label": "Residential", "description": "Private living spaces designed around daily life and personal narrative.", "projects": ["yesilkoy", "kupferberg"] },
-        { "id": "interior-retail", "label": "Retail", "description": "Spatial identities for retail environments including cafes, bookstores and shops.", "projects": ["bookstore", "cafe", "isis"] },
-        { "id": "interior-hospitality", "label": "Hospitality", "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.", "projects": ["isis"] },
-        { "id": "interior-workspace", "label": "Workspace", "description": "Office and studio environments designed for focus, collaboration and culture.", "projects": [] },
-        { "id": "interior-practice", "label": "Practice", "description": "Interior architecture and design practice across residential, hospitality and retail projects.", "projects": [] }
       ]
     },
     {
@@ -41,7 +50,7 @@
       "description": "Furniture, retail fixtures and product concepts.",
       "subcategories": [
         { "id": "product-furniture", "label": "Furniture", "description": "Custom furniture and built-in joinery designed for residential and commercial contexts.", "projects": ["product"] },
-        { "id": "product-kiosk", "label": "Kiosk & Display", "description": "Kiosk and display system designs for retail environments and public spaces. Also referenced under Interior / Retail.", "projects": [] },
+        { "id": "product-kiosk", "label": "Kiosk & Display", "description": "Kiosk and display system designs for retail environments and public spaces.", "projects": [] },
         { "id": "product-branding", "label": "Branding & Spatial Identity", "description": "Branded spatial environments where architecture, material and identity converge into a coherent whole.", "projects": [] },
         { "id": "product-objects", "label": "Objects & Artifacts", "description": "Small-scale objects, brewing apparatus, handcrafted items and experimental product concepts.", "projects": [] }
       ]
@@ -52,7 +61,7 @@
       "description": "Interactive installations and environments.",
       "subcategories": [
         { "id": "interactive-game", "label": "Game Design", "description": "Interactive experiences and game environments developed in Unreal Engine. Narrative-driven spatial explorations.", "projects": ["fremde-gameplay"] },
-        { "id": "interactive-spatial", "label": "Spatial Design", "description": "Interactive spatial systems and environments developed in Unity 3D. Bridging physical space and digital interaction.", "projects": [] },
+        { "id": "interactive-spatial", "label": "Spatial Design", "description": "Interactive spatial systems and environments developed in Unity 3D.", "projects": [] },
         { "id": "interactive-installations", "label": "Installations", "description": "Site-specific interactive installations combining sensor systems, projection and audience participation.", "projects": [] }
       ]
     },
@@ -71,9 +80,9 @@
       "label": "VR / AR / XR",
       "description": "360 degree, fulldome, animations and virtual, augmented experiences.",
       "subcategories": [
-        { "id": "xr-fulldome", "label": "360 & Fulldome", "description": "360 degree animations and fulldome productions. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and international fulldome festivals.", "projects": ["anim-village-dome"] },
-        { "id": "xr-vr", "label": "Virtual Reality", "description": "Immersive VR environments and experiences. Spatial narratives designed for head-mounted display.", "projects": ["infinity-room", "anim-future-or"] },
-        { "id": "xr-ar", "label": "Augmented Reality", "description": "AR interventions layering digital content onto physical space. Site-specific and mobile-based experiences.", "projects": [] },
+        { "id": "xr-fulldome", "label": "360 & Fulldome", "description": "360 degree animations and fulldome productions.", "projects": ["anim-village-dome"] },
+        { "id": "xr-vr", "label": "Virtual Reality", "description": "Immersive VR environments and experiences.", "projects": ["infinity-room", "anim-future-or"] },
+        { "id": "xr-ar", "label": "Augmented Reality", "description": "AR interventions layering digital content onto physical space.", "projects": [] },
         { "id": "xr-xr", "label": "Extended Reality", "description": "Hybrid experiences operating across the spectrum of physical and digital presence.", "projects": [] }
       ]
     },
@@ -83,9 +92,9 @@
       "description": "3D animations, stop-motion films, experimental video.",
       "subcategories": [
         { "id": "mi-animation", "label": "3D Animation", "description": "Three-dimensional animations produced for architectural visualization, art projects and festival screenings.", "projects": ["anim-dkam", "infinity-room"] },
-        { "id": "mi-essay", "label": "Essay Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history. Also referenced under Academic / Archive.", "projects": [] },
-        { "id": "mi-experimental", "label": "Experimental Video", "description": "Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.", "projects":["anim-fremde-trailer1"] },
-{ "id": "mi-stopmotion", "label": "Stop Motion", "description": "Frame-by-frame animation works combining handcrafted objects, material textures and spatial environments.", "projects": ["anim-wed", "anim-stools"] },
+        { "id": "mi-essay", "label": "Essay Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history.", "projects": [] },
+        { "id": "mi-experimental", "label": "Experimental Video", "description": "Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.", "projects": ["anim-fremde-trailer1"] },
+        { "id": "mi-stopmotion", "label": "Stop Motion", "description": "Frame-by-frame animation works combining handcrafted objects, material textures and spatial environments.", "projects": ["anim-wed", "anim-stools"] },
         { "id": "mi-motion", "label": "Motion Graphics", "description": "Motion design and title sequences produced for film, installation and broadcast contexts.", "projects": [] }
       ]
     },

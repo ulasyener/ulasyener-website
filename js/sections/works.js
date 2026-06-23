@@ -228,25 +228,46 @@ async function _navigateToProject(projectId) {
   const data = await res.json();
 
   for (const cat of data.categories) {
+    // subcategory'leri + nested subcategory'leri tara
+    const allSubs = [];
     for (const sub of cat.subcategories) {
+      allSubs.push({ sub, parentSub: null });
+      if (sub.subcategories) {
+        for (const nested of sub.subcategories) {
+          allSubs.push({ sub: nested, parentSub: sub });
+        }
+      }
+    }
+
+    for (const { sub, parentSub } of allSubs) {
       if (!sub.projects || !sub.projects.includes(projectId)) continue;
-      if (sub.id === 'arch-visualization' || sub.id === 'interior-practice') continue;
+      if (sub.id === 'arch-visualization' || sub.id === 'interior-practice' || sub.id === 'ai-practice') continue;
+
       runGlitch(async () => {
         clearPanel();
         const proj = await fetch(`data/projects/${projectId}.json`).then(r => r.json());
         navState.subcategory = sub.id;
         navState.project     = projectId;
-        pushHash('works/' + cat.id + '/' + sub.id + '/' + projectId);
+
+        const hashSub = parentSub ? parentSub.id + '/' + sub.id : sub.id;
+        pushHash('works/' + cat.id + '/' + hashSub + '/' + projectId);
 
         const root = getPanelRoot();
         const el   = document.createElement('div');
         el.className = 'panel panel-grid';
 
-        const nav = makePanelNav([
-          { label: 'Works',    action: () => showSection('works') },
-          { label: cat.label,  action: () => showCategory(cat.id) },
-          { label: sub.label,  action: () => showSubcategory(cat.id, sub.id) },
-        ]);
+        const navItems = [
+          { label: 'Works',   action: () => showSection('works') },
+          { label: cat.label, action: () => showCategory(cat.id) },
+        ];
+        if (parentSub) {
+          navItems.push({ label: parentSub.label, action: () => showSubcategory(cat.id, parentSub.id) });
+          navItems.push({ label: sub.label, action: () => showNestedSubcategory(cat.id, parentSub.id, sub.id) });
+        } else {
+          navItems.push({ label: sub.label, action: () => showSubcategory(cat.id, sub.id) });
+        }
+
+        const nav = makePanelNav(navItems);
         el.appendChild(nav);
 
         const navTitle = document.createElement('span');
@@ -257,7 +278,11 @@ async function _navigateToProject(projectId) {
         const secLabel = document.createElement('div');
         secLabel.className = 'sec-label sec-label--home';
         secLabel.textContent = sub.label;
-        secLabel.addEventListener('click', () => runGlitch(() => showSubcategory(cat.id, sub.id)));
+        if (parentSub) {
+          secLabel.addEventListener('click', () => runGlitch(() => showNestedSubcategory(cat.id, parentSub.id, sub.id)));
+        } else {
+          secLabel.addEventListener('click', () => runGlitch(() => showSubcategory(cat.id, sub.id)));
+        }
         el.appendChild(secLabel);
 
         root.appendChild(el);
@@ -344,6 +369,108 @@ function showPracticeTable(categoryId, subcategoryId, catLabel, subLabel) {
   });
 }
 
+// ─── Nested subcategory (3. seviye) ───────────────────────────────────────
+async function showNestedSubcategory(categoryId, parentSubId, nestedSubId) {
+  const res  = await fetch('data/works.json');
+  const data = await res.json();
+  const cat  = data.categories.find(c => c.id === categoryId);
+  const parentSub = cat?.subcategories.find(s => s.id === parentSubId);
+  const sub = parentSub?.subcategories?.find(s => s.id === nestedSubId);
+  if (!sub) return;
+
+  runGlitch(async () => {
+    navState.subcategory = nestedSubId;
+    navState.project     = null;
+    pushHash('works/' + categoryId + '/' + parentSubId + '/' + nestedSubId);
+
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel panel-grid';
+
+    el.appendChild(makePanelNav([
+      { label: 'Works',          action: () => showSection('works') },
+      { label: cat.label,        action: () => showCategory(categoryId) },
+      { label: parentSub.label,  action: () => showSubcategory(categoryId, parentSubId) },
+      { label: sub.label }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = sub.label;
+    label.addEventListener('click', () => runGlitch(() => showSubcategory(categoryId, parentSubId)));
+    el.appendChild(label);
+
+    root.appendChild(el);
+
+    if (!sub.projects || sub.projects.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = '— coming soon —';
+      el.appendChild(empty);
+      return;
+    }
+
+    const projects = await Promise.all(
+      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()))
+    );
+
+    window.grid3d = showProjectGrid(projects, (proj) => {
+      openPhotoGridNested(proj, categoryId, parentSubId, nestedSubId, cat.label, parentSub.label, sub.label);
+    });
+  });
+}
+
+// ─── Nested photo grid açıcı ──────────────────────────────────────────────
+function openPhotoGridNested(project, categoryId, parentSubId, nestedSubId, catLabel, parentSubLabel, subLabel) {
+  runGlitch(() => {
+    navState.project = project.id;
+    pushHash('works/' + categoryId + '/' + parentSubId + '/' + nestedSubId + '/' + project.id);
+
+    const root        = getPanelRoot();
+    const existingNav = root.querySelector('.panel-nav');
+
+    if (existingNav) {
+      existingNav.innerHTML = '';
+
+      [
+        { text: '← Works',        fn: () => showSection('works') },
+        { text: '← ' + catLabel,  fn: () => showCategory(categoryId) },
+        { text: '← ' + parentSubLabel, fn: () => showSubcategory(categoryId, parentSubId) },
+        { text: '← ' + subLabel,  fn: () => showNestedSubcategory(categoryId, parentSubId, nestedSubId) },
+      ].forEach(({ text, fn }) => {
+        const btn = document.createElement('span');
+        btn.className   = 'back-btn';
+        btn.textContent = text;
+        btn.addEventListener('click', () => runGlitch(fn));
+        existingNav.appendChild(btn);
+      });
+
+      const title = document.createElement('span');
+      title.className = 'proj-nav-title';
+      title.innerHTML = `${project.title} <span style="opacity:.4">${project.year}</span>`;
+      existingNav.appendChild(title);
+    }
+
+    if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
+
+    if (project.content_type === 'video') {
+      window.grid3d = showVideoEmbed(project);
+    } else {
+      window.grid3d = showPhotoGrid(project, (data) => {
+        if (project.images && project.images.length) {
+          openLightbox(project.images, data.index, project);
+        }
+      });
+    }
+
+    if (project.content_type !== 'video') {
+      renderProjectInfoPanel(project, false);
+    }
+  });
+}
+
 // ─── Alt kategori → Kademe 1 grid ─────────────────────────────────────────
 async function showSubcategory(categoryId, subcategoryId) {
   const res  = await fetch('data/works.json');
@@ -357,8 +484,52 @@ async function showSubcategory(categoryId, subcategoryId) {
     return;
   }
 
-  if (subcategoryId === 'arch-visualization' || subcategoryId === 'interior-practice') {
+  if (subcategoryId === 'ai-practice' || subcategoryId === 'arch-visualization' || subcategoryId === 'interior-practice') {
     showPracticeTable(categoryId, subcategoryId, cat.label, sub.label);
+    return;
+  }
+
+  // ai-projects: nested subcategory list göster
+  if (subcategoryId === 'ai-projects') {
+    runGlitch(() => {
+      navState.subcategory = subcategoryId;
+      navState.project     = null;
+      pushHash('works/' + categoryId + '/' + subcategoryId);
+
+      const root = getPanelRoot();
+      clearPanel();
+
+      const el = document.createElement('div');
+      el.className = 'panel';
+
+      el.appendChild(makePanelNav([
+        { label: 'Works',   action: () => showSection('works') },
+        { label: cat.label, action: () => showCategory(categoryId) },
+        { label: sub.label }
+      ]));
+
+      const label = document.createElement('div');
+      label.className = 'sec-label sec-label--home';
+      label.textContent = sub.label;
+      label.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
+      el.appendChild(label);
+
+      const list = document.createElement('div');
+      list.className = 'subcategory-list';
+      list.innerHTML = sub.subcategories.map(nested => `
+        <div class="subcat-item" data-sub="${nested.id}">
+          <div class="subcat-label">${nested.label}</div>
+          ${nested.description ? `<div class="cat-desc">${nested.description}</div>` : ''}
+        </div>
+      `).join('');
+      el.appendChild(list);
+
+      list.querySelectorAll('.subcat-item').forEach(item => {
+        item.addEventListener('click', () => showNestedSubcategory(categoryId, subcategoryId, item.dataset.sub));
+      });
+
+      root.appendChild(el);
+    });
     return;
   }
 
