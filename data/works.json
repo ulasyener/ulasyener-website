@@ -57,7 +57,7 @@
       "label": "Interactive",
       "description": "Interactive installations and environments.",
       "subcategories": [
-        { "id": "interactive-game", "label": "Game Design", "description": "Interactive experiences and game environments developed in Unreal Engine. Narrative-driven spatial explorations.", "projects": [] },
+        { "id": "interactive-game", "label": "Game Design", "description": "Interactive experiences and game environments developed in Unreal Engine. Narrative-driven spatial explorations.", "projects": ["fremde-gameplay"] },
         { "id": "interactive-spatial", "label": "Spatial Design", "description": "Interactive spatial systems and environments developed in Unity 3D. Bridging physical space and digital interaction.", "projects": [] },
         { "id": "interactive-installations", "label": "Installations", "description": "Site-specific interactive installations combining sensor systems, projection and audience participation.", "projects": [] }
       ]
@@ -77,8 +77,8 @@
       "label": "VR / AR / XR",
       "description": "360 degree, fulldome, animations and virtual, augmented experiences.",
       "subcategories": [
-        { "id": "xr-fulldome", "label": "360 & Fulldome", "description": "360 degree animations and fulldome productions. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and international fulldome festivals.", "projects": [] },
-        { "id": "xr-vr", "label": "Virtual Reality", "description": "Immersive VR environments and experiences. Spatial narratives designed for head-mounted display.", "projects": ["infinity-room"] },
+        { "id": "xr-fulldome", "label": "360 & Fulldome", "description": "360 degree animations and fulldome productions. Screened at Ars Electronica, MediaArchitecture Biennale Vienna and international fulldome festivals.", "projects": ["anim-village-dome"] },
+        { "id": "xr-vr", "label": "Virtual Reality", "description": "Immersive VR environments and experiences. Spatial narratives designed for head-mounted display.", "projects": ["infinity-room", "anim-future-or"] },
         { "id": "xr-ar", "label": "Augmented Reality", "description": "AR interventions layering digital content onto physical space. Site-specific and mobile-based experiences.", "projects": [] },
         { "id": "xr-xr", "label": "Extended Reality", "description": "Hybrid experiences operating across the spectrum of physical and digital presence.", "projects": [] }
       ]
@@ -90,7 +90,7 @@
       "subcategories": [
         { "id": "mi-animation", "label": "3D Animation", "description": "Three-dimensional animations produced for architectural visualization, art projects and festival screenings.", "projects": ["anim-dkam", "infinity-room"] },
         { "id": "mi-essay", "label": "Essay Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history. Also referenced under Academic / Archive.", "projects": [] },
-        { "id": "mi-experimental", "label": "Experimental Video", "description": "Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.", "projects": [] },
+        { "id": "mi-experimental", "label": "Experimental Video", "description": "Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.", "projects":["anim-fremde-trailer1"] },
 { "id": "mi-stopmotion", "label": "Stop Motion", "description": "Frame-by-frame animation works combining handcrafted objects, material textures and spatial environments.", "projects": ["anim-wed", "anim-stools"] },
         { "id": "mi-motion", "label": "Motion Graphics", "description": "Motion design and title sequences produced for film, installation and broadcast contexts.", "projects": [] }
       ]
