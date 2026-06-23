@@ -103,10 +103,8 @@ async function parseAndNavigate() {
       renderAcademic();
       if (category) {
         const acSections = {
-          projects: { id: 'projects', label: 'Projects', subs: [{ id: 'bachelor', label: 'Bachelor' }, { id: 'master', label: 'Master' }, { id: 'phd', label: 'PhD' }] },
-          articles: { id: 'articles', label: 'Articles', subs: [{ id: 'essays', label: 'Essays' }, { id: 'reviews', label: 'Reviews' }, { id: 'writings', label: 'Writings' }] },
-          research: { id: 'research', label: 'Research', subs: [{ id: 'media-architecture', label: 'Media Architecture' }, { id: 'immersive-media', label: 'Immersive Media' }, { id: 'artistic-research', label: 'Artistic Research' }] },
-          archive:  { id: 'archive',  label: 'Archive',  subs: [{ id: 'fremde-tueren', label: 'Fremde Türen / El Kapıları' }] }
+          articles: { id: 'articles', label: 'Publications', subs: [{ id: 'essays', label: 'Essays' }, { id: 'reviews', label: 'Reviews' }, { id: 'writings', label: 'Writings' }] },
+          archive:  { id: 'archive',  label: 'Archive',      subs: [{ id: 'fremde-tueren', label: 'Fremde Türen / El Kapıları' }] }
         };
         if (acSections[category]) showAcademicSection(acSections[category]);
       }

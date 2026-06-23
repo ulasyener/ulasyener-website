@@ -2,30 +2,12 @@
 function renderAcademic() {
   const sections = [
     {
-      id: 'projects',
-      label: 'Projects',
-      subs: [
-        { id: 'bachelor', label: 'Bachelor' },
-        { id: 'master',   label: 'Master' },
-        { id: 'phd',      label: 'PhD' }
-      ]
-    },
-    {
       id: 'articles',
-      label: 'Articles',
+      label: 'Publications',
       subs: [
         { id: 'essays',   label: 'Essays' },
         { id: 'reviews',  label: 'Reviews' },
         { id: 'writings', label: 'Writings' }
-      ]
-    },
-    {
-      id: 'research',
-      label: 'Research',
-      subs: [
-        { id: 'media-architecture', label: 'Media Architecture' },
-        { id: 'immersive-media',    label: 'Immersive Media' },
-        { id: 'artistic-research',  label: 'Artistic Research' }
       ]
     },
     {
@@ -68,9 +50,7 @@ function renderAcademic() {
 // ─── Academic alt sayfa ────────────────────────────────────────────────────
 function showAcademicSection(section) {
   if (section.id === 'archive')  { showArchiveSection(section); return; }
-  if (section.id === 'projects') { showAcademicProjects(section); return; }
   if (section.id === 'articles') { showAcademicArticles(section); return; }
-  if (section.id === 'research') { showAcademicResearch(section); return; }
 
   runGlitch(() => {
     pushHash('academic/' + section.id);
@@ -144,12 +124,12 @@ function showAcademicArticles(section) {
 
     el.appendChild(makePanelNav([
       { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
+      { label: 'Publications' }
     ]));
 
     const label = document.createElement('div');
     label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
+    label.textContent = 'Publications';
     label.addEventListener('click', () => runGlitch(() => showSection('academic')));
     el.appendChild(label);
 
