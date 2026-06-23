@@ -20,12 +20,6 @@
           "label": "Practice",
           "description": "Interior architecture and design practice across residential, hospitality and retail projects.",
           "projects": []
-        },
-        {
-          "id": "arch-competition",
-          "label": "Competition Management",
-          "description": "Coordination and submission management for national and international competitions.",
-          "projects": []
         }
       ]
     },
