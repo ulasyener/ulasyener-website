@@ -625,7 +625,10 @@ async function showSubcategory(categoryId, subcategoryId) {
 function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
   runGlitch(() => {
     navState.project = project.id;
-    pushHash('works/' + categoryId + '/' + subcategoryId + '/' + project.id);
+    const hashPath = subcategoryId
+      ? 'works/' + categoryId + '/' + subcategoryId + '/' + project.id
+      : 'works/' + categoryId + '/' + project.id;
+    pushHash(hashPath);
 
     const root        = getPanelRoot();
     const existingNav = root.querySelector('.panel-nav');
@@ -645,13 +648,15 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       backCat.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
       existingNav.appendChild(backCat);
 
-      const backBtn = document.createElement('span');
-      backBtn.className   = 'back-btn';
-      backBtn.textContent = '← ' + subLabel;
-      backBtn.addEventListener('click', () =>
-        runGlitch(() => showSubcategory(categoryId, subcategoryId))
-      );
-      existingNav.appendChild(backBtn);
+      if (subcategoryId && subLabel) {
+        const backBtn = document.createElement('span');
+        backBtn.className   = 'back-btn';
+        backBtn.textContent = '← ' + subLabel;
+        backBtn.addEventListener('click', () =>
+          runGlitch(() => showSubcategory(categoryId, subcategoryId))
+        );
+        existingNav.appendChild(backBtn);
+      }
 
       const title = document.createElement('span');
       title.className = 'proj-nav-title';
