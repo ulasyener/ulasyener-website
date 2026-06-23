@@ -92,8 +92,7 @@ const PRACTICE_FIRMS = [
       { year: '2024',      project: 'Neubau Grundschule Kuppelnau',                                           type: 'Primary School',                            location: 'Ravensburg, Germany' },
       { year: '2024',      project: 'Neubau Kindertagesstätte St. Ambrosius',                                 type: 'Kindergarten',                              location: 'Hergensweiler, Germany' },
       { year: '2024',      project: 'Lindachareal',                                                           type: 'Mixed-Use Urban Development',               location: 'Leinfelden-Echterdingen, Germany' },
-      { year: '2024',      project: 'Neubau Bildungscampus West Baufeld E',                                   type: 'Educational Campus',                        location: 'Heilbronn, Germany' },
-      { year: '2024',      project: 'Neubau Bildungscampus West Baufeld F',                                   type: 'Educational Campus',                        location: 'Heilbronn, Germany' },
+
       { year: '2024',      project: 'Wohnungsbau Veilchenweg / Halde',                                       type: 'Residential Development',                   location: 'Kirchheim unter Teck, Germany' },
       { year: '2024',      project: 'Erweiterung, Umbau und Sanierung Karl-Siegfried-Bader Schule',           type: 'School Extension & Renovation',             location: 'Elzach-Prechtal, Germany' },
       { year: '2024',      project: 'Zentralbereich Gaisbach',                                                type: 'Mixed-Use Development',                     location: 'Künzelsau, Germany' },
