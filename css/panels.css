@@ -35,7 +35,7 @@
 }
 
 .back-btn {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 10px;
   letter-spacing: .2em;
   color: rgba(0,0,0,0.3);
@@ -49,7 +49,7 @@
 
 /* ─── Section label ──────────────────────────────────────────────────── */
 .sec-label {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 10px;
   letter-spacing: .28em;
   color: rgba(0,0,0,0.5);
@@ -100,7 +100,7 @@
 .category-item:not(.empty):hover .cat-desc  { color: rgba(0,0,0,0.65); }
 
 .cat-label {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 19px;
   font-weight: 700;
   letter-spacing: .10em;
@@ -110,7 +110,7 @@
 }
 
 .cat-desc {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 12px;
   font-weight: 500;
   color: rgba(0,0,0,0.42);
@@ -151,7 +151,7 @@
 .subcat-item:not(.empty):hover .cat-desc     { color: rgba(0,0,0,0.65); }
 
 .subcat-label {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: .08em;
@@ -162,7 +162,7 @@
 
 /* ─── Inline subcat list (Academic) ─────────────────────────────────── */
 .subcat-list-inline {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 12px;
   font-weight: 500;
   color: rgba(0,0,0,0.42);
@@ -173,7 +173,7 @@
 
 /* ─── Empty state ────────────────────────────────────────────────────── */
 .empty-state {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 10px;
   letter-spacing: .3em;
   color: rgba(0,0,0,0.22);
@@ -184,7 +184,7 @@
 
 /* ─── Proje nav basligi ──────────────────────────────────────────────── */
 .proj-nav-title {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -212,7 +212,7 @@
   cursor: pointer;
   transition: color .2s ease;
   user-select: none;
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
 }
 .accordion-arrow:hover { color: rgba(0,0,0,1); }
 
@@ -227,7 +227,7 @@
 }
 
 .accordion-content p {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 11px;
   font-weight: 700;
   color: rgba(0,0,0,0.65);
@@ -247,7 +247,7 @@
 .about-row:last-child { border-bottom: none; }
 
 .about-period {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .06em;
@@ -259,7 +259,7 @@
 }
 
 .about-title {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 11px;
   font-weight: 700;
   color: rgba(0,0,0,0.72);
@@ -270,7 +270,7 @@
 }
 
 .about-sub {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 11px;
   font-weight: 700;
   color: rgba(0,0,0,0.42);
@@ -295,7 +295,7 @@
 }
 
 .practice-firm-name {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .12em;
@@ -306,7 +306,7 @@
 }
 
 .practice-firm-meta {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .06em;
@@ -322,7 +322,7 @@
 }
 
 .practice-table th {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .14em;
@@ -334,7 +334,7 @@
 }
 
 .practice-table td {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .04em;
@@ -374,7 +374,7 @@
 }
 
 .contact-key {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 9px;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -383,7 +383,7 @@
 }
 
 .contact-val {
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 11px;
   font-weight: 300;
   letter-spacing: .06em;
@@ -409,7 +409,7 @@
 }
 
 .social-link-btn {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 9px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -432,7 +432,7 @@
 }
 
 .dl-btn {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 9px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -464,7 +464,7 @@
   border: none;
   border-bottom: 1px solid rgba(0,0,0,0.12);
   padding: 12px 0;
-  font-family: var(--f-sans);
+  font-family: var(--f-mono);
   font-size: 12px;
   font-weight: 300;
   color: rgba(0,0,0,0.7);
@@ -475,7 +475,7 @@
 }
 .cf-input:focus { border-bottom-color: rgba(0,0,0,0.4); }
 .cf-input::placeholder {
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 9px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -493,7 +493,7 @@
   background: none;
   border: 1px solid rgba(0,0,0,0.18);
   padding: 10px 28px;
-  font-family: var(--f-mono);
+  font-family: var(--f-sans);
   font-size: 9px;
   letter-spacing: .28em;
   text-transform: uppercase;

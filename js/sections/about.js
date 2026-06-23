@@ -242,8 +242,8 @@ function getAboutContent(sectionId) {
       ${firms.map(f => `
         <div class="practice-firm">
           <div class="practice-firm-header">
-            <span class="practice-firm-name">${f.name}</span>
-            <span class="practice-firm-meta">${f.role} · ${f.period}</span>
+            <div class="practice-firm-name">${f.name}</div>
+            <div class="practice-firm-meta">${f.role} · ${f.period}</div>
           </div>
           <table class="practice-table">
             <thead>
