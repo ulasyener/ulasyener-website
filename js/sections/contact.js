@@ -21,34 +21,32 @@ function _telHref(){ return 'tel:' + _d(_C.pA) + _d(_C.pB).replace(/\s/g,'') + _
 // ─── Accordion yardımcısı ──────────────────────────────────────────────────
 function makeAccordion(titleText, contentEl, startOpen = false) {
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'border-top:1px solid rgba(0,0,0,0.08);margin-top:0;';
+  wrap.className = 'category-item';
+  wrap.style.cursor = 'pointer';
 
   const header = document.createElement('div');
-  header.style.cssText = `
-    display:flex;justify-content:space-between;align-items:center;
-    padding:14px 0;cursor:pointer;user-select:none;
-  `;
+  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;';
 
-  const titleEl = document.createElement('span');
-  titleEl.style.cssText = 'font-family:var(--f-sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,0,0,0.55);';
+  const titleEl = document.createElement('div');
+  titleEl.className = 'cat-label';
   titleEl.textContent = titleText;
 
   const arrow = document.createElement('span');
-  arrow.style.cssText = 'font-family:var(--f-mono);font-size:10px;color:rgba(0,0,0,0.3);transition:transform 0.25s ease;';
+  arrow.style.cssText = 'font-family:var(--f-mono);font-size:11px;color:rgba(0,0,0,0.3);transition:transform 0.25s ease;';
   arrow.textContent = '↓';
 
   header.appendChild(titleEl);
   header.appendChild(arrow);
 
   const body = document.createElement('div');
-  body.style.cssText = `overflow:hidden;transition:max-height 0.35s ease, opacity 0.3s ease;`;
+  body.style.cssText = 'overflow:hidden;transition:max-height 0.4s ease, opacity 0.3s ease;';
 
   let open = startOpen;
 
   function setOpen(val) {
     open = val;
     if (open) {
-      body.style.maxHeight = '1000px';
+      body.style.maxHeight = '2000px';
       body.style.opacity   = '1';
       arrow.style.transform = 'rotate(180deg)';
     } else {
@@ -61,7 +59,6 @@ function makeAccordion(titleText, contentEl, startOpen = false) {
   setOpen(startOpen);
   body.appendChild(contentEl);
   header.addEventListener('click', () => setOpen(!open));
-
   wrap.appendChild(header);
   wrap.appendChild(body);
   return wrap;
