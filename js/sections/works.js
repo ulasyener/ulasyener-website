@@ -77,8 +77,41 @@ async function showCategory(categoryId) {
   });
 }
 
-// ─── Practice proje verisi ─────────────────────────────────────────────────
+// ─── Practice firma verisi ─────────────────────────────────────────────────
 const PRACTICE_FIRMS = [
+  {
+    name: 'SCHMITZ-RIOL ARCHITEKTEN',
+    role: 'Architectural Designer · Interior Designer · Visualisation',
+    period: '2017 – 2023 · Weimar, Germany',
+    projects: [
+      { year: '2017–2018', project: 'Gate Group Headquarters',                    type: 'Corporate Workplace Design',                    location: 'Opfikon, Switzerland' },
+      { year: '2018',      project: 'Warnecke House',                             type: 'Residential Interior Renovation',               location: 'Frankfurt am Main, Germany' },
+      { year: '2018',      project: 'Haus Schachener Straße 153',                 type: 'Historic Residence Restoration',                location: 'Lindau-Bad Schachen, Germany' },
+      { year: '2018–2019', project: 'Haus Am Kupferberg',                         type: 'Residential Retreat & Guest House',             location: 'Black Forest, Germany',       projectId: 'kupferberg' },
+      { year: '2018–2020', project: 'Umgebung Neubauten im Zil',                  type: 'Renovation & New Residential Development',      location: 'Wetzikon, Switzerland' },
+      { year: '2019',      project: 'Belvedere Allee',                            type: 'Historic Residential Renovation & Interior',    location: 'Weimar, Germany' },
+      { year: '2019',      project: 'Jugendhaus Am Jakobskirchhof',               type: 'Youth Center Interior',                        location: 'Weimar, Germany' },
+      { year: '2019',      project: 'Mehrfamilienhaus Scheidegg',                 type: 'Multi-Family Residential Building',             location: 'Scheidegg, Germany',          projectId: 'scheidegg' },
+      { year: '2019',      project: 'Exhibition Space Schlossgasse 1',            type: 'Exhibition Space',                             location: 'Hahnheim, Germany' },
+      { year: '2019–2023', project: 'Jagdschloss Mönchbruch Hotel & Restaurant',  type: 'Historic Hotel & Restaurant Restoration',      location: 'Mörfelden-Walldorf, Germany' },
+      { year: '2019–2020', project: 'Mehrfamilienhaus Liebigstraße 54',           type: 'Multi-Family Residential Building',             location: 'Offenbach am Main, Germany' },
+      { year: '2019–2021', project: 'Ensemble Obere Pforte 7',                    type: 'Restoration of Residential Building Ensemble', location: 'Trebur, Germany' },
+      { year: '2020',      project: 'Widderbergweg 5',                            type: 'Residential Building',                         location: 'Weimar, Germany' },
+      { year: '2020',      project: 'Familienhaus Kreuch',                        type: 'Residential Architecture & Interior Design',   location: 'Erfurt, Germany' },
+      { year: '2020',      project: 'Ehemalige Schokoladenfabrik Wohnung 137',    type: 'Loft Apartment Interior Design',               location: 'Erfurt, Germany' },
+      { year: '2020',      project: 'Maison du Rempart',                          type: 'Historic Residential Renovation & Interior',   location: 'Semur-en-Auxois, France' },
+      { year: '2020–2022', project: 'Brunnhausgasse 3',                           type: 'Historic Residential Building Renovation',     location: 'Salzburg, Austria' },
+      { year: '2020–2023', project: 'Vierseithof Burgwitz 8',                     type: 'Historic Farmhouse Restoration',               location: 'Kospoda, Germany' },
+      { year: '2020',      project: 'WEG Helmstedter Straße',                     type: 'Residential Interior',                         location: 'Schöningen, Germany' },
+      { year: '2020',      project: 'Wohnhaus Müller',                            type: 'Residential Architecture & Interior Design',   location: 'Weimar, Germany' },
+      { year: '2020–2021', project: 'Wohnhaus Hinkelmann',                        type: 'Residential Architecture & Interior Design',   location: 'Weimar, Germany' },
+      { year: '2021',      project: 'Wohnhaus Blanz / Schober',                   type: 'Residential Architecture & Interior Design',   location: 'Richterswil, Switzerland' },
+      { year: '2021',      project: 'Eisen 2',                                    type: 'Office Interior Design',                       location: 'Rüsselsheim am Main, Germany' },
+      { year: '2021',      project: 'Webicht House',                              type: 'Residential Architecture & Interior Design',   location: 'Weimar, Germany' },
+      { year: '2022',      project: 'An der Trift 2',                             type: 'Residential Building Renovation',              location: 'Weimar, Germany' },
+      { year: '2023',      project: 'Villa Krähbühlstrasse 64',                   type: 'Villa Renovation & Interior Design',           location: 'Zürich, Switzerland' }
+    ]
+  },
   {
     name: '304 DESIGN',
     role: 'Brand Architect · Interior Architect',
@@ -118,13 +151,13 @@ const PRACTICE_FIRMS = [
     period: '2013 – 2014 · Istanbul, Turkey',
     projects: [
       { year: '2013',      project: "Mum's Cafe",                         type: 'Hospitality / Café',                  location: 'Karaköy, Istanbul',        projectId: 'cafe' },
-      { year: '2013',      project: 'Forneria Restaurant',                type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
-      { year: '2014',      project: 'Mükellef Restaurant',                type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
-      { year: '2014',      project: 'Read & Rest Bookstore Café',         type: 'Hospitality / Bookstore Café',        location: 'Göktürk, Istanbul',        projectId: 'bookstore' },
-      { year: '2013–2014', project: 'One Ortaköy Family House',           type: 'Residential',                         location: 'Ortaköy, Istanbul' },
-      { year: '2013–2014', project: 'Dilek Seferoğlu House',              type: 'Residential',                         location: 'Şişli, Istanbul' },
-      { year: '2013–2014', project: 'Alafortanfoni Headquarters',         type: 'Office / Workplace',                  location: 'Maslak, Istanbul' },
-      { year: '2013–2014', project: 'Portakal Family',                    type: 'Hospitality / Café · Restaurant · Bar', location: 'Karaköy, Istanbul' }
+      { year: '2013',      project: 'Forneria Restaurant',                 type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
+      { year: '2014',      project: 'Mükellef Restaurant',                 type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
+      { year: '2014',      project: 'Read & Rest Bookstore Café',          type: 'Hospitality / Bookstore Café',        location: 'Göktürk, Istanbul',        projectId: 'bookstore' },
+      { year: '2013–2014', project: 'One Ortaköy Family House',            type: 'Residential',                         location: 'Ortaköy, Istanbul' },
+      { year: '2013–2014', project: 'Dilek Seferoğlu House',               type: 'Residential',                         location: 'Şişli, Istanbul' },
+      { year: '2013–2014', project: 'Alafortanfoni Headquarters',          type: 'Office / Workplace',                  location: 'Maslak, Istanbul' },
+      { year: '2013–2014', project: 'Portakal Family',                     type: 'Hospitality / Café · Restaurant · Bar', location: 'Karaköy, Istanbul' }
     ]
   },
   {
@@ -132,8 +165,8 @@ const PRACTICE_FIRMS = [
     role: 'Interior Architect · Furniture Designer',
     period: '2012 – 2013 · Istanbul, Turkey',
     projects: [
-      { year: '2012–2013', project: 'Bilgitek Headquarters',              type: 'Office / Workplace',                  location: 'Zeytinburnu, Istanbul' },
-      { year: '2012–2013', project: 'AGCA House',                         type: 'Residential / Restoration',           location: 'Istanbul' }
+      { year: '2012–2013', project: 'Bilgitek Headquarters',               type: 'Office / Workplace',                  location: 'Zeytinburnu, Istanbul' },
+      { year: '2012–2013', project: 'AGCA House',                          type: 'Residential / Restoration',           location: 'Istanbul' }
     ]
   }
 ];
