@@ -18,7 +18,7 @@ function _waHref() { return 'https://wa' + '.me/' + _d(_C.wP); }
 function _tgHref() { return 'https://t'  + '.me/' + _d(_C.tP); }
 function _telHref(){ return 'tel:' + _d(_C.pA) + _d(_C.pB).replace(/\s/g,'') + _d(_C.pC).replace(/\s/g,''); }
 
-// ─── Accordion yardımcısı ──────────────────────────────────────────────────
+// ─── Accordion ────────────────────────────────────────────────────────────
 function makeAccordion(titleText, contentEl, startOpen = false) {
   const wrap = document.createElement('div');
   wrap.className = 'category-item';
@@ -77,9 +77,12 @@ function renderContact() {
   label.addEventListener('click', goHome);
   el.appendChild(label);
 
-  // ─── Form ───────────────────────────────────────────────────────────────
+  // ─── Contact & Info accordion ────────────────────────────────────────────
+  const ciContent = document.createElement('div');
+  ciContent.style.cssText = 'padding:4px 0 16px;';
+
+  // Form
   const formWrap = document.createElement('div');
-  formWrap.style.cssText = 'padding:4px 0 8px;';
   formWrap.innerHTML = `
     <div class="contact-form">
       <input type="text"  class="cf-input" id="cf-name"    placeholder="Name" />
@@ -89,13 +92,15 @@ function renderContact() {
       <button class="cf-btn" id="cf-submit">Send</button>
     </div>
   `;
-  el.appendChild(formWrap);
-  el.querySelector('#cf-submit').addEventListener('click', handleContactSubmit);
+  ciContent.appendChild(formWrap);
 
-  // ─── Info accordion ─────────────────────────────────────────────────────
-  const infoContent = document.createElement('div');
-  infoContent.style.cssText = 'padding:4px 0 16px;';
+  // Ayraç çizgisi
+  const divider = document.createElement('div');
+  divider.style.cssText = 'border-top:1px solid rgba(0,0,0,0.08);margin:20px 0;';
+  ciContent.appendChild(divider);
 
+  // Info satırları
+  const infoList = document.createElement('div');
   const rows = [
     { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: _email },
     { key: 'Phone',        tag: 'a',    getHref: _telHref,                   getText: _phone },
@@ -122,7 +127,7 @@ function renderContact() {
 
     row.appendChild(keyEl);
     row.appendChild(valEl);
-    infoContent.appendChild(row);
+    infoList.appendChild(row);
   });
 
   const dlRow = document.createElement('div');
@@ -135,9 +140,10 @@ function renderContact() {
       <a class="dl-btn" href="files/cv.pdf" download>CV</a>
     </div>
   `;
-  infoContent.appendChild(dlRow);
+  infoList.appendChild(dlRow);
+  ciContent.appendChild(infoList);
 
-  el.appendChild(makeAccordion('Info', infoContent, false));
+  el.appendChild(makeAccordion('Contact & Info', ciContent, false));
 
   // ─── Social accordion ────────────────────────────────────────────────────
   const socialContent = document.createElement('div');
@@ -224,6 +230,8 @@ function renderContact() {
   el.appendChild(makeAccordion('Social', socialContent, false));
 
   root.appendChild(el);
+
+  el.querySelector('#cf-submit').addEventListener('click', handleContactSubmit);
 }
 
 // ─── Form submit ───────────────────────────────────────────────────────────
