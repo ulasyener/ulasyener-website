@@ -14,19 +14,29 @@
               "id": "ai-residential",
               "label": "Residential",
               "description": "Private living spaces and residential building design.",
-              "projects": ["yesilkoy", "kupferberg", "scheidegg"]
+              "projects": [
+                "yesilkoy",
+                "kupferberg",
+                "scheidegg"
+              ]
             },
             {
               "id": "ai-retail",
               "label": "Retail",
               "description": "Spatial identities for retail environments including cafes, bookstores and shops.",
-              "projects": ["bookstore", "cafe", "isis"]
+              "projects": [
+                "bookstore",
+                "cafe",
+                "isis"
+              ]
             },
             {
               "id": "ai-hospitality",
               "label": "Hospitality",
               "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.",
-              "projects": ["isis"]
+              "projects": [
+                "isis"
+              ]
             },
             {
               "id": "ai-workspace",
@@ -48,7 +58,9 @@
       "id": "craft-design",
       "label": "Craft & Design",
       "description": "Furniture, spatial objects and branded environments. Work spanning custom joinery, display systems and material identity.",
-      "projects": ["product"]
+      "projects": [
+        "product"
+      ]
     },
     {
       "id": "spatial-media",
@@ -59,13 +71,19 @@
           "id": "sm-immersive",
           "label": "Immersive Environments",
           "description": "Virtual reality, 360° film, fulldome and audio-visual environments designed for spatial experience.",
-          "projects": ["infinity-room", "anim-future-or", "anim-village-dome"]
+          "projects": [
+            "infinity-room",
+            "anim-future-or",
+            "anim-village-dome"
+          ]
         },
         {
           "id": "sm-interactive",
           "label": "Interactive Spaces",
           "description": "Game environments, spatial installations and interactive systems developed across digital and physical space.",
-          "projects": ["fremde-gameplay"]
+          "projects": [
+            "fremde-gameplay"
+          ]
         }
       ]
     },
@@ -74,8 +92,23 @@
       "label": "Moving Images",
       "description": "Film, animation and moving image works.",
       "subcategories": [
-        { "id": "mi-documentary", "label": "Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history.", "projects": [] },
-        { "id": "mi-sequences", "label": "Sequences", "description": "3D animations, stop-motion works, motion graphics and experimental video sequences. Projects spanning architectural visualization, material exploration and moving image experiments.", "projects": ["anim-dkam", "anim-wed", "anim-stools", "anim-fremde-trailer1"] }
+        {
+          "id": "mi-documentary",
+          "label": "Film & Documentary",
+          "description": "Essayistic documentary films exploring migration, memory and cultural history.",
+          "projects": []
+        },
+        {
+          "id": "mi-sequences",
+          "label": "Sequences",
+          "description": "3D animations, stop-motion works, motion graphics and experimental video sequences. Projects spanning architectural visualization, material exploration and moving image experiments.",
+          "projects": [
+            "anim-dkam",
+            "anim-wed",
+            "anim-stools",
+            "anim-fremde-trailer1"
+          ]
+        }
       ]
     },
     {
@@ -83,10 +116,24 @@
       "label": "Photography",
       "description": "Analog and digital photography since 2010.",
       "subcategories": [
-        { "id": "photo-architecture", "label": "Architecture", "description": "Photographs of built environments, interiors and urban space.", "projects": [] },
-        { "id": "photo-documentary", "label": "Documentary", "description": "Long-form documentary projects engaging with place, memory and community.", "projects": [] },
-        { "id": "photo-street", "label": "Street", "description": "Candid photography from cities across Europe, Asia and the Middle East.", "projects": [] },
-        { "id": "photo-portrait", "label": "Portrait", "description": "Portraits made across documentary, editorial and personal contexts.", "projects": [] }
+        {
+          "id": "photo-architecture",
+          "label": "Architecture",
+          "description": "Photographs of built environments, interiors and urban space.",
+          "projects": []
+        },
+        {
+          "id": "photo-street",
+          "label": "Street",
+          "description": "Candid photography from cities across Europe, Asia and the Middle East.",
+          "projects": []
+        },
+        {
+          "id": "photo-portrait",
+          "label": "Portrait",
+          "description": "Portraits made across documentary, editorial and personal contexts.",
+          "projects": []
+        }
       ]
     },
     {
@@ -94,10 +141,24 @@
       "label": "Sound",
       "description": "Sound collages, podcasts and radio broadcasts.",
       "subcategories": [
-        { "id": "sound-collages", "label": "Collages", "description": "Assembled sound works drawing from field recordings, found audio and archival material.", "projects": [] },
-        { "id": "sound-soundscape", "label": "Soundscape", "description": "Environmental and spatial sound compositions designed for installation and place-based listening.", "projects": [] },
-        { "id": "sound-podcasts", "label": "Podcasts", "description": "Conversations on architecture, media art and spatial culture.", "projects": [] },
-        { "id": "sound-radio", "label": "Radio", "description": "Broadcasts and archival recordings from independent radio platforms.", "projects": [] }
+        {
+          "id": "sound-soundscape",
+          "label": "Soundscape",
+          "description": "Environmental and spatial sound compositions designed for installation and place-based listening.",
+          "projects": []
+        },
+        {
+          "id": "sound-podcasts",
+          "label": "Podcasts",
+          "description": "Conversations on architecture, media art and spatial culture.",
+          "projects": []
+        },
+        {
+          "id": "sound-radio",
+          "label": "Radio",
+          "description": "Broadcasts and archival recordings from independent radio platforms.",
+          "projects": []
+        }
       ]
     }
   ]
