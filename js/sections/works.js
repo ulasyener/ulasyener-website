@@ -72,7 +72,7 @@ async function showCategory(categoryId) {
       }
 
       const projects = await Promise.all(
-        cat.projects.map(pid => fetch(\`data/projects/\${pid}.json\`).then(r => r.json()))
+        cat.projects.map(pid => fetch(`data/projects/\${pid}.json`).then(r => r.json()))
       );
 
       window.grid3d = showProjectGrid(projects, (proj) => {
