@@ -73,7 +73,7 @@ function buildGrid(items, onSelect, overlayTop) {
     'top:' + OV_TOP + 'px;' +
     'left:0;right:0;' +
     'bottom:0;' +
-    'z-index:102;' +
+    'z-index:210;' +
     'overflow-y:auto;overflow-x:hidden;' +
     '-webkit-overflow-scrolling:touch;' +
     'padding:' + FADE + 'px ' + PAD_H + ' 80px;' +
@@ -260,7 +260,7 @@ function showVideoEmbed(project) {
     'position:fixed;' +
     'top:' + TOP_PX + 'px;' +
     'left:0;right:0;bottom:0;' +
-    'z-index:102;' +
+    'z-index:210;' +
     'display:flex;' +
     'flex-direction:' + (IS_MOB ? 'column' : 'row') + ';' +
     'align-items:' + (IS_MOB ? 'stretch' : 'flex-start') + ';' +
@@ -314,10 +314,13 @@ function showVideoEmbed(project) {
     }
 
     if (project.year)        addRow('Year', project.year);
+    if (project.subtitle)    addRow('Format', project.subtitle);
     if (project.location)    addRow('Location', project.location);
     if (project.office)      addRow('Office', project.office);
     if (project.firm)        addRow('Firm', project.firm);
     if (project.description) addRow('Info', project.description);
+    if (project.credits && project.credits.length) addRow('Credits', project.credits.join(' / '));
+    if (project.exhibition && project.exhibition.length) addRow('Exhibition', project.exhibition.join(', '));
     if (project.software)    addRow('Software', project.software);
 
     let isOpen = false;
@@ -426,10 +429,13 @@ function showVideoEmbed(project) {
     }
 
     if (project.year)        addMobRow('Year', project.year);
+    if (project.subtitle)    addMobRow('Format', project.subtitle);
     if (project.location)    addMobRow('Location', project.location);
     if (project.office)      addMobRow('Office', project.office);
     if (project.firm)        addMobRow('Firm', project.firm);
     if (project.description) addMobRow('Info', project.description);
+    if (project.credits && project.credits.length) addMobRow('Credits', project.credits.join(' / '));
+    if (project.exhibition && project.exhibition.length) addMobRow('Exhibition', project.exhibition.join(', '));
     if (project.software)    addMobRow('Software', project.software);
 
     let mobIsOpen = false;

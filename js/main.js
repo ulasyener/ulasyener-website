@@ -11,7 +11,6 @@ function initHeroScramble() {
   const nameFinal = 'ULA\u015e YENER';
   const subFinal  = 'Architect \u00b7 Media Artist \u00b7 PhD Researcher';
 
-  // Analog / morse / sembol karakter havuzu
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' +
                 '\u2022\u2013\u2014\u00b7\u00d7\u25a0\u25b2\u25cf' +
                 '\u2212\u002b\u003d\u007c\u002f\u005c\u005f' +
@@ -19,50 +18,38 @@ function initHeroScramble() {
                 '\u03b1\u03b2\u03b3\u03a3\u03a9\u0394\u03a6' +
                 '.-/+=[]:;!?#%&';
 
-  function scramble(el, finalText, duration, delay) {
-    el.style.opacity = '0';
+  function scramble(el, finalText, duration, delay, fadeIn) {
+    if (fadeIn) {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.3s ease';
+    }
 
     setTimeout(() => {
-      // Fade in
-      el.style.transition = 'opacity 0.3s ease';
-      el.style.opacity = '1';
+      if (fadeIn) el.style.opacity = '1';
 
-      const steps    = Math.floor(duration / 30); // 30ms interval — hızlı
-      let step       = 0;
-      const fixed    = Array.from(finalText).map(c =>
-        (c === ' ' || c === '\u00b7')
-          ? c
-          : chars[Math.floor(Math.random() * chars.length)]
-      );
+      const steps = Math.floor(duration / 30);
+      let step = 0;
 
       const iv = setInterval(() => {
-        const progress  = step / steps;
-        const revealed  = Math.floor(progress * finalText.length);
+        const progress = step / steps;
+        const revealed = Math.floor(progress * finalText.length);
         let out = '';
         for (let i = 0; i < finalText.length; i++) {
-          if (finalText[i] === ' ' || finalText[i] === '\u00b7') {
-            out += finalText[i];
-            continue;
-          }
-          if (i < revealed) {
-            out += finalText[i];
-          } else {
-            // Her frame yeni random karakter — analog hissi
-            out += chars[Math.floor(Math.random() * chars.length)];
-          }
+          if (finalText[i] === ' ' || finalText[i] === '\u00b7') { out += finalText[i]; continue; }
+          out += i < revealed ? finalText[i] : chars[Math.floor(Math.random() * chars.length)];
         }
         el.textContent = out;
         step++;
-        if (step > steps) {
-          el.textContent = finalText;
-          clearInterval(iv);
-        }
+        if (step > steps) { el.textContent = finalText; clearInterval(iv); }
       }, 30);
     }, delay);
   }
 
-  scramble(nameEl, nameFinal, 3200, 400);
-  scramble(subEl,  subFinal,  3000, 900);
+  const isFirstLoad = !nameEl.dataset.scrambled;
+  nameEl.dataset.scrambled = '1';
+
+  scramble(nameEl, nameFinal, 3200, 400, isFirstLoad);
+  scramble(subEl,  subFinal,  3000, 900, isFirstLoad);
 }
 
 function initGrain() {
