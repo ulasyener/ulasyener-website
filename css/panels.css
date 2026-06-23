@@ -605,19 +605,17 @@
 /* ─── Mobil fade (nav ve footer çakışması) ───────────────────────────── */
 @media (max-width: 768px) {
   .panel:not(.panel-grid) {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0px,
-      black 52px,
-      black calc(100% - 60px),
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0px,
-      black 52px,
-      black calc(100% - 60px),
-      transparent 100%
-    );
-  }
-}
+-webkit-mask-image: linear-gradient(
+  to bottom,
+  transparent 0px,
+  black 90px,
+  black calc(100% - 60px),
+  transparent 100%
+);
+mask-image: linear-gradient(
+  to bottom,
+  transparent 0px,
+  black 90px,
+  black calc(100% - 60px),
+  transparent 100%
+);
