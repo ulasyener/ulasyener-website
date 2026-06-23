@@ -1,4 +1,3 @@
-
 // ─── WORKS ────────────────────────────────────────────────────────────────
 async function renderWorks() {
   const res  = await fetch('data/works.json');
@@ -78,6 +77,192 @@ async function showCategory(categoryId) {
   });
 }
 
+// ─── Practice proje verisi ─────────────────────────────────────────────────
+const PRACTICE_FIRMS = [
+  {
+    name: '304 DESIGN',
+    role: 'Brand Architect · Interior Architect',
+    period: '2014 – 2016 · Istanbul, Turkey',
+    projects: [
+      { year: '2015–2016', project: 'Mambocino Coffee',                   type: 'Franchise Coffee Shops',              location: 'Istanbul · Tekirdağ · N. Cyprus' },
+      { year: '2015–2016', project: 'Coffee Manifesto',                   type: 'Coffee Shops',                        location: 'Moda · Kadıköy, Istanbul' },
+      { year: '2015–2016', project: "Cup'n Go Coffee",                    type: 'Franchise Coffee Kiosks',             location: 'Istanbul · Antalya' },
+      { year: '2015–2016', project: 'Coffee Sapiens',                     type: 'Modular Coffee Kiosk',                location: 'Karaköy, Istanbul' },
+      { year: '2015–2016', project: 'Probador Colectiva Coffee Roastery', type: 'Roastery',                            location: 'Karaköy, Istanbul' },
+      { year: '2015–2016', project: 'Tramplen Roastery & Headquarters',   type: 'Office / Roastery',                   location: 'Ataşehir, Istanbul' },
+      { year: '2015–2016', project: 'Kaffesa Headquarters',               type: 'Office / Workplace',                  location: 'Istanbul' },
+      { year: '2015–2016', project: 'Isis Restaurant',                    type: 'Restaurant',                          location: 'Moda, Istanbul',           projectId: 'isis' },
+      { year: '2015–2016', project: 'Bahane Cafe & Bar',                  type: 'Café · Bar',                          location: 'Moda, Istanbul' },
+      { year: '2015–2016', project: 'Paria Restaurant',                   type: 'Restaurant',                          location: 'Bostancı, Istanbul' },
+      { year: '2015–2016', project: 'Drip Third Wave Coffee Shop',        type: 'Coffee Shop',                         location: 'Istanbul' },
+      { year: '2015–2016', project: 'Karaköy Gümrük Restaurant',          type: 'Restaurant',                          location: 'Karaköy, Istanbul' },
+      { year: '2015–2016', project: 'Take Five Jazz Bar',                 type: 'Jazz Bar',                            location: 'Alaçatı, İzmir' },
+      { year: '2015–2016', project: 'Serdar-i Ekrem Boutique Hotel',      type: 'Boutique Hotel',                      location: 'Beyoğlu, Istanbul' },
+      { year: '2015–2016', project: 'Gökçe Kozanoğlu House',              type: 'Residential',                         location: 'Göztepe, Istanbul' },
+      { year: '2015–2016', project: 'Ali Osman Yener House',              type: 'Residential',                         location: 'Kadıköy, Istanbul' },
+      { year: '2015–2016', project: 'Lisani Atasayan House',              type: 'Residential',                         location: 'Istanbul' },
+      { year: '2015–2016', project: 'İbrahim Şimşek House',               type: 'Residential',                         location: 'Göztepe, Istanbul' },
+      { year: '2015–2016', project: 'Gökçe & Selim Kocaoğlu House',       type: 'Residential',                         location: 'Ulus, Istanbul' },
+      { year: '2015–2016', project: 'Soy Copper Shop Loft',               type: 'Retail / Loft',                       location: 'Istanbul' },
+      { year: '2015–2016', project: 'Uniq Shop',                          type: 'Pop-up Store',                        location: 'Maslak, Istanbul' },
+      { year: '2014–2016', project: 'Retail Store Products & Systems',    type: 'Product Design',                      location: 'Istanbul' },
+      { year: '2014–2016', project: 'Custom Furniture & Product Systems', type: 'Furniture & Product Design',          location: 'Istanbul' },
+      { year: '2014',      project: 'Istanbul Coffee Festival',            type: 'Event Design',                        location: 'Istanbul' },
+      { year: '2015',      project: 'Istanbul Coffee Festival',            type: 'Event Design',                        location: 'Istanbul' },
+      { year: '2016',      project: 'Istanbul Coffee Festival',            type: 'Event Design',                        location: 'Istanbul' }
+    ]
+  },
+  {
+    name: 'CISIMDESIGN',
+    role: 'Interior Architect · Product Designer',
+    period: '2013 – 2014 · Istanbul, Turkey',
+    projects: [
+      { year: '2013',      project: "Mum's Cafe",                         type: 'Hospitality / Café',                  location: 'Karaköy, Istanbul',        projectId: 'cafe' },
+      { year: '2013',      project: 'Forneria Restaurant',                type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
+      { year: '2014',      project: 'Mükellef Restaurant',                type: 'Hospitality / Restaurant',            location: 'Karaköy, Istanbul' },
+      { year: '2014',      project: 'Read & Rest Bookstore Café',         type: 'Hospitality / Bookstore Café',        location: 'Göktürk, Istanbul',        projectId: 'bookstore' },
+      { year: '2013–2014', project: 'One Ortaköy Family House',           type: 'Residential',                         location: 'Ortaköy, Istanbul' },
+      { year: '2013–2014', project: 'Dilek Seferoğlu House',              type: 'Residential',                         location: 'Şişli, Istanbul' },
+      { year: '2013–2014', project: 'Alafortanfoni Headquarters',         type: 'Office / Workplace',                  location: 'Maslak, Istanbul' },
+      { year: '2013–2014', project: 'Portakal Family',                    type: 'Hospitality / Café · Restaurant · Bar', location: 'Karaköy, Istanbul' }
+    ]
+  },
+  {
+    name: 'PROJEMASIF',
+    role: 'Interior Architect · Furniture Designer',
+    period: '2012 – 2013 · Istanbul, Turkey',
+    projects: [
+      { year: '2012–2013', project: 'Bilgitek Headquarters',              type: 'Office / Workplace',                  location: 'Zeytinburnu, Istanbul' },
+      { year: '2012–2013', project: 'AGCA House',                         type: 'Residential / Restoration',           location: 'Istanbul' }
+    ]
+  }
+];
+
+// ─── Practice'ten proje sayfasına yönlendir ────────────────────────────────
+async function _navigateToProject(projectId) {
+  const res  = await fetch('data/works.json');
+  const data = await res.json();
+
+  for (const cat of data.categories) {
+    for (const sub of cat.subcategories) {
+      if (!sub.projects || !sub.projects.includes(projectId)) continue;
+      if (sub.id === 'arch-visualization' || sub.id === 'interior-practice') continue;
+      runGlitch(async () => {
+        clearPanel();
+        const proj = await fetch(`data/projects/${projectId}.json`).then(r => r.json());
+        navState.subcategory = sub.id;
+        navState.project     = projectId;
+        pushHash('works/' + cat.id + '/' + sub.id + '/' + projectId);
+
+        const root = getPanelRoot();
+        const el   = document.createElement('div');
+        el.className = 'panel panel-grid';
+
+        const nav = makePanelNav([
+          { label: 'Works',    action: () => showSection('works') },
+          { label: cat.label,  action: () => showCategory(cat.id) },
+          { label: sub.label,  action: () => showSubcategory(cat.id, sub.id) },
+        ]);
+        el.appendChild(nav);
+
+        const navTitle = document.createElement('span');
+        navTitle.className = 'proj-nav-title';
+        navTitle.innerHTML = `${proj.title} <span style="opacity:.4">${proj.year}</span>`;
+        nav.appendChild(navTitle);
+
+        const secLabel = document.createElement('div');
+        secLabel.className = 'sec-label sec-label--home';
+        secLabel.textContent = sub.label;
+        secLabel.addEventListener('click', () => runGlitch(() => showSubcategory(cat.id, sub.id)));
+        el.appendChild(secLabel);
+
+        root.appendChild(el);
+
+        if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
+        window.grid3d = showPhotoGrid(proj, (d) => {
+          if (proj.images && proj.images.length) openLightbox(proj.images, d.index, proj);
+        });
+        renderProjectInfoPanel(proj, false);
+      });
+      return;
+    }
+  }
+}
+
+// ─── Practice tablo render ─────────────────────────────────────────────────
+function showPracticeTable(categoryId, subcategoryId, catLabel, subLabel) {
+  runGlitch(() => {
+    navState.subcategory = subcategoryId;
+    navState.project     = null;
+    pushHash('works/' + categoryId + '/' + subcategoryId);
+
+    const root = getPanelRoot();
+    clearPanel();
+
+    const el = document.createElement('div');
+    el.className = 'panel';
+
+    el.appendChild(makePanelNav([
+      { label: 'Works',  action: () => showSection('works') },
+      { label: catLabel, action: () => showCategory(categoryId) },
+      { label: subLabel }
+    ]));
+
+    const label = document.createElement('div');
+    label.className = 'sec-label sec-label--home';
+    label.textContent = subLabel;
+    label.addEventListener('click', () => runGlitch(() => showCategory(categoryId)));
+    el.appendChild(label);
+
+    const practiceList = document.createElement('div');
+    practiceList.className = 'accordion-content practice-list';
+
+    PRACTICE_FIRMS.forEach(f => {
+      const firmEl = document.createElement('div');
+      firmEl.className = 'practice-firm';
+
+      const header = document.createElement('div');
+      header.className = 'practice-firm-header';
+      header.innerHTML = `
+        <div class="practice-firm-name">${f.name}</div>
+        <div class="practice-firm-meta">${f.role} · ${f.period}</div>
+      `;
+      firmEl.appendChild(header);
+
+      const table = document.createElement('table');
+      table.className = 'practice-table';
+      table.innerHTML = `
+        <thead><tr>
+          <th>Year</th><th>Project</th><th>Type</th><th>Location</th>
+        </tr></thead>
+      `;
+      const tbody = document.createElement('tbody');
+
+      f.projects.forEach(p => {
+        const tr = document.createElement('tr');
+        if (p.projectId) tr.classList.add('practice-row-link');
+        tr.innerHTML = `
+          <td>${p.year}</td>
+          <td>${p.project}${p.projectId ? ' <span class="practice-row-arrow">→</span>' : ''}</td>
+          <td>${p.type}</td>
+          <td>${p.location}</td>
+        `;
+        if (p.projectId) {
+          tr.addEventListener('click', () => _navigateToProject(p.projectId));
+        }
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      firmEl.appendChild(table);
+      practiceList.appendChild(firmEl);
+    });
+
+    el.appendChild(practiceList);
+    root.appendChild(el);
+  });
+}
+
 // ─── Alt kategori → Kademe 1 grid ─────────────────────────────────────────
 async function showSubcategory(categoryId, subcategoryId) {
   const res  = await fetch('data/works.json');
@@ -88,6 +273,11 @@ async function showSubcategory(categoryId, subcategoryId) {
 
   if (subcategoryId === 'sound-radio') {
     showRadio(categoryId, cat.label);
+    return;
+  }
+
+  if (subcategoryId === 'arch-visualization' || subcategoryId === 'interior-practice') {
+    showPracticeTable(categoryId, subcategoryId, cat.label, sub.label);
     return;
   }
 
@@ -184,8 +374,8 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       });
     }
 
-  if (project.content_type !== 'video') {
-   renderProjectInfoPanel(project, project.content_type === 'video');
+    if (project.content_type !== 'video') {
+      renderProjectInfoPanel(project, project.content_type === 'video');
     }
   });
 }
