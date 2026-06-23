@@ -62,6 +62,7 @@ async function parseAndNavigate() {
   }
 
   const [section, category, subcategory, project] = parts;
+  const nestedSub = parts[3]; // alias for clarity in nested routing
 
   switch (section) {
     case 'works':
@@ -79,10 +80,19 @@ async function parseAndNavigate() {
         renderWorks();
         await showSubcategory(category, subcategory);
       } else {
-        // Proje seviyesi — subkategoriyi aç, proje grid'i yükle
-        clearPanel();
-        renderWorks();
-        await showSubcategory(category, subcategory);
+        // parts[3] mevcut: nested subcategory mi (ai-residential vs) yoksa proje mi?
+        const nestedSubIds = ['ai-residential', 'ai-retail', 'ai-hospitality', 'ai-workspace'];
+        if (nestedSubIds.includes(project)) {
+          // works/architecture-interior/ai-projects/ai-residential
+          clearPanel();
+          renderWorks();
+          await showNestedSubcategory(category, subcategory, project);
+        } else {
+          // Normal: works/category/subcategory/projectId
+          clearPanel();
+          renderWorks();
+          await showSubcategory(category, subcategory);
+        }
       }
       break;
 
