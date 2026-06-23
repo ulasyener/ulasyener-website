@@ -1,17 +1,16 @@
 // ─── CONTACT ──────────────────────────────────────────────────────────────
 const FORMSPREE_ID = 'mvzjpvda';
 
-// Scraper koruması: veriler parçalanmış + encode edilmiş, runtime'da birleştirilir
 function _d(b) { return atob(b); }
 const _C = {
-  eA: 'aGVsbG8=',             // hello
-  eB: 'QA==',                 // @
-  eC: 'dWxhc3llbmVyLmNvbQ==', // ulasyener.com
-  pA: 'KzQ5',                 // +49
-  pB: 'IDE2Mw==',             // 163
-  pC: 'IDIwNyA4NjE2',         // 207 8616
-  wP: 'NDkxNjMyMDc4NjE2',     // 491632078616
-  tP: 'KzQ5MTYzMjA3ODYxNg==', // +491632078616
+  eA: 'aGVsbG8=',
+  eB: 'QA==',
+  eC: 'dWxhc3llbmVyLmNvbQ==',
+  pA: 'KzQ5',
+  pB: 'IDE2Mw==',
+  pC: 'IDIwNyA4NjE2',
+  wP: 'NDkxNjMyMDc4NjE2',
+  tP: 'KzQ5MTYzMjA3ODYxNg==',
 };
 function _email()  { return _d(_C.eA) + _d(_C.eB) + _d(_C.eC); }
 function _phone()  { return _d(_C.pA) + ' ' + _d(_C.pB).trim() + ' ' + _d(_C.pC).trim(); }
@@ -19,7 +18,58 @@ function _waHref() { return 'https://wa' + '.me/' + _d(_C.wP); }
 function _tgHref() { return 'https://t'  + '.me/' + _d(_C.tP); }
 function _telHref(){ return 'tel:' + _d(_C.pA) + _d(_C.pB).replace(/\s/g,'') + _d(_C.pC).replace(/\s/g,''); }
 
+// ─── Accordion yardımcısı ──────────────────────────────────────────────────
+function makeAccordion(titleText, contentEl, startOpen = false) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'border-top:1px solid rgba(0,0,0,0.08);margin-top:0;';
+
+  const header = document.createElement('div');
+  header.style.cssText = `
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 0;cursor:pointer;user-select:none;
+  `;
+
+  const titleEl = document.createElement('span');
+  titleEl.style.cssText = 'font-family:var(--f-sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,0,0,0.55);';
+  titleEl.textContent = titleText;
+
+  const arrow = document.createElement('span');
+  arrow.style.cssText = 'font-family:var(--f-mono);font-size:10px;color:rgba(0,0,0,0.3);transition:transform 0.25s ease;';
+  arrow.textContent = '↓';
+
+  header.appendChild(titleEl);
+  header.appendChild(arrow);
+
+  const body = document.createElement('div');
+  body.style.cssText = `overflow:hidden;transition:max-height 0.35s ease, opacity 0.3s ease;`;
+
+  let open = startOpen;
+
+  function setOpen(val) {
+    open = val;
+    if (open) {
+      body.style.maxHeight = '1000px';
+      body.style.opacity   = '1';
+      arrow.style.transform = 'rotate(180deg)';
+    } else {
+      body.style.maxHeight = '0';
+      body.style.opacity   = '0';
+      arrow.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  setOpen(startOpen);
+  body.appendChild(contentEl);
+  header.addEventListener('click', () => setOpen(!open));
+
+  wrap.appendChild(header);
+  wrap.appendChild(body);
+  return wrap;
+}
+
+// ─── renderContact ─────────────────────────────────────────────────────────
 function renderContact() {
+  pushHash('contact');
   const root = getPanelRoot();
   const el   = document.createElement('div');
   el.className = 'panel';
@@ -30,207 +80,156 @@ function renderContact() {
   label.addEventListener('click', goHome);
   el.appendChild(label);
 
-  const list = document.createElement('div');
-  list.className = 'category-list';
+  // ─── Form ───────────────────────────────────────────────────────────────
+  const formWrap = document.createElement('div');
+  formWrap.style.cssText = 'padding:4px 0 8px;';
+  formWrap.innerHTML = `
+    <div class="contact-form">
+      <input type="text"  class="cf-input" id="cf-name"    placeholder="Name" />
+      <input type="email" class="cf-input" id="cf-email"   placeholder="Email" />
+      <input type="text"  class="cf-input" id="cf-subject" placeholder="Subject" />
+      <textarea           class="cf-input cf-textarea" id="cf-message" placeholder="Message" rows="5"></textarea>
+      <button class="cf-btn" id="cf-submit">Send</button>
+    </div>
+  `;
+  el.appendChild(formWrap);
+  el.querySelector('#cf-submit').addEventListener('click', handleContactSubmit);
 
-  const sections = [
-    { id: 'info',    label: 'Info' },
-    { id: 'social',  label: 'Social' },
-    { id: 'contact', label: 'Contact' }
+  // ─── Info accordion ─────────────────────────────────────────────────────
+  const infoContent = document.createElement('div');
+  infoContent.style.cssText = 'padding:4px 0 16px;';
+
+  const rows = [
+    { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: _email },
+    { key: 'Phone',        tag: 'a',    getHref: _telHref,                   getText: _phone },
+    { key: 'WhatsApp',     tag: 'a',    getHref: _waHref,                    getText: () => 'OPEN WHATSAPP', target: '_blank' },
+    { key: 'Telegram',     tag: 'a',    getHref: _tgHref,                    getText: () => 'OPEN TELEGRAM', target: '_blank' },
+    { key: 'Based',        tag: 'span',                                       getText: () => 'WEIMAR · STUTTGART · ISTANBUL' },
+    { key: 'Currently',    tag: 'span',                                       getText: () => '70599 STUTTGART' },
+    { key: 'Availability', tag: 'span',                                       getText: () => 'OPEN TO COLLABORATION' },
   ];
 
-  sections.forEach(s => {
-    const item = document.createElement('div');
-    item.className = 'category-item';
-    item.innerHTML = `<div class="cat-label">${s.label}</div>`;
-    item.addEventListener('click', () => showContactSection(s));
-    list.appendChild(item);
+  rows.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'contact-row';
+
+    const keyEl = document.createElement('span');
+    keyEl.className = 'contact-key';
+    keyEl.textContent = r.key;
+
+    const valEl = document.createElement(r.tag);
+    valEl.className = 'contact-val';
+    valEl.textContent = r.getText();
+    if (r.getHref) valEl.href = r.getHref();
+    if (r.target)  valEl.target = r.target;
+
+    row.appendChild(keyEl);
+    row.appendChild(valEl);
+    infoContent.appendChild(row);
   });
 
-  el.appendChild(list);
+  const dlRow = document.createElement('div');
+  dlRow.className = 'contact-row';
+  dlRow.style.paddingTop = '16px';
+  dlRow.innerHTML = `
+    <span class="contact-key"></span>
+    <div class="download-btns">
+      <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
+      <a class="dl-btn" href="files/cv.pdf" download>CV</a>
+    </div>
+  `;
+  infoContent.appendChild(dlRow);
+
+  el.appendChild(makeAccordion('Info', infoContent, false));
+
+  // ─── Social accordion ────────────────────────────────────────────────────
+  const socialContent = document.createElement('div');
+  socialContent.style.cssText = 'padding:4px 0 16px;';
+
+  const groups = [
+    {
+      label: 'Social',
+      links: [
+        { label: 'Instagram',  href: 'https://www.instagram.com/ulasynr/' },
+        { label: 'Twitter / X',href: 'https://x.com/ulasynr' },
+        { label: 'Facebook',   href: 'https://www.facebook.com/ulasynr' },
+        { label: 'Bluesky',    href: 'https://bsky.app/profile/ulasyener.bsky.social' },
+        { label: 'Tumblr',     href: 'https://ulasynr.tumblr.com/' },
+      ]
+    },
+    {
+      label: 'Portfolio & Creative',
+      links: [
+        { label: 'Behance',  href: 'https://www.behance.net/ulasynr' },
+        { label: 'Flickr',   href: 'https://www.flickr.com/photos/ulasyener' },
+        { label: 'Vimeo',    href: 'https://vimeo.com/ulasyener' },
+        { label: 'YouTube',  href: 'https://www.youtube.com/@theulasyener' },
+        { label: 'Patreon',  href: 'https://www.patreon.com/c/ulasyener' },
+      ]
+    },
+    {
+      label: 'Music & Audio',
+      links: [
+        { label: 'SoundCloud', href: 'https://soundcloud.com/ulasyener-1' },
+        { label: 'Mixcloud',   href: 'https://www.mixcloud.com/ula%C5%9F-yener/' },
+      ]
+    },
+    {
+      label: 'Live',
+      links: [
+        { label: 'Twitch', href: 'https://www.twitch.tv/barbar__turk' },
+        { label: 'Kick',   href: 'https://kick.com/barbarturko' },
+      ]
+    },
+    {
+      label: 'Academic & Writing',
+      links: [
+        { label: 'Academia.edu', href: 'https://uni-weimar.academia.edu/Ula%C5%9FYener' },
+        { label: 'Medium',       href: 'https://medium.com/@ulasyener' },
+        { label: 'Substack',     href: 'https://substack.com/@ulasyener' },
+      ]
+    },
+    {
+      label: 'Professional',
+      links: [
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ulasynr/' },
+        { label: 'Xing',     href: 'https://www.xing.com/profile/Ulas_Yener2/web_profiles?nwt_nav=profile_icon' },
+        { label: 'GitHub',   href: 'https://github.com/ulasyener' },
+      ]
+    },
+  ];
+
+  groups.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.style.cssText = 'margin-bottom:20px;';
+
+    const groupLabel = document.createElement('div');
+    groupLabel.style.cssText = 'font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.32);margin-bottom:8px;';
+    groupLabel.textContent = group.label;
+    groupEl.appendChild(groupLabel);
+
+    const btnWrap = document.createElement('div');
+    btnWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
+
+    group.links.forEach(l => {
+      const a = document.createElement('a');
+      a.className = 'social-link-btn';
+      a.href = l.href;
+      a.target = '_blank';
+      a.textContent = l.label;
+      btnWrap.appendChild(a);
+    });
+
+    groupEl.appendChild(btnWrap);
+    socialContent.appendChild(groupEl);
+  });
+
+  el.appendChild(makeAccordion('Social', socialContent, false));
+
   root.appendChild(el);
 }
 
-// ─── Contact alt sayfa ────────────────────────────────────────────────────
-function showContactSection(s) {
-  runGlitch(() => {
-    pushHash('contact/' + s.id);
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Contact', action: () => showSection('contact') },
-      { label: s.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = s.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('contact')));
-    el.appendChild(label);
-
-    if (s.id === 'info') {
-      const list = document.createElement('div');
-      list.className = 'category-list';
-
-      const rows = [
-        { key: 'Email',        tag: 'a',    getHref: () => 'mailto:' + _email(), getText: _email,           },
-        { key: 'Phone',        tag: 'a',    getHref: _telHref,                   getText: _phone,           },
-        { key: 'WhatsApp',     tag: 'a',    getHref: _waHref,                    getText: () => 'OPEN WHATSAPP', target: '_blank' },
-        { key: 'Telegram',     tag: 'a',    getHref: _tgHref,                    getText: () => 'OPEN TELEGRAM', target: '_blank' },
-        { key: 'Based',        tag: 'span',                                       getText: () => 'WEIMAR · STUTTGART · ISTANBUL' },
-        { key: 'Currently',    tag: 'span',                                       getText: () => '70599 STUTTGART' },
-        { key: 'Availability', tag: 'span',                                       getText: () => 'OPEN TO COLLABORATION' },
-      ];
-
-      rows.forEach(r => {
-        const row = document.createElement('div');
-        row.className = 'contact-row';
-
-        const keyEl = document.createElement('span');
-        keyEl.className = 'contact-key';
-        keyEl.textContent = r.key;
-        row.appendChild(keyEl);
-
-        const valEl = document.createElement(r.tag);
-        valEl.className = 'contact-val';
-        valEl.textContent = r.getText();
-        if (r.getHref) valEl.href = r.getHref();
-        if (r.target)  valEl.target = r.target;
-        row.appendChild(valEl);
-
-        list.appendChild(row);
-      });
-
-      const dlRow = document.createElement('div');
-      dlRow.className = 'contact-row';
-      dlRow.style.paddingTop = '20px';
-      dlRow.innerHTML = `
-        <span class="contact-key"></span>
-        <div class="download-btns">
-          <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
-          <a class="dl-btn" href="files/cv.pdf" download>CV</a>
-        </div>
-      `;
-      list.appendChild(dlRow);
-
-      el.appendChild(list);
-    }
-
-    if (s.id === 'social') {
-      const groups = [
-        {
-          label: 'Social',
-          links: [
-            { label: 'Instagram',  href: 'https://www.instagram.com/ulasynr/' },
-            { label: 'Twitter / X',href: 'https://x.com/ulasynr' },
-            { label: 'Facebook',   href: 'https://www.facebook.com/ulasynr' },
-            { label: 'Bluesky',    href: 'https://bsky.app/profile/ulasyener.bsky.social' },
-            { label: 'Tumblr',     href: 'https://ulasynr.tumblr.com/' },
-          ]
-        },
-        {
-          label: 'Portfolio & Creative',
-          links: [
-            { label: 'Behance',  href: 'https://www.behance.net/ulasynr' },
-            { label: 'Flickr',   href: 'https://www.flickr.com/photos/ulasyener' },
-            { label: 'Vimeo',    href: 'https://vimeo.com/ulasyener' },
-            { label: 'YouTube',  href: 'https://www.youtube.com/@theulasyener' },
-            { label: 'Patreon',  href: 'https://www.patreon.com/c/ulasyener' },
-          ]
-        },
-        {
-          label: 'Music & Audio',
-          links: [
-            { label: 'SoundCloud', href: 'https://soundcloud.com/ulasyener-1' },
-            { label: 'Mixcloud',   href: 'https://www.mixcloud.com/ula%C5%9F-yener/' },
-          ]
-        },
-        {
-          label: 'Live',
-          links: [
-            { label: 'Twitch', href: 'https://www.twitch.tv/barbar__turk' },
-            { label: 'Kick',   href: 'https://kick.com/barbarturko' },
-          ]
-        },
-        {
-          label: 'Academic & Writing',
-          links: [
-            { label: 'Academia.edu', href: 'https://uni-weimar.academia.edu/Ula%C5%9FYener' },
-            { label: 'Medium',       href: 'https://medium.com/@ulasyener' },
-            { label: 'Substack',     href: 'https://substack.com/@ulasyener' },
-          ]
-        },
-        {
-          label: 'Professional',
-          links: [
-            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ulasynr/' },
-            { label: 'Xing',     href: 'https://www.xing.com/profile/Ulas_Yener2/web_profiles?nwt_nav=profile_icon' },
-            { label: 'GitHub',   href: 'https://github.com/ulasyener' },
-          ]
-        },
-      ];
-
-      const wrap = document.createElement('div');
-      wrap.style.paddingTop = '8px';
-
-      groups.forEach(group => {
-        const groupEl = document.createElement('div');
-        groupEl.style.cssText = 'margin-bottom:24px;';
-
-        const groupLabel = document.createElement('div');
-        groupLabel.style.cssText = 'font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.32);margin-bottom:10px;';
-        groupLabel.textContent = group.label;
-        groupEl.appendChild(groupLabel);
-
-        const btnWrap = document.createElement('div');
-        btnWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
-
-        group.links.forEach(l => {
-          const a = document.createElement('a');
-          a.className = 'social-link-btn';
-          a.href = l.href;
-          a.target = '_blank';
-          a.textContent = l.label;
-          btnWrap.appendChild(a);
-        });
-
-        groupEl.appendChild(btnWrap);
-        wrap.appendChild(groupEl);
-      });
-
-      el.appendChild(wrap);
-    }
-
-    if (s.id === 'contact') {
-      const wrap = document.createElement('div');
-      wrap.style.paddingTop = '16px';
-      wrap.innerHTML = `
-        <div style="padding:0 0 12px;">
-          <span style="font-size:11px;line-height:1.8;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:rgba(0,0,0,0.65);">
-            Feel free to send me a message!
-          </span>
-        </div>
-        <div class="contact-form">
-          <input type="text"  class="cf-input" id="cf-name"    placeholder="Name" />
-          <input type="email" class="cf-input" id="cf-email"   placeholder="Email" />
-          <input type="text"  class="cf-input" id="cf-subject" placeholder="Subject" />
-          <textarea           class="cf-input cf-textarea" id="cf-message" placeholder="Message" rows="5"></textarea>
-          <button class="cf-btn" id="cf-submit">Send</button>
-        </div>
-      `;
-      el.appendChild(wrap);
-
-      el.querySelector('#cf-submit').addEventListener('click', handleContactSubmit);
-    }
-
-    root.appendChild(el);
-  });
-}
-
+// ─── Form submit ───────────────────────────────────────────────────────────
 async function handleContactSubmit() {
   const btn     = document.getElementById('cf-submit');
   const name    = document.getElementById('cf-name')?.value.trim();

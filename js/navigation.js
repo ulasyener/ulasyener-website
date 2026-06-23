@@ -124,14 +124,6 @@ async function parseAndNavigate() {
       navState.section = 'contact';
       clearPanel();
       renderContact();
-      if (category) {
-        const contactSections = {
-          info:    { id: 'info',    label: 'Info' },
-          social:  { id: 'social',  label: 'Social' },
-          contact: { id: 'contact', label: 'Contact' }
-        };
-        if (contactSections[category]) showContactSection(contactSections[category]);
-      }
       break;
   }
 }
@@ -755,10 +747,9 @@ document.addEventListener('DOMContentLoaded', () => {
     runGlitch(() => {
       clearPanel();
       getOv().style.opacity = '0';
-      navState = { section: 'contact', category: 'contact', subcategory: null, project: null };
-      pushHash('contact/contact');
+      navState = { section: 'contact', category: null, subcategory: null, project: null };
+      pushHash('contact');
       renderContact();
-      showContactSection({ id: 'contact', label: 'Contact' });
     });
   });
 
