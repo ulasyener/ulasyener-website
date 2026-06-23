@@ -279,11 +279,7 @@
   text-transform: uppercase;
 }
 
-/* ─── Practice tablosu ───────────────────────────────────────────────── */
-.practice-list {
-  padding-top: 4px;
-}
-
+/* ─── Practice satır formatı (about-row bazlı) ───────────────────────────── */
 .practice-firm {
   margin-bottom: 32px;
 }
@@ -315,45 +311,88 @@
   display: block;
 }
 
-.practice-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0;
+.practice-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0 20px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  cursor: default;
+  transition: background .15s ease;
+}
+.practice-row:last-child { border-bottom: none; }
+
+.practice-row.is-link {
+  cursor: pointer;
+}
+.practice-row.is-link:hover {
+  background: rgba(0,0,0,0.03);
+  margin: 0 -12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.practice-row.is-link:hover .practice-proj-name {
+  color: rgba(0,0,0,0.9);
 }
 
-.practice-table th {
+.practice-year {
   font-family: var(--f-mono);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: .14em;
+  letter-spacing: .06em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.28);
-  text-align: left;
-  padding: 8px 8px 8px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  color: rgba(0,0,0,0.38);
+  padding-top: 2px;
+  line-height: 1.6;
+  white-space: nowrap;
 }
 
-.practice-table td {
+.practice-proj-name {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.72);
+  line-height: 1.6;
+  margin-bottom: 1px;
+  transition: color .15s ease;
+}
+
+.practice-proj-name .practice-row-arrow {
+  font-size: 9px;
+  color: rgba(0,0,0,0.28);
+  margin-left: 6px;
+  transition: color .15s ease;
+}
+.practice-row.is-link:hover .practice-row-arrow {
+  color: rgba(0,0,0,0.7);
+}
+
+.practice-proj-meta {
   font-family: var(--f-mono);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .04em;
-  color: rgba(0,0,0,0.60);
-  padding: 7px 8px 7px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-  vertical-align: top;
-  line-height: 1.5;
-}
-
-.practice-table tr:last-child td {
-  border-bottom: none;
-}
-
-.practice-table td:first-child,
-.practice-table th:first-child {
-  white-space: nowrap;
-  min-width: 72px;
+  text-transform: uppercase;
   color: rgba(0,0,0,0.38);
+  line-height: 1.6;
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .practice-row { grid-template-columns: 72px 1fr; gap: 0 10px; }
+  .practice-year { font-size: 9px; }
+  .practice-proj-name { font-size: 10px; }
+  .practice-proj-meta { font-size: 9px; }
+  .practice-firm-name { font-size: 10px; }
+  .practice-firm-meta { font-size: 9px; }
+  .practice-row.is-link:hover {
+    background: none;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 /* ─── Fremde Turen accordion ─────────────────────────────────────────── */
@@ -563,3 +602,4 @@
   .subcat-label { font-size: 12px; }
   .panel        { padding: 54px 14px 80px 14px; }
 }
+

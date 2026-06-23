@@ -229,32 +229,29 @@ function showPracticeTable(categoryId, subcategoryId, catLabel, subLabel) {
       `;
       firmEl.appendChild(header);
 
-      const table = document.createElement('table');
-      table.className = 'practice-table';
-      table.innerHTML = `
-        <thead><tr>
-          <th>Year</th><th>Project</th><th>Type</th><th>Location</th>
-        </tr></thead>
-      `;
-      const tbody = document.createElement('tbody');
-
       f.projects.forEach(p => {
-        const tr = document.createElement('tr');
-        if (p.projectId) tr.classList.add('practice-row-link');
-        tr.innerHTML = `
-          <td>${p.year}</td>
-          <td>${p.project}${p.projectId ? ' <span class="practice-row-arrow">→</span>' : ''}</td>
-          <td>${p.type}</td>
-          <td>${p.location}</td>
+        const row = document.createElement('div');
+        row.className = 'practice-row' + (p.projectId ? ' is-link' : '');
+
+        const yearEl = document.createElement('div');
+        yearEl.className = 'practice-year';
+        yearEl.textContent = p.year;
+
+        const detailEl = document.createElement('div');
+        detailEl.innerHTML = `
+          <div class="practice-proj-name">${p.project}${p.projectId ? ' <span class="practice-row-arrow">→</span>' : ''}</div>
+          <div class="practice-proj-meta">${p.type} · ${p.location}</div>
         `;
+
+        row.appendChild(yearEl);
+        row.appendChild(detailEl);
+
         if (p.projectId) {
-          tr.addEventListener('click', () => _navigateToProject(p.projectId));
+          row.addEventListener('click', () => _navigateToProject(p.projectId));
         }
-        tbody.appendChild(tr);
+        firmEl.appendChild(row);
       });
 
-      table.appendChild(tbody);
-      firmEl.appendChild(table);
       practiceList.appendChild(firmEl);
     });
 
