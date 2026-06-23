@@ -17,8 +17,8 @@
         },
         {
           "id": "arch-visualization",
-          "label": "Visualization & Drawing",
-          "description": "Architectural representation through rendering, diagram and hand drawing.",
+          "label": "Practice",
+          "description": "Interior architecture and design practice across residential, hospitality and retail projects.",
           "projects": []
         },
         {
@@ -37,7 +37,8 @@
         { "id": "interior-residential", "label": "Residential", "description": "Private living spaces designed around daily life and personal narrative.", "projects": ["yesilkoy", "kupferberg"] },
         { "id": "interior-retail", "label": "Retail", "description": "Spatial identities for retail environments including cafes, bookstores and shops.", "projects": ["bookstore", "cafe", "isis"] },
         { "id": "interior-hospitality", "label": "Hospitality", "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.", "projects": ["isis"] },
-        { "id": "interior-workspace", "label": "Workspace", "description": "Office and studio environments designed for focus, collaboration and culture.", "projects": [] }
+        { "id": "interior-workspace", "label": "Workspace", "description": "Office and studio environments designed for focus, collaboration and culture.", "projects": [] },
+        { "id": "interior-practice", "label": "Practice", "description": "Interior architecture and design practice across residential, hospitality and retail projects.", "projects": [] }
       ]
     },
     {
