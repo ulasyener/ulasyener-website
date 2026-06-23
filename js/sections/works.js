@@ -37,6 +37,51 @@ async function showCategory(categoryId) {
   const cat  = data.categories.find(c => c.id === categoryId);
   if (!cat) return;
 
+  // Subcategory'si olmayan, direkt proje listesi olan kategoriler (craft-design vs.)
+  if (!cat.subcategories && cat.projects) {
+    runGlitch(async () => {
+      navState.category    = categoryId;
+      navState.subcategory = null;
+      pushHash('works/' + categoryId);
+
+      const root = getPanelRoot();
+      clearPanel();
+
+      const el = document.createElement('div');
+      el.className = 'panel panel-grid';
+
+      el.appendChild(makePanelNav([
+        { label: 'Works', action: () => showSection('works') },
+        { label: cat.label }
+      ]));
+
+      const label = document.createElement('div');
+      label.className = 'sec-label sec-label--home';
+      label.textContent = cat.label;
+      label.addEventListener('click', () => runGlitch(() => showSection('works')));
+      el.appendChild(label);
+
+      root.appendChild(el);
+
+      if (cat.projects.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = '— coming soon —';
+        el.appendChild(empty);
+        return;
+      }
+
+      const projects = await Promise.all(
+        cat.projects.map(pid => fetch(\`data/projects/\${pid}.json\`).then(r => r.json()))
+      );
+
+      window.grid3d = showProjectGrid(projects, (proj) => {
+        openPhotoGrid(proj, categoryId, null, cat.label, null);
+      });
+    });
+    return;
+  }
+
   runGlitch(() => {
     navState.category    = categoryId;
     navState.subcategory = null;

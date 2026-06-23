@@ -45,45 +45,28 @@
       ]
     },
     {
-      "id": "product",
-      "label": "Product",
-      "description": "Furniture, retail fixtures and product concepts.",
-      "subcategories": [
-        { "id": "product-furniture", "label": "Furniture", "description": "Custom furniture and built-in joinery designed for residential and commercial contexts.", "projects": ["product"] },
-        { "id": "product-kiosk", "label": "Kiosk & Display", "description": "Kiosk and display system designs for retail environments and public spaces.", "projects": [] },
-        { "id": "product-branding", "label": "Branding & Spatial Identity", "description": "Branded spatial environments where architecture, material and identity converge into a coherent whole.", "projects": [] },
-        { "id": "product-objects", "label": "Objects & Artifacts", "description": "Small-scale objects, brewing apparatus, handcrafted items and experimental product concepts.", "projects": [] }
-      ]
+      "id": "craft-design",
+      "label": "Craft & Design",
+      "description": "Furniture, spatial objects and branded environments. Work spanning custom joinery, display systems and material identity.",
+      "projects": ["product"]
     },
     {
-      "id": "interactive",
-      "label": "Interactive",
-      "description": "Interactive installations and environments.",
+      "id": "spatial-media",
+      "label": "Spatial Media",
+      "description": "Immersive environments, interactive spaces and extended reality experiences.",
       "subcategories": [
-        { "id": "interactive-game", "label": "Game Design", "description": "Interactive experiences and game environments developed in Unreal Engine. Narrative-driven spatial explorations.", "projects": ["fremde-gameplay"] },
-        { "id": "interactive-spatial", "label": "Spatial Design", "description": "Interactive spatial systems and environments developed in Unity 3D.", "projects": [] },
-        { "id": "interactive-installations", "label": "Installations", "description": "Site-specific interactive installations combining sensor systems, projection and audience participation.", "projects": [] }
-      ]
-    },
-    {
-      "id": "immersive",
-      "label": "Immersive",
-      "description": "Immersive audio-visual environments and spatial experiences.",
-      "subcategories": [
-        { "id": "immersive-av", "label": "Audio-Visual Environments", "description": "Synchronized sound and image environments for live performance and installation.", "projects": [] },
-        { "id": "immersive-fulldome", "label": "Fulldome", "description": "360-degree dome projections and immersive spatial narratives.", "projects": [] },
-        { "id": "immersive-projection", "label": "Projection Mapping", "description": "Site-specific projection works that transform architectural surfaces.", "projects": [] }
-      ]
-    },
-    {
-      "id": "vr-ar-xr",
-      "label": "VR / AR / XR",
-      "description": "360 degree, fulldome, animations and virtual, augmented experiences.",
-      "subcategories": [
-        { "id": "xr-fulldome", "label": "360 & Fulldome", "description": "360 degree animations and fulldome productions.", "projects": ["anim-village-dome"] },
-        { "id": "xr-vr", "label": "Virtual Reality", "description": "Immersive VR environments and experiences.", "projects": ["infinity-room", "anim-future-or"] },
-        { "id": "xr-ar", "label": "Augmented Reality", "description": "AR interventions layering digital content onto physical space.", "projects": [] },
-        { "id": "xr-xr", "label": "Extended Reality", "description": "Hybrid experiences operating across the spectrum of physical and digital presence.", "projects": [] }
+        {
+          "id": "sm-immersive",
+          "label": "Immersive Environments",
+          "description": "Virtual reality, 360° film, fulldome and audio-visual environments designed for spatial experience.",
+          "projects": ["infinity-room", "anim-future-or", "anim-village-dome"]
+        },
+        {
+          "id": "sm-interactive",
+          "label": "Interactive Spaces",
+          "description": "Game environments, spatial installations and interactive systems developed across digital and physical space.",
+          "projects": ["fremde-gameplay"]
+        }
       ]
     },
     {
