@@ -72,13 +72,10 @@
     {
       "id": "moving-images",
       "label": "Moving Images",
-      "description": "3D animations, stop-motion films, experimental video.",
+      "description": "Film, animation and moving image works.",
       "subcategories": [
-        { "id": "mi-animation", "label": "3D Animation", "description": "Three-dimensional animations produced for architectural visualization, art projects and festival screenings.", "projects": ["anim-dkam", "infinity-room"] },
-        { "id": "mi-essay", "label": "Essay Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history.", "projects": [] },
-        { "id": "mi-experimental", "label": "Experimental Video", "description": "Experimental moving image works exhibited at B3 Biennial Frankfurt, Bauhaus Summaery and international film festivals.", "projects": ["anim-fremde-trailer1"] },
-        { "id": "mi-stopmotion", "label": "Stop Motion", "description": "Frame-by-frame animation works combining handcrafted objects, material textures and spatial environments.", "projects": ["anim-wed", "anim-stools"] },
-        { "id": "mi-motion", "label": "Motion Graphics", "description": "Motion design and title sequences produced for film, installation and broadcast contexts.", "projects": [] }
+        { "id": "mi-documentary", "label": "Film & Documentary", "description": "Essayistic documentary films exploring migration, memory and cultural history.", "projects": [] },
+        { "id": "mi-sequences", "label": "Sequences", "description": "3D animations, stop-motion works, motion graphics and experimental video sequences. Projects spanning architectural visualization, material exploration and moving image experiments.", "projects": ["anim-dkam", "anim-wed", "anim-stools", "anim-fremde-trailer1"] }
       ]
     },
     {
