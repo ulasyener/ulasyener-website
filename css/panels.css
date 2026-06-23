@@ -602,4 +602,22 @@
   .subcat-label { font-size: 12px; }
   .panel        { padding: 54px 14px 80px 14px; }
 }
-
+/* ─── Mobil fade (nav ve footer çakışması) ───────────────────────────── */
+@media (max-width: 768px) {
+  .panel:not(.panel-grid) {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0px,
+      black 52px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0px,
+      black 52px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
+  }
+}
