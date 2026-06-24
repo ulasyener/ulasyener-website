@@ -80,18 +80,38 @@ async function parseAndNavigate() {
         renderWorks();
         await showSubcategory(category, subcategory);
       } else {
-        // parts[3] mevcut: nested subcategory mi (ai-residential vs) yoksa proje mi?
-        const nestedSubIds = ['ai-residential', 'ai-retail', 'ai-hospitality', 'ai-workspace'];
+        // parts[3] mevcut — works.json'dan nested sub ID listesini dinamik çek
+        const wData = await fetch('data/works.json').then(r => r.json());
+        const wCat  = wData.categories.find(c => c.id === category);
+        const wSub  = wCat?.subcategories?.find(s => s.id === subcategory);
+        const nestedSubIds = wSub?.subcategories?.map(s => s.id) || [];
+
         if (nestedSubIds.includes(project)) {
-          // works/architecture-interior/ai-projects/ai-residential
+          // 4 segment: works/cat/parentSub/nestedSub
+          const nestedProjectId = parts[4]; // opsiyonel 5. segment
           clearPanel();
           renderWorks();
-          await showNestedSubcategory(category, subcategory, project);
+          if (nestedProjectId) {
+            // works/cat/parentSub/nestedSub/projectId — nested proje doğrudan aç
+            await showNestedSubcategory(category, subcategory, project);
+            // _navigateToProject nested context'i halleder, ama doğrudan açmak için:
+            const proj = await fetch(`data/projects/${nestedProjectId}.json`).then(r => r.json()).catch(() => null);
+            if (proj) {
+              const nestedSub = wSub.subcategories.find(s => s.id === project);
+              openPhotoGridNested(proj, category, subcategory, project, wCat.label, wSub.label, nestedSub?.label || '');
+            }
+          } else {
+            await showNestedSubcategory(category, subcategory, project);
+          }
         } else {
-          // Normal: works/category/subcategory/projectId
+          // Normal 4 segment: works/cat/sub/projectId
           clearPanel();
           renderWorks();
           await showSubcategory(category, subcategory);
+          const proj = await fetch(`data/projects/${project}.json`).then(r => r.json()).catch(() => null);
+          if (proj) {
+            openPhotoGrid(proj, category, subcategory, wCat?.label || '', wSub?.label || '');
+          }
         }
       }
       break;

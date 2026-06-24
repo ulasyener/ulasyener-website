@@ -34,9 +34,7 @@
               "id": "ai-hospitality",
               "label": "Hospitality",
               "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.",
-              "projects": [
-                "isis"
-              ]
+              "projects": []
             },
             {
               "id": "ai-workspace",

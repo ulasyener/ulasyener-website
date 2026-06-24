@@ -1,7 +1,12 @@
 // ─── WORKS ────────────────────────────────────────────────────────────────
+let _worksData = null;
+async function getWorksData() {
+  if (!_worksData) _worksData = await fetch('data/works.json').then(r => r.json());
+  return _worksData;
+}
+
 async function renderWorks() {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
+  const data = await getWorksData();
   const root = getPanelRoot();
 
   const el = document.createElement('div');
@@ -32,8 +37,7 @@ async function renderWorks() {
 
 // ─── Kategori ─────────────────────────────────────────────────────────────
 async function showCategory(categoryId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
+  const data = await getWorksData();
   const cat  = data.categories.find(c => c.id === categoryId);
   if (!cat) return;
 
@@ -269,8 +273,7 @@ const PRACTICE_FIRMS = [
 
 // ─── Practice'ten proje sayfasına yönlendir ────────────────────────────────
 async function _navigateToProject(projectId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
+  const data = await getWorksData();
 
   for (const cat of data.categories) {
     // subcategory'leri + nested subcategory'leri tara
@@ -286,7 +289,7 @@ async function _navigateToProject(projectId) {
 
     for (const { sub, parentSub } of allSubs) {
       if (!sub.projects || !sub.projects.includes(projectId)) continue;
-      if (sub.id === 'arch-visualization' || sub.id === 'interior-practice' || sub.id === 'ai-practice') continue;
+      if (sub.id === 'ai-practice') continue;
 
       runGlitch(async () => {
         clearPanel();
@@ -416,8 +419,7 @@ function showPracticeTable(categoryId, subcategoryId, catLabel, subLabel) {
 
 // ─── Nested subcategory (3. seviye) ───────────────────────────────────────
 async function showNestedSubcategory(categoryId, parentSubId, nestedSubId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
+  const data = await getWorksData();
   const cat  = data.categories.find(c => c.id === categoryId);
   const parentSub = cat?.subcategories.find(s => s.id === parentSubId);
   const sub = parentSub?.subcategories?.find(s => s.id === nestedSubId);
@@ -518,8 +520,7 @@ function openPhotoGridNested(project, categoryId, parentSubId, nestedSubId, catL
 
 // ─── Alt kategori → Kademe 1 grid ─────────────────────────────────────────
 async function showSubcategory(categoryId, subcategoryId) {
-  const res  = await fetch('data/works.json');
-  const data = await res.json();
+  const data = await getWorksData();
   const cat  = data.categories.find(c => c.id === categoryId);
   const sub  = cat?.subcategories.find(s => s.id === subcategoryId);
   if (!sub) return;
@@ -529,7 +530,7 @@ async function showSubcategory(categoryId, subcategoryId) {
     return;
   }
 
-  if (subcategoryId === 'ai-practice' || subcategoryId === 'arch-visualization' || subcategoryId === 'interior-practice') {
+  if (subcategoryId === 'ai-practice') {
     showPracticeTable(categoryId, subcategoryId, cat.label, sub.label);
     return;
   }
