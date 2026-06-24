@@ -46,7 +46,7 @@ function makeAccordion(titleText, contentEl, startOpen = false) {
   function setOpen(val) {
     open = val;
     if (open) {
-      body.style.maxHeight = '2000px';
+      body.style.maxHeight = body.scrollHeight + 'px';
       body.style.opacity   = '1';
       arrow.style.transform = 'rotate(180deg)';
     } else {
@@ -58,7 +58,23 @@ function makeAccordion(titleText, contentEl, startOpen = false) {
 
   setOpen(startOpen);
   body.appendChild(contentEl);
-  header.addEventListener('click', () => setOpen(!open));
+  header.addEventListener('click', () => {
+    // Diğer accordion'ları kapat
+    const list = wrap.closest('.category-list');
+    if (list && !open) {
+      list.querySelectorAll('.category-item').forEach(other => {
+        if (other === wrap) return;
+        const otherBody  = other.querySelector('.accordion-body');
+        const otherArrow = other.querySelector('span');
+        if (otherBody && otherBody.style.maxHeight !== '0px' && otherBody.style.maxHeight !== '') {
+          otherBody.style.maxHeight = '0';
+          otherBody.style.opacity   = '0';
+          if (otherArrow) otherArrow.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+    setOpen(!open);
+  });
   wrap.appendChild(header);
   wrap.appendChild(body);
   return wrap;

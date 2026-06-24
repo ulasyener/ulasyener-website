@@ -75,44 +75,7 @@ function showAcademicSection(section) {
   });
 }
 
-// ─── Academic: Projects ────────────────────────────────────────────────────
-function showAcademicProjects(section) {
-  runGlitch(() => {
-    pushHash('academic/' + section.id);
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
-      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicProjects));
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Articles (accordion) ───────────────────────────────────────
+// ─── Archive → Fremde Türen listesi ───────────────────────────────────────
 function showAcademicArticles(section) {
   runGlitch(() => {
     pushHash('academic/' + section.id);
@@ -149,11 +112,23 @@ function showAcademicArticles(section) {
         const isOpen = item.classList.contains('is-open');
         const arrow  = item.querySelector('.accordion-arrow');
         const body   = item.querySelector('.accordion-body');
+
+        // Diğer açık accordion'ları kapat
+        list.querySelectorAll('.accordion-item.is-open').forEach(other => {
+          if (other === item) return;
+          const otherArrow = other.querySelector('.accordion-arrow');
+          const otherBody  = other.querySelector('.accordion-body');
+          other.classList.remove('is-open');
+          otherArrow.innerHTML = '&#x002B;';
+          otherBody.style.maxHeight = '0';
+          setTimeout(() => { otherBody.innerHTML = ''; }, 350);
+        });
+
         if (isOpen) {
           item.classList.remove('is-open');
           arrow.innerHTML = '&#x002B;';
-          body.innerHTML  = '';
           body.style.maxHeight = '0';
+          setTimeout(() => { body.innerHTML = ''; }, 350);
         } else {
           item.classList.add('is-open');
           arrow.innerHTML = '&#x2212;';
@@ -168,73 +143,6 @@ function showAcademicArticles(section) {
     });
 
     el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Research ────────────────────────────────────────────────────
-function showAcademicResearch(section) {
-  runGlitch(() => {
-    pushHash('academic/' + section.id);
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic', action: () => showSection('academic') },
-      { label: section.label }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = section.label;
-    label.addEventListener('click', () => runGlitch(() => showSection('academic')));
-    el.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'subcategory-list';
-
-    section.subs.forEach(sub => {
-      const item = document.createElement('div');
-      item.className = 'subcat-item';
-      item.innerHTML = `<div class="subcat-label">${sub.label}</div>`;
-      item.addEventListener('click', () => showAcademicComingSoon(sub.label, section, showAcademicResearch));
-      list.appendChild(item);
-    });
-
-    el.appendChild(list);
-    root.appendChild(el);
-  });
-}
-
-// ─── Academic: Coming Soon sayfası ────────────────────────────────────────
-function showAcademicComingSoon(title, parentSection, parentFn) {
-  runGlitch(() => {
-    const root = getPanelRoot();
-    clearPanel();
-
-    const el = document.createElement('div');
-    el.className = 'panel';
-
-    el.appendChild(makePanelNav([
-      { label: 'Academic',          action: () => showSection('academic') },
-      { label: parentSection.label, action: () => parentFn(parentSection) },
-      { label: title }
-    ]));
-
-    const label = document.createElement('div');
-    label.className = 'sec-label sec-label--home';
-    label.textContent = title;
-    label.addEventListener('click', () => parentFn(parentSection));
-    el.appendChild(label);
-
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = '— coming soon —';
-    el.appendChild(empty);
-
     root.appendChild(el);
   });
 }
