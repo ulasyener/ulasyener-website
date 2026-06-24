@@ -143,11 +143,6 @@ function renderContact() {
   infoList.appendChild(dlRow);
   ciContent.appendChild(infoList);
 
-  const list = document.createElement('div');
-  list.className = 'category-list';
-  list.appendChild(makeAccordion('Contact & Info', ciContent, false));
-  list.appendChild(makeAccordion('Social', socialContent, false));
-  el.appendChild(list);
   const socialContent = document.createElement('div');
   socialContent.style.cssText = 'padding:4px 0 16px;';
 
@@ -228,6 +223,12 @@ function renderContact() {
     groupEl.appendChild(btnWrap);
     socialContent.appendChild(groupEl);
   });
+
+  const list = document.createElement('div');
+  list.className = 'category-list';
+  list.appendChild(makeAccordion('Contact & Info', ciContent, false));
+  list.appendChild(makeAccordion('Social', socialContent, false));
+  el.appendChild(list);
 
   root.appendChild(el);
 
