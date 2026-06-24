@@ -68,8 +68,8 @@ function renderAbout() {
       aowItem.classList.add('is-open');
       arrow.innerHTML = '&#x2212;';
       const areas = [
-        { label: 'Architecture', desc: 'Spatial design, restoration, visualization and competition projects.' },
-        { label: 'Computation',  desc: 'Three.js, TouchDesigner, Unreal Engine, parametric and generative tools.' },
+        { label: 'Architecture', desc: 'Spatial design across architecture, interior design, planning, restoration and competition projects.' },
+        { label: 'Computation',  desc: 'Interactive and immersive experiences using new tools relating architecture, media and art.' },
         { label: 'Culture',      desc: 'Documentary practices, archival research, migration narratives and media archaeology.' },
         { label: 'Teaching',     desc: 'Lectures and workshops at Bauhaus-Universität Weimar and international institutions.' },
         { label: 'Event',        desc: 'Curatorial and production experience across exhibitions, screenings and installations.' }
