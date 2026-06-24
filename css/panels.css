@@ -85,19 +85,15 @@
   transition: background .2s ease, padding .2s ease, margin .2s ease;
 }
 
-.category-item.empty {
-  cursor: default;
-  opacity: 0.5;
-}
 
-.category-item:not(.empty):hover {
+.category-item:not(.accordion-item):hover {
   background: rgba(0,0,0,0.04);
   margin: 0 -12px;
   padding-left: 12px;
   padding-right: 12px;
 }
-.category-item:not(.empty):hover .cat-label { color: rgba(0,0,0,1); }
-.category-item:not(.empty):hover .cat-desc  { color: rgba(0,0,0,0.65); }
+.category-item:not(.accordion-item):hover .cat-label { color: rgba(0,0,0,1); }
+.category-item:not(.accordion-item):hover .cat-desc  { color: rgba(0,0,0,0.65); }
 
 .cat-label {
   font-family: var(--f-sans);
@@ -136,19 +132,15 @@
   transition: background .2s ease, padding .2s ease, margin .2s ease;
 }
 
-.subcat-item.empty {
-  cursor: default;
-  opacity: 0.4;
-}
 
-.subcat-item:not(.empty):hover {
+.subcat-item:hover {
   background: rgba(0,0,0,0.04);
   margin: 0 -12px;
   padding-left: 12px;
   padding-right: 12px;
 }
-.subcat-item:not(.empty):hover .subcat-label { color: rgba(0,0,0,1); }
-.subcat-item:not(.empty):hover .cat-desc     { color: rgba(0,0,0,0.65); }
+.subcat-item:hover .subcat-label { color: rgba(0,0,0,1); }
+.subcat-item:hover .cat-desc     { color: rgba(0,0,0,0.65); }
 
 .subcat-label {
   font-family: var(--f-sans);
@@ -380,21 +372,6 @@
 }
 
 /* Mobil */
-@media (max-width: 768px) {
-  .practice-row { grid-template-columns: 72px 1fr; gap: 0 10px; }
-  .practice-year { font-size: 9px; }
-  .practice-proj-name { font-size: 10px; }
-  .practice-proj-meta { font-size: 9px; }
-  .practice-firm-name { font-size: 10px; }
-  .practice-firm-meta { font-size: 9px; }
-  .practice-row.is-link:hover {
-    background: none;
-    margin: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
 /* ─── Fremde Turen accordion ─────────────────────────────────────────── */
 .fremde-sec-item { cursor: pointer; }
 
@@ -574,27 +551,34 @@
   .about-title  { font-size: 11px; font-weight: 700; }
   .about-sub    { font-size: 10px; font-weight: 700; }
 
-  .practice-table th { font-size: 8px; padding: 6px 6px 6px 0; }
-  .practice-table td { font-size: 9px; padding: 6px 6px 6px 0; }
-  .practice-table td:first-child,
-  .practice-table th:first-child { min-width: 56px; }
+  .practice-row { grid-template-columns: 72px 1fr; gap: 0 10px; }
+  .practice-year { font-size: 9px; }
+  .practice-proj-name { font-size: 10px; }
+  .practice-proj-meta { font-size: 9px; }
   .practice-firm-name { font-size: 10px; }
   .practice-firm-meta { font-size: 9px; }
+  .practice-row.is-link:hover { background: none; margin: 0; padding-left: 0; padding-right: 0; }
 
   /* Hover efektleri mobilde kapali */
-  .category-item:not(.empty):hover,
-  .subcat-item:not(.empty):hover,
+  .category-item:not(.accordion-item):hover,
+  .subcat-item:hover,
   .accordion-item:hover {
     background: none;
     margin: 0;
     padding-left: 0;
     padding-right: 0;
   }
-  .category-item:not(.empty):hover .cat-label,
-  .category-item:not(.empty):hover .cat-desc,
-  .subcat-item:not(.empty):hover .subcat-label,
-  .subcat-item:not(.empty):hover .cat-desc,
+  .category-item:not(.accordion-item):hover .cat-label,
+  .category-item:not(.accordion-item):hover .cat-desc,
+  .subcat-item:hover .subcat-label,
+  .subcat-item:hover .cat-desc,
   .accordion-item:hover .cat-label { color: inherit; }
+
+  /* Mobil fade */
+  .panel:not(.panel-grid) {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 140px, black calc(100% - 60px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0px, black 140px, black calc(100% - 60px), transparent 100%);
+  }
 }
 
 @media (max-width: 480px) {
@@ -602,20 +586,3 @@
   .subcat-label { font-size: 12px; }
   .panel        { padding: 54px 14px 80px 14px; }
 }
-/* ─── Mobil fade (nav ve footer çakışması) ───────────────────────────── */
-@media (max-width: 768px) {
-  .panel:not(.panel-grid) {
--webkit-mask-image: linear-gradient(
-  to bottom,
-  transparent 0px,
-  black 140px,
-  black calc(100% - 60px),
-  transparent 100%
-);
-mask-image: linear-gradient(
-  to bottom,
-  transparent 0px,
-  black 140px,
-  black calc(100% - 60px),
-  transparent 100%
-);

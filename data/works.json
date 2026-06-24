@@ -21,20 +21,14 @@
               ]
             },
             {
-              "id": "ai-retail",
-              "label": "Retail",
-              "description": "Spatial identities for retail environments including cafes, bookstores and shops.",
+              "id": "ai-retail-hospitality",
+              "label": "Retail & Hospitality",
+              "description": "Spatial identities for retail, cafe, restaurant and hospitality environments.",
               "projects": [
                 "bookstore",
                 "cafe",
                 "isis"
               ]
-            },
-            {
-              "id": "ai-hospitality",
-              "label": "Hospitality",
-              "description": "Hotel, restaurant and hospitality interiors focused on atmosphere and experience.",
-              "projects": []
             },
             {
               "id": "ai-workspace",
