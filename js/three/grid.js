@@ -34,26 +34,7 @@ function destroyGrid() {
 }
 
 // ─── Scramble text ────────────────────────────────────────────────────────
-function gridScramble(el, finalText, duration) {
-  duration = duration || 1200;
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const steps = Math.floor(duration / 60);
-  let step = 0;
-  const fixed = Array.from(finalText).map(function(c) {
-    return c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)];
-  });
-  const iv = setInterval(function() {
-    const revealed = Math.floor((step / steps) * finalText.length);
-    let out = '';
-    for (let i = 0; i < finalText.length; i++) {
-      if (finalText[i] === ' ') { out += ' '; continue; }
-      out += i < revealed ? finalText[i] : fixed[i];
-    }
-    el.textContent = out;
-    step++;
-    if (step > steps) { el.textContent = finalText; clearInterval(iv); }
-  }, 60);
-}
+
 
 // ─── Cekirdek builder ─────────────────────────────────────────────────────
 function buildGrid(items, onSelect, overlayTop) {
@@ -169,8 +150,8 @@ function buildGrid(items, onSelect, overlayTop) {
         const obs = new IntersectionObserver(function(entries) {
           entries.forEach(function(e) {
             if (e.isIntersecting) {
-              gridScramble(titleEl, item.label.toUpperCase(), 1200);
-              setTimeout(function() { gridScramble(subEl, String(item.sublabel), 900); }, 300);
+              scrambleText(titleEl, item.label.toUpperCase(), 1200);
+              setTimeout(function() { scrambleText(subEl, String(item.sublabel), 900); }, 300);
               obs.disconnect();
             }
           });
@@ -180,7 +161,7 @@ function buildGrid(items, onSelect, overlayTop) {
         const obs = new IntersectionObserver(function(entries) {
           entries.forEach(function(e) {
             if (e.isIntersecting) {
-              gridScramble(titleEl, item.label.toUpperCase(), 1200);
+              scrambleText(titleEl, item.label.toUpperCase(), 1200);
               obs.disconnect();
             }
           });
@@ -342,7 +323,7 @@ function showVideoEmbed(project) {
 
     gridOverlay.appendChild(infoPanel);
 
-    setTimeout(function() { gridScramble(titleEl, project.title.toUpperCase(), 1200); }, 100);
+    setTimeout(function() { scrambleText(titleEl, project.title.toUpperCase(), 1200); }, 100);
 
     const scanLine = document.createElement('div');
     scanLine.style.cssText =
@@ -470,7 +451,7 @@ function showVideoEmbed(project) {
     }
     scanAnimIds.push(requestAnimationFrame(mobAnimateScan));
 
-    setTimeout(function() { gridScramble(mobTitleEl, project.title.toUpperCase(), 1200); }, 100);
+    setTimeout(function() { scrambleText(mobTitleEl, project.title.toUpperCase(), 1200); }, 100);
 
     videoCol.appendChild(mobInfo);
   }
