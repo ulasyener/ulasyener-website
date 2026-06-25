@@ -92,8 +92,11 @@ function renderAbout() {
   dlItem.innerHTML = `
     <div class="cat-label">Download</div>
     <div class="download-btns">
-      <a class="dl-btn" href="files/cv.pdf" download>CV</a>
-      <a class="dl-btn" href="files/portfolio-architectural.pdf" download>Architectural Portfolio</a>
+      <a class="dl-btn" href="assets/CV_EN_UlasYener.pdf" download>CV EN</a>
+      <a class="dl-btn" href="assets/LongCV_EN_UlasYener.pdf" download>CV EN &mdash; Long</a>
+      <a class="dl-btn" href="assets/CV_DE_UlasYener.pdf" download>CV DE</a>
+      <a class="dl-btn" href="assets/LongCV_DE_UlasYener.pdf" download>CV DE &mdash; Long</a>
+      <a class="dl-btn" href="assets/ArchPortfolio_UlasYener.pdf" download>Architectural Portfolio</a>
       <a class="dl-btn" href="files/portfolio-artistic.pdf" download>Artistic Portfolio</a>
       <a class="dl-btn" href="files/portfolio-academic.pdf" download>Academic Portfolio</a>
     </div>
