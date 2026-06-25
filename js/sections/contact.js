@@ -33,7 +33,7 @@ function makeAccordion(titleText, contentEl, startOpen = false) {
 
   const arrow = document.createElement('span');
   arrow.style.cssText = 'font-family:var(--f-mono);font-size:11px;color:rgba(0,0,0,0.3);transition:transform 0.25s ease;';
-  arrow.textContent = '↓';
+  arrow.textContent = '+';
 
   header.appendChild(titleEl);
   header.appendChild(arrow);
@@ -48,11 +48,11 @@ function makeAccordion(titleText, contentEl, startOpen = false) {
     if (open) {
       body.style.maxHeight = body.scrollHeight + 'px';
       body.style.opacity   = '1';
-      arrow.style.transform = 'rotate(180deg)';
+      arrow.textContent = '−';
     } else {
       body.style.maxHeight = '0';
       body.style.opacity   = '0';
-      arrow.style.transform = 'rotate(0deg)';
+      arrow.textContent = '+';
     }
   }
 
@@ -151,9 +151,18 @@ function renderContact() {
   dlRow.style.paddingTop = '16px';
   dlRow.innerHTML = `
     <span class="contact-key"></span>
-    <div class="download-btns">
-      <a class="dl-btn" href="files/motivation.pdf" download>Motivation Letter</a>
-      <a class="dl-btn" href="files/cv.pdf" download>CV</a>
+    <div class="download-btns" style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <a class="dl-btn" href="assets/CV_EN_UlasYener.pdf" download>CV EN</a>
+        <a class="dl-btn" href="assets/LongCV_EN_UlasYener.pdf" download>LONG CV EN</a>
+        <a class="dl-btn" href="assets/CV_DE_UlasYener.pdf" download>CV DE</a>
+        <a class="dl-btn" href="assets/LongCV_DE_UlasYener.pdf" download>LONG CV DE</a>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <a class="dl-btn" href="assets/ArchPortfolio_UlasYener.pdf" download>Architectural Portfolio</a>
+        <a class="dl-btn" href="files/portfolio-artistic.pdf" download>Artistic Portfolio</a>
+        <a class="dl-btn" href="files/portfolio-academic.pdf" download>Academic Portfolio</a>
+      </div>
     </div>
   `;
   infoList.appendChild(dlRow);

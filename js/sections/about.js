@@ -91,14 +91,18 @@ function renderAbout() {
   dlItem.className = 'category-item';
   dlItem.innerHTML = `
     <div class="cat-label">Download</div>
-    <div class="download-btns">
-      <a class="dl-btn" href="assets/CV_EN_UlasYener.pdf" download>CV EN</a>
-      <a class="dl-btn" href="assets/LongCV_EN_UlasYener.pdf" download>CV EN &mdash; Long</a>
-      <a class="dl-btn" href="assets/CV_DE_UlasYener.pdf" download>CV DE</a>
-      <a class="dl-btn" href="assets/LongCV_DE_UlasYener.pdf" download>CV DE &mdash; Long</a>
-      <a class="dl-btn" href="assets/ArchPortfolio_UlasYener.pdf" download>Architectural Portfolio</a>
-      <a class="dl-btn" href="files/portfolio-artistic.pdf" download>Artistic Portfolio</a>
-      <a class="dl-btn" href="files/portfolio-academic.pdf" download>Academic Portfolio</a>
+    <div class="download-btns" style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <a class="dl-btn" href="assets/CV_EN_UlasYener.pdf" download>CV EN</a>
+        <a class="dl-btn" href="assets/LongCV_EN_UlasYener.pdf" download>LONG CV EN</a>
+        <a class="dl-btn" href="assets/CV_DE_UlasYener.pdf" download>CV DE</a>
+        <a class="dl-btn" href="assets/LongCV_DE_UlasYener.pdf" download>LONG CV DE</a>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <a class="dl-btn" href="assets/ArchPortfolio_UlasYener.pdf" download>Architectural Portfolio</a>
+        <a class="dl-btn" href="files/portfolio-artistic.pdf" download>Artistic Portfolio</a>
+        <a class="dl-btn" href="files/portfolio-academic.pdf" download>Academic Portfolio</a>
+      </div>
     </div>
   `;
   list.appendChild(dlItem);
@@ -355,8 +359,10 @@ function getAboutContent(sectionId) {
           { year: '2024',         project: 'Monogram Gastro Pub',              type: 'Restaurant · Café · Bar',             location: 'Ankara, Turkey' },
           { year: '2022–Present', project: 'Aesculap AG Media Experience',     type: 'Interactive Media · Immersive Experience', location: 'Tuttlingen, Germany' },
           { year: '2019',         project: 'Monogram Coffee',                  type: 'Coffee Shop',                         location: 'Samsun, Turkey' },
+          { year: '2018',         project: 'Hydrogen Fuel Station',            type: 'Parametric Architectural Design',     location: 'Bauhaus-Universität Weimar' },
           { year: '2016',         project: 'Mustafa Üreyen Law Home Office',   type: 'Law Office & Residential Interior',   location: 'Antalya, Turkey' },
-          { year: '2015',         project: 'No:75 Passage',                    type: 'Restaurant · Café · Bar',             location: 'Samsun, Turkey' }
+          { year: '2015',         project: 'No:75 Passage',                    type: 'Restaurant · Café · Bar',             location: 'Samsun, Turkey' },
+          { year: '2013',         project: 'Arkaoda Bar',                      type: 'Architectural Planning · Public Space', location: 'Istanbul, Turkey' }
         ]
       }
     ];
