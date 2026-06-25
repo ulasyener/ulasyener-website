@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ulas Yener</title>
 
+  <!-- Preload kritik kaynaklar -->
+  <link rel="preload" href="Terrain.glb" as="fetch" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +20,7 @@
 </head>
 <body>
 
-  <canvas id="c"></canvas>
+  <canvas id="c" style="opacity:0;transition:opacity 0.8s ease;"></canvas>
   <canvas id="grain"></canvas>
 
   <!-- Kimlik -->
