@@ -333,6 +333,7 @@ function showVideoEmbed(project) {
     infoPanel.appendChild(scanLine);
     let scanPos = 0;
     function animateScan() {
+      if (!document.body.contains(infoPanel)) return;
       scanPos += 0.4;
       if (scanPos > infoPanel.offsetHeight) scanPos = -2;
       scanLine.style.top = scanPos + 'px';
@@ -444,6 +445,7 @@ function showVideoEmbed(project) {
     mobInfo.appendChild(mobScanLine);
     let mobScanPos = 0;
     function mobAnimateScan() {
+      if (!document.body.contains(mobInfo)) return;
       mobScanPos += 0.4;
       if (mobScanPos > mobInfo.offsetHeight) mobScanPos = -2;
       mobScanLine.style.top = mobScanPos + 'px';

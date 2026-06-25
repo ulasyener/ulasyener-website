@@ -6,14 +6,21 @@
   <title>Ulas Yener</title>
 
   <!-- Preload kritik kaynaklar -->
-  <link rel="preload" href="Terrain.glb" as="fetch" crossorigin>
+  <!-- GLB: crossorigin kaldırıldı — GLTFLoader'la header uyumsuzluğu önlenir -->
+  <link rel="preload" href="Terrain.glb" as="fetch">
+
+  <!-- Glitch GIF'leri preload — ilk geçişte boş/geç görünme sorunu giderildi -->
+  <link rel="preload" href="images/glitch-0.gif" as="image">
+  <link rel="preload" href="images/glitch-1.gif" as="image">
+  <link rel="preload" href="images/glitch-2.gif" as="image">
+
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
-  <!-- Fonts -->
+  <!-- Fonts: gstatic crossorigin eklendi — preconnect boşa gitmez -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/panels.css">

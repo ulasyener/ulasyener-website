@@ -61,7 +61,16 @@ function initGrain() {
     canvas.height = window.innerHeight;
   }
 
-  function drawGrain() {
+  // Sadece fps throttle — canvas boyutuna dokunmuyoruz
+  const TARGET_FPS = 12;
+  const FRAME_MS   = 1000 / TARGET_FPS;
+  let   lastTime   = 0;
+
+  function drawGrain(now) {
+    requestAnimationFrame(drawGrain);
+    if (now - lastTime < FRAME_MS) return;
+    lastTime = now;
+
     const w = canvas.width;
     const h = canvas.height;
     const imageData = ctx.createImageData(w, h);
@@ -76,10 +85,9 @@ function initGrain() {
     }
 
     ctx.putImageData(imageData, 0, 0);
-    requestAnimationFrame(drawGrain);
   }
 
   resize();
   window.addEventListener('resize', resize);
-  drawGrain();
+  requestAnimationFrame(drawGrain);
 }

@@ -1,10 +1,19 @@
 // ─── Glitch geçiş efekti ───────────────────────────────────────────────────
 const glitchImgs = ['images/glitch-0.gif', 'images/glitch-1.gif', 'images/glitch-2.gif'];
-let glitchIdx = 0;
+let glitchIdx    = 0;
 let glitchActive = false;
 
+// GIF'leri önceden belleğe al — preload tag'lere ek olarak JS garantisi
+(function preloadGlitchImgs() {
+  glitchImgs.forEach(src => { const i = new Image(); i.src = src; });
+})();
+
 function runGlitch(callback) {
-  if (glitchActive) { if (callback) callback(); return; }
+  // Race condition fix: aktifken gelen callback'i kuyruğa al, iptal etme
+  if (glitchActive) {
+    setTimeout(() => runGlitch(callback), 240);
+    return;
+  }
   glitchActive = true;
 
   const img = document.createElement('img');
@@ -32,15 +41,13 @@ function runGlitch(callback) {
 
 // ─── State ────────────────────────────────────────────────────────────────
 let navState = {
-  section:     null,  // 'works' | 'academic' | 'about' | 'contact'
+  section:     null,
   category:    null,
   subcategory: null,
   project:     null
 };
 
 // ─── Hash Routing ─────────────────────────────────────────────────────────
-
-// Hash'i güncelle (history stack'e eklemeden)
 function pushHash(hash) {
   const h = hash ? '#' + hash : '#';
   if (window.location.hash !== h) {
@@ -48,13 +55,11 @@ function pushHash(hash) {
   }
 }
 
-// Mevcut hash'i parse edip sayfayı aç
 async function parseAndNavigate() {
-  const raw = window.location.hash.replace(/^#\/?/, '').trim();
+  const raw   = window.location.hash.replace(/^#\/?/, '').trim();
   const parts = raw ? raw.split('/') : [];
 
   if (parts.length === 0 || parts[0] === '') {
-    // Home
     clearPanel();
     getOv().style.opacity = '1';
     navState = { section: null, category: null, subcategory: null, project: null };
@@ -62,7 +67,6 @@ async function parseAndNavigate() {
   }
 
   const [section, category, subcategory, project] = parts;
-  const nestedSub = parts[3]; // alias for clarity in nested routing
 
   switch (section) {
     case 'works':
@@ -80,21 +84,17 @@ async function parseAndNavigate() {
         renderWorks();
         await showSubcategory(category, subcategory);
       } else {
-        // parts[3] mevcut — works.json'dan nested sub ID listesini dinamik çek
         const wData = await fetch('data/works.json').then(r => r.json());
         const wCat  = wData.categories.find(c => c.id === category);
         const wSub  = wCat?.subcategories?.find(s => s.id === subcategory);
         const nestedSubIds = wSub?.subcategories?.map(s => s.id) || [];
 
         if (nestedSubIds.includes(project)) {
-          // 4 segment: works/cat/parentSub/nestedSub
-          const nestedProjectId = parts[4]; // opsiyonel 5. segment
+          const nestedProjectId = parts[4];
           clearPanel();
           renderWorks();
           if (nestedProjectId) {
-            // works/cat/parentSub/nestedSub/projectId — nested proje doğrudan aç
             await showNestedSubcategory(category, subcategory, project);
-            // _navigateToProject nested context'i halleder, ama doğrudan açmak için:
             const proj = await fetch(`data/projects/${nestedProjectId}.json`).then(r => r.json()).catch(() => null);
             if (proj) {
               const nestedSub = wSub.subcategories.find(s => s.id === project);
@@ -104,7 +104,6 @@ async function parseAndNavigate() {
             await showNestedSubcategory(category, subcategory, project);
           }
         } else {
-          // Normal 4 segment: works/cat/sub/projectId
           clearPanel();
           renderWorks();
           await showSubcategory(category, subcategory);
@@ -167,7 +166,6 @@ function goHome() {
     getOv().style.opacity = '1';
     navState = { section: null, category: null, subcategory: null, project: null };
     pushHash('');
-    // Text'i temizle, sonra scramble başlat
     document.getElementById('name').textContent = '';
     document.getElementById('sub').textContent  = '';
     initHeroScramble();
@@ -220,7 +218,7 @@ function scrambleText(el, finalText, duration = 1800) {
   );
 
   const interval = setInterval(() => {
-    const progress = step / steps;
+    const progress     = step / steps;
     const revealedCount = Math.floor(progress * finalText.length);
     let display = '';
     for (let i = 0; i < finalText.length; i++) {
@@ -235,16 +233,16 @@ function scrambleText(el, finalText, duration = 1800) {
     }
   }, 60);
 }
+
 // ─── Proje Bilgi Paneli ───────────────────────────────────────────────────
 function renderProjectInfoPanel(project, startCollapsed) {
   const existing = document.getElementById('proj-info-panel');
   if (existing) existing.remove();
 
-const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 768;
 
-  // ─── MOBİL: grid-overlay içine inline panel ───────────────────────────
+  // ─── MOBİL ───────────────────────────────────────────────────────────
   if (isMobile) {
-    // grid-overlay hazır olana kadar bekle
     let pollCount = 0;
     function injectMobileInfo() {
       const ov = document.getElementById('grid-overlay');
@@ -255,54 +253,21 @@ const isMobile = window.innerWidth <= 768;
 
       const mob = document.createElement('div');
       mob.id = 'proj-info-mobile';
-      mob.style.cssText = `
-        width: 100%;
-        padding: 16px 0 24px;
-        margin-bottom: 16px;
-        border-bottom: 1px solid rgba(0,0,0,0.08);
-        box-sizing: border-box;
-      `;
+      mob.style.cssText = 'width:100%;padding:16px 0 24px;margin-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.08);box-sizing:border-box;';
 
       const titleEl = document.createElement('div');
-      titleEl.style.cssText = `
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: .10em;
-        text-transform: uppercase;
-        color: rgba(0,0,0,0.78);
-        margin-bottom: 14px;
-        display: block;
-        line-height: 1.5;
-      `;
+      titleEl.style.cssText = 'font-family:"Space Grotesk",sans-serif;font-size:13px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(0,0,0,0.78);margin-bottom:14px;display:block;line-height:1.5;';
       mob.appendChild(titleEl);
 
       function addMobRow(key, val) {
-        const div = document.createElement('div');
+        const div    = document.createElement('div');
         div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:8px;';
-
-        const keyEl = document.createElement('span');
-        keyEl.style.cssText = `
-          font-family: 'DM Mono', monospace;
-          font-size: 8px;
-          letter-spacing: .22em;
-          text-transform: uppercase;
-          color: rgba(0,0,0,0.35);
-          margin-bottom: 2px;
-        `;
+        const keyEl  = document.createElement('span');
+        keyEl.style.cssText = 'font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,0,0,0.35);margin-bottom:2px;';
         keyEl.textContent = key;
-
-        const valEl = document.createElement('span');
-        valEl.style.cssText = `
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 11px;
-          font-weight: 300;
-          letter-spacing: .03em;
-          color: rgba(0,0,0,0.65);
-          line-height: 1.5;
-        `;
+        const valEl  = document.createElement('span');
+        valEl.style.cssText = 'font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:300;letter-spacing:.03em;color:rgba(0,0,0,0.65);line-height:1.5;';
         valEl.textContent = val;
-
         div.appendChild(keyEl);
         div.appendChild(valEl);
         mob.appendChild(div);
@@ -317,7 +282,6 @@ const isMobile = window.innerWidth <= 768;
         addMobRow('Role', project.responsibilities.join(', '));
       if (project.description)    addMobRow('Info', project.description);
 
-      // Grid container'ın önüne ekle
       const gridEl = ov.querySelector('div');
       ov.insertBefore(mob, gridEl);
 
@@ -326,85 +290,36 @@ const isMobile = window.innerWidth <= 768;
     injectMobileInfo();
     return;
   }
-  // ─────────────────────────────────────────────────────────────────────
-  
+
+  // ─── DESKTOP ──────────────────────────────────────────────────────────
   const panelTop   = 181;
   const panelLeft  = 100;
   const panelWidth = 520;
-  const panelPad   = '20px 18px 22px';
 
   const panel = document.createElement('div');
   panel.id = 'proj-info-panel';
-  panel.style.cssText = `
-    position: fixed;
-    left: ${panelLeft}px;
-    top: ${panelTop}px;
-    width: ${panelWidth}px;
-    height: auto;
-    z-index: 103;
-    pointer-events: all;
-    background: rgba(225,222,217,0.65);
-    backdrop-filter: blur(3px);
-    padding: ${panelPad};
-    box-sizing: border-box;
-    overflow: hidden;
-    cursor: pointer;
-  `;
+  panel.style.cssText = 'position:fixed;left:' + panelLeft + 'px;top:' + panelTop + 'px;width:' + panelWidth + 'px;height:auto;z-index:103;pointer-events:all;background:rgba(225,222,217,0.65);backdrop-filter:blur(3px);padding:20px 18px 22px;box-sizing:border-box;overflow:hidden;cursor:pointer;';
 
-  // Başlık
   const titleEl = document.createElement('span');
-  titleEl.style.cssText = `
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .10em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.78);
-    display: block;
-    line-height: 1.5;
-  `;
+  titleEl.style.cssText = 'font-family:"Space Grotesk",sans-serif;font-size:12px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(0,0,0,0.78);display:block;line-height:1.5;';
   panel.appendChild(titleEl);
 
-  // Detay alanı — collapse olacak kısım
   const detailsEl = document.createElement('div');
   detailsEl.id = 'proj-info-details';
-  detailsEl.style.cssText = `
-    overflow: hidden;
-    max-height: 300px;
-    opacity: 1;
-    transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;
-    margin-top: 18px;
-  `;
+  detailsEl.style.cssText = 'overflow:hidden;max-height:300px;opacity:1;transition:max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;margin-top:18px;';
   panel.appendChild(detailsEl);
 
   const valueEls = [];
 
   function addRow(key, val) {
-    const div = document.createElement('div');
+    const div    = document.createElement('div');
     div.style.cssText = 'display:flex;flex-direction:column;margin-bottom:10px;';
-
-    const keyEl = document.createElement('span');
-    keyEl.style.cssText = `
-      font-family: 'DM Mono', monospace;
-      font-size: 8px;
-      letter-spacing: .24em;
-      text-transform: uppercase;
-      color: rgba(0,0,0,0.38);
-      margin-bottom: 2px;
-    `;
+    const keyEl  = document.createElement('span');
+    keyEl.style.cssText = 'font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:rgba(0,0,0,0.38);margin-bottom:2px;';
     keyEl.textContent = key;
-
-    const valEl = document.createElement('span');
-    valEl.style.cssText = `
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: .04em;
-      color: rgba(0,0,0,0.68);
-      line-height: 1.5;
-    `;
+    const valEl  = document.createElement('span');
+    valEl.style.cssText = 'font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:300;letter-spacing:.04em;color:rgba(0,0,0,0.68);line-height:1.5;';
     valEl.textContent = val;
-
     div.appendChild(keyEl);
     div.appendChild(valEl);
     detailsEl.appendChild(div);
@@ -414,70 +329,42 @@ const isMobile = window.innerWidth <= 768;
   function addDoubleRow(left, right) {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;flex-direction:row;gap:24px;margin-bottom:10px;';
-
     [left, right].forEach(col => {
       if (!col) return;
-      const div = document.createElement('div');
+      const div    = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;';
-
-      const keyEl = document.createElement('span');
-      keyEl.style.cssText = `
-        font-family: 'DM Mono', monospace;
-        font-size: 8px;
-        letter-spacing: .24em;
-        text-transform: uppercase;
-        color: rgba(0,0,0,0.38);
-        margin-bottom: 2px;
-      `;
+      const keyEl  = document.createElement('span');
+      keyEl.style.cssText = 'font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:rgba(0,0,0,0.38);margin-bottom:2px;';
       keyEl.textContent = col.key;
-
-      const valEl = document.createElement('span');
-      valEl.style.cssText = `
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 11px;
-        font-weight: 300;
-        letter-spacing: .04em;
-        color: rgba(0,0,0,0.68);
-        line-height: 1.5;
-      `;
+      const valEl  = document.createElement('span');
+      valEl.style.cssText = 'font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:300;letter-spacing:.04em;color:rgba(0,0,0,0.68);line-height:1.5;';
       valEl.textContent = col.val;
-
       div.appendChild(keyEl);
       div.appendChild(valEl);
       row.appendChild(div);
       valueEls.push({ el: valEl, text: col.val });
     });
-
     detailsEl.appendChild(row);
   }
 
-  if (project.year)
-    addRow('Year', project.year);
-
+  if (project.year) addRow('Year', project.year);
   const locationCol    = project.location ? { key: 'Location', val: project.location } : null;
   const coordinatesCol = project.coordinates && project.coordinates.length === 2
     ? { key: 'Coordinates', val: project.coordinates[0].toFixed(2) + ', ' + project.coordinates[1].toFixed(2) }
     : null;
-  if (locationCol || coordinatesCol) {
-    addDoubleRow(locationCol, coordinatesCol);
-  }
-
-  if (project.office)
-    addRow('Office', project.office);
-  if (project.firm)
-    addRow('Firm', project.firm);
-  if (project.program)
-    addRow('Program', project.program);
+  if (locationCol || coordinatesCol) addDoubleRow(locationCol, coordinatesCol);
+  if (project.office)  addRow('Office', project.office);
+  if (project.firm)    addRow('Firm', project.firm);
+  if (project.program) addRow('Program', project.program);
   if (project.responsibilities && project.responsibilities.length)
     addRow('Role', project.responsibilities.join(', '));
   if (project.coworkers && project.coworkers.length)
     addRow('With', project.coworkers.join(', '));
-  if (project.description)
-    addRow('Info', project.description);
+  if (project.description) addRow('Info', project.description);
 
   document.body.appendChild(panel);
 
-// ─── Collapse / Expand ───────────────────────────────────────────────
+  // ─── Collapse / Expand ───────────────────────────────────────────────
   let isCollapsed = false;
   let scrollListenerAttached = false;
 
@@ -488,10 +375,7 @@ const isMobile = window.innerWidth <= 768;
     detailsEl.style.opacity   = '0';
     detailsEl.style.marginTop = '0';
     const ov = document.getElementById('grid-overlay');
-    if (ov) {
-      ov.style.transition = 'top 0.45s ease';
-      ov.style.top = (panelTop + 52) + 'px';
-    }
+    if (ov) { ov.style.transition = 'top 0.45s ease'; ov.style.top = (panelTop + 52) + 'px'; }
   }
 
   function expand() {
@@ -501,104 +385,37 @@ const isMobile = window.innerWidth <= 768;
     detailsEl.style.opacity   = '1';
     detailsEl.style.marginTop = '18px';
     const ov = document.getElementById('grid-overlay');
-    if (ov) {
-      ov.style.transition = 'top 0.45s ease';
-      ov.style.top = K2_OVERLAY_TOP + 'px';
-    }
+    if (ov) { ov.style.transition = 'top 0.45s ease'; ov.style.top = K2_OVERLAY_TOP + 'px'; }
   }
 
-  // Tıklayınca toggle
-  panel.addEventListener('click', () => {
-    isCollapsed ? expand() : collapse();
-  });
+  panel.addEventListener('click', () => { isCollapsed ? expand() : collapse(); });
 
-  // grid-overlay hazır olunca scroll listener + timer bağla
-  let pollCount = 0;
-  function waitForOverlay() {
-    const ov = document.getElementById('grid-overlay');
-    if (ov) {
-      // Scroll listener
-      let lastScrollTop = 0;
-      function onGridScroll() {
-        const st = ov.scrollTop;
-        if (st > lastScrollTop && st > 10) {
-          collapse();
-        } else if (st < lastScrollTop && st < 20) {
-          expand();
-        }
-        lastScrollTop = st;
-      }
-      if (!scrollListenerAttached) {
-        ov.addEventListener('scroll', onGridScroll);
-        scrollListenerAttached = true;
-      }
-
-      // Observer: panel DOM'dan çıkınca temizle
-      const observer = new MutationObserver(() => {
-        if (!document.body.contains(panel)) {
-          ov.removeEventListener('scroll', onGridScroll);
-          observer.disconnect();
-        }
-      });
-      observer.observe(document.body, { childList: true });
-
-// Video sayfasında direkt collapsed başla, diğerlerinde 2.5sn sonra
-      if (startCollapsed) {
-        collapse();
-      } else {
-        setTimeout(collapse, 2500);
-      }
-      
-    } else if (pollCount < 30) {
-      pollCount++;
-      requestAnimationFrame(waitForOverlay);
-    }
-  }
-  waitForOverlay();
-
-
-  // ─── Scan line ───────────────────────────────────────────────────────
+  // ─── Scan line — MutationObserver yerine panel referansıyla temizleme ─
   const scanLine = document.createElement('div');
-  scanLine.style.cssText = `
-    position: absolute;
-    left: 0; top: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.08), rgba(0,0,0,0));
-    pointer-events: none;
-    z-index: 1;
-  `;
+  scanLine.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,0.08),rgba(0,0,0,0));pointer-events:none;z-index:1;';
   panel.appendChild(scanLine);
 
-  let scanPos = 0;
+  let scanPos   = 0;
   let scanAnimId = null;
   function animateScan() {
+    if (!document.body.contains(panel)) { cancelAnimationFrame(scanAnimId); return; }
     scanPos += 0.4;
-    const panelH = panel.offsetHeight;
-    if (scanPos > panelH) scanPos = -2;
+    if (scanPos > panel.offsetHeight) scanPos = -2;
     scanLine.style.top = scanPos + 'px';
     scanAnimId = requestAnimationFrame(animateScan);
   }
   scanAnimId = requestAnimationFrame(animateScan);
 
-  // Panel DOM'dan çıkınca scan line'ı durdur
-  const scanObserver = new MutationObserver(() => {
-    if (!document.body.contains(panel)) {
-      cancelAnimationFrame(scanAnimId);
-      scanObserver.disconnect();
-    }
-  });
-  scanObserver.observe(document.body, { childList: true, subtree: true });
-
-  // ─── Glitch flash ────────────────────────────────────────────────────
+  // ─── Glitch flash — panel referansıyla timeout temizleme ─────────────
   let glitchTimeout = null;
   function scheduleGlitch() {
+    if (!document.body.contains(panel)) return; // panel gitmişse dur
     const delay = 3000 + Math.random() * 5000;
     glitchTimeout = setTimeout(() => {
       if (!document.body.contains(panel)) return;
       const offsetX = (Math.random() - 0.5) * 6;
       const offsetY = (Math.random() - 0.5) * 3;
-      panel.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      panel.style.transform = 'translate(' + offsetX + 'px,' + offsetY + 'px)';
       panel.style.opacity = '0.7';
       setTimeout(() => {
         if (!document.body.contains(panel)) return;
@@ -610,7 +427,44 @@ const isMobile = window.innerWidth <= 768;
   }
   scheduleGlitch();
 
-  // ─── Scramble ────────────────────────────────────────────────────────
+  // Panel clearPanel() ile kaldırılınca scan + glitch timeout'ları temizle
+  // MutationObserver'dan kaçınıyoruz — panel.remove() intercept'i yerine
+  // clearPanel() içinde zaten panel.remove() çağrılıyor, ama scan rAF
+  // bir sonraki frame'de contains() kontrolüyle kendini iptal eder.
+  // glitchTimeout için panel'e referans sakladık, scheduleGlitch() her
+  // çağrıda contains() kontrolü yapıyor.
+
+  let pollCount = 0;
+  function waitForOverlay() {
+    const ov = document.getElementById('grid-overlay');
+    if (ov) {
+      let lastScrollTop = 0;
+      function onGridScroll() {
+        const st = ov.scrollTop;
+        if (st > lastScrollTop && st > 10)  collapse();
+        else if (st < lastScrollTop && st < 20) expand();
+        lastScrollTop = st;
+      }
+      if (!scrollListenerAttached) {
+        ov.addEventListener('scroll', onGridScroll);
+        scrollListenerAttached = true;
+        // Overlay gittiğinde scroll listener'ı temizle (MutationObserver yerine overlay'in kendisini izle)
+        const removeOnClear = () => { ov.removeEventListener('scroll', onGridScroll); };
+        ov.addEventListener('remove', removeOnClear, { once: true });
+      }
+
+      if (startCollapsed) {
+        collapse();
+      } else {
+        setTimeout(collapse, 2500);
+      }
+    } else if (pollCount < 30) {
+      pollCount++;
+      requestAnimationFrame(waitForOverlay);
+    }
+  }
+  waitForOverlay();
+
   scrambleText(titleEl, project.title.toUpperCase(), 1400);
   valueEls.forEach(({ el, text }, i) => {
     setTimeout(() => scrambleText(el, text, 1000), 400 + i * 200);
@@ -618,30 +472,29 @@ const isMobile = window.innerWidth <= 768;
 }
 
 // ─── Lightbox ─────────────────────────────────────────────────────────────
+// Vimeo script tekrar eklenmesini önle
+let _vimeoScriptLoaded = false;
+function ensureVimeoScript() {
+  if (_vimeoScriptLoaded) return;
+  _vimeoScriptLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://player.vimeo.com/api/player.js';
+  document.head.appendChild(s);
+}
+
 function openLightbox(images, startIndex, project) {
   const existing = document.getElementById('lightbox');
   if (existing) existing.remove();
 
   const isVideo = project && project.content_type === 'video' && project.video_provider === 'vimeo';
-
   let current = startIndex;
 
   const box = document.createElement('div');
   box.id = 'lightbox';
-  box.style.cssText = `
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    z-index:900;background:rgba(14,13,12,0.94);
-    display:flex;align-items:center;justify-content:center;
-  `;
+  box.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:900;background:rgba(14,13,12,0.94);display:flex;align-items:center;justify-content:center;';
 
   const closeBtn = document.createElement('div');
-  closeBtn.style.cssText = `
-    position:fixed;top:24px;right:32px;
-    font-family:'DM Mono',monospace;font-size:10px;
-    letter-spacing:.25em;text-transform:uppercase;
-    color:rgba(255,255,255,0.35);cursor:pointer;z-index:901;
-    transition:color 0.15s ease;
-  `;
+  closeBtn.style.cssText = 'position:fixed;top:24px;right:32px;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,0.35);cursor:pointer;z-index:901;transition:color 0.15s ease;';
   closeBtn.textContent = 'Close';
   closeBtn.addEventListener('mouseenter', () => { closeBtn.style.color = 'rgba(255,255,255,0.9)'; });
   closeBtn.addEventListener('mouseleave', () => { closeBtn.style.color = 'rgba(255,255,255,0.35)'; });
@@ -654,9 +507,7 @@ function openLightbox(images, startIndex, project) {
   }
 
   closeBtn.addEventListener('click', closeLightbox);
-  box.addEventListener('click', (e) => {
-    if (e.target === box) closeLightbox();
-  });
+  box.addEventListener('click', (e) => { if (e.target === box) closeLightbox(); });
 
   function onKey(e) {
     if (e.key === 'Escape') closeLightbox();
@@ -669,32 +520,22 @@ function openLightbox(images, startIndex, project) {
 
   if (isVideo) {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = `width:80vw;max-width:1100px;position:relative;`;
+    wrapper.style.cssText = 'width:80vw;max-width:1100px;position:relative;';
     const ratio = document.createElement('div');
     ratio.style.cssText = 'padding:56.25% 0 0 0;position:relative;';
     const iframe = document.createElement('iframe');
-    iframe.src = `https://player.vimeo.com/video/${project.vimeo_id}?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479`;
+    iframe.src = 'https://player.vimeo.com/video/' + project.vimeo_id + '?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479';
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
     iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
     iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;';
     ratio.appendChild(iframe);
     wrapper.appendChild(ratio);
-
-    const vimeoScript = document.createElement('script');
-    vimeoScript.src = 'https://player.vimeo.com/api/player.js';
-    document.head.appendChild(vimeoScript);
-
+    ensureVimeoScript(); // tekrar eklemez
     box.appendChild(wrapper);
-
   } else {
     const img = document.createElement('img');
-    img.style.cssText = `
-      max-width:88vw;max-height:88vh;
-      object-fit:contain;display:block;
-      transition:opacity 0.2s ease;
-      user-select:none;
-    `;
+    img.style.cssText = 'max-width:88vw;max-height:88vh;object-fit:contain;display:block;transition:opacity 0.2s ease;user-select:none;';
 
     function loadImg(index) {
       img.style.opacity = '0';
@@ -707,46 +548,31 @@ function openLightbox(images, startIndex, project) {
 
     function makeArrow(dir) {
       const btn = document.createElement('button');
-      btn.style.cssText = `
-        position:fixed;top:50%;transform:translateY(-50%);
-        ${dir === 'left' ? 'left:32px' : 'right:32px'};
-        background:none;border:none;cursor:pointer;
-        color:rgba(255,255,255,0.5);font-size:28px;
-        padding:12px;z-index:901;
-        transition:color 0.15s ease;font-family:'DM Mono',monospace;
-        font-weight:100;letter-spacing:0;
-      `;
+      btn.style.cssText = 'position:fixed;top:50%;transform:translateY(-50%);' + (dir === 'left' ? 'left:32px' : 'right:32px') + ';background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.5);font-size:28px;padding:12px;z-index:901;transition:color 0.15s ease;font-family:"DM Mono",monospace;font-weight:100;';
       btn.textContent = dir === 'left' ? '←' : '→';
       btn.addEventListener('mouseenter', () => { btn.style.color = 'rgba(255,255,255,0.95)'; });
       btn.addEventListener('mouseleave', () => { btn.style.color = 'rgba(255,255,255,0.5)'; });
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (dir === 'left')  current = (current - 1 + images.length) % images.length;
-        else                 current = (current + 1) % images.length;
+        if (dir === 'left') current = (current - 1 + images.length) % images.length;
+        else                current = (current + 1) % images.length;
         loadImg(current);
       });
       return btn;
     }
 
     const counter = document.createElement('div');
-    counter.style.cssText = `
-      position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-      font-family:'DM Mono',monospace;font-size:10px;
-      letter-spacing:.25em;color:rgba(255,255,255,0.35);
-      z-index:901;user-select:none;
-    `;
+    counter.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.25em;color:rgba(255,255,255,0.35);z-index:901;user-select:none;';
 
     box.appendChild(img);
     box.appendChild(makeArrow('left'));
     box.appendChild(makeArrow('right'));
     box.appendChild(counter);
-
     loadImg(current);
   }
 
   box.appendChild(closeBtn);
   document.body.appendChild(box);
-
   box.style.opacity = '0';
   box.style.transition = 'opacity 0.25s ease';
   requestAnimationFrame(() => { box.style.opacity = '1'; });
@@ -759,7 +585,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('abtb')?.addEventListener('click', () => showSection('about'));
   document.getElementById('cb')?.addEventListener('click',   () => showSection('contact'));
 
-  // Footer email linki → contact formu
   document.getElementById('email-link')?.addEventListener('click', (e) => {
     e.preventDefault();
     runGlitch(() => {
@@ -771,10 +596,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Geri/ileri buton desteği
   window.addEventListener('popstate', () => parseAndNavigate());
 
-  // Sayfa ilk yüklendiğinde URL'deki hash'e git
   if (window.location.hash && window.location.hash !== '#') {
     parseAndNavigate();
   }
