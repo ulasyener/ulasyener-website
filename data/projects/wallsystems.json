@@ -1,0 +1,20 @@
+{
+  "id": "wallsystems",
+  "title": "Modular Wall Storage System",
+  "year": "2014–2017",
+  "location": "Istanbul, Turkey",
+  "firm": "304 Design",
+  "program": "Modular Wall Storage System",
+  "responsibilities": ["Product Design", "Detail Design"],
+  "description": "Modular wall storage system designed with refined detailing, developed for use in showrooms and retail environments of an internationally recognized brand.",
+  "cover": "images/projects/craftdesign/wallsystems/cover.webp",
+  "images": [
+    { "src": "images/projects/craftdesign/wallsystems/1.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/2.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/3.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/4.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/5.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/6.webp" },
+    { "src": "images/projects/craftdesign/wallsystems/7.webp" }
+  ]
+}

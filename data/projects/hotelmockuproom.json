@@ -1,0 +1,19 @@
+{
+  "id": "hotelmockuproom",
+  "title": "Serdar-i Ekrem Boutique Hotel — Mock-Up Room",
+  "year": "2015–2016",
+  "location": "Beyoğlu, Istanbul",
+  "firm": "304 Design",
+  "program": "Boutique Hotel · Mock-Up Room",
+  "responsibilities": ["Interior Design", "Detail Design"],
+  "description": "Full-scale mock-up room developed for the Serdar-i Ekrem Boutique Hotel, used to test materials, lighting and spatial detailing ahead of full rollout.",
+  "cover": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/cover.jpg",
+  "images": [
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/1.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/2.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/3.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/4.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/5.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/hotelmockuproom/6.jpg" }
+  ]
+}

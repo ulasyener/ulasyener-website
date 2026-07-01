@@ -27,7 +27,12 @@
               "projects": [
                 "bookstore",
                 "cafe",
-                "isis"
+                "hotelmockuproom",
+                "isis",
+                "kahvebahane",
+                "pariarestaurant",
+                "uniqshop",
+                "coffeesapiens"
               ]
             },
             {
@@ -51,7 +56,11 @@
       "label": "Craft & Design",
       "description": "Furniture, spatial objects and branded environments. Work spanning custom joinery, display systems and material identity.",
       "projects": [
-        "product"
+        "coffeesapiens",
+        "seating",
+        "storage",
+        "wallsystems",
+        "uniqshop"
       ]
     },
     {

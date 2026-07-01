@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "bookstore",
   "title": "Read & Rest Bookstore Cafe",
   "year": "2014",
@@ -8,20 +8,20 @@
   "responsibilities": ["Interior Architect", "Project Architect", "Construction Management"],
   "program": "Bookstore + Cafe",
   "type": "image-grid",
-  "cover": "images/projects/interior/bookstore/cover.webp",
+  "cover": "images/projects/architectureinterior/retailhospitality/bookstore/cover.webp",
   "images": [
-    { "src": "images/projects/interior/bookstore/1.webp" },
-    { "src": "images/projects/interior/bookstore/2.webp" },
-    { "src": "images/projects/interior/bookstore/3.webp" },
-    { "src": "images/projects/interior/bookstore/4.webp" },
-    { "src": "images/projects/interior/bookstore/5.webp" },
-    { "src": "images/projects/interior/bookstore/6.webp" },
-    { "src": "images/projects/interior/bookstore/7.webp" },
-    { "src": "images/projects/interior/bookstore/8.webp" },
-    { "src": "images/projects/interior/bookstore/9.webp" },
-    { "src": "images/projects/interior/bookstore/10.webp" },
-    { "src": "images/projects/interior/bookstore/11.webp" },
-    { "src": "images/projects/interior/bookstore/12.webp" },
-    { "src": "images/projects/interior/bookstore/13.webp" }
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/1.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/2.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/3.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/4.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/5.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/6.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/7.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/8.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/9.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/10.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/11.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/12.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/bookstore/13.webp" }
   ]
 }

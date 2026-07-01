@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "scheidegg",
   "title": "SCHEIDEGG",
   "year": "2019",
@@ -8,9 +8,9 @@
   "responsibilities": ["Design Architect", "Project Architect", "Visualisation", "LPH 1–5"],
   "program": "Residential Building Design",
   "type": "image-grid",
-  "cover": "images/projects/architecture/scheidegg/cover.webp",
+  "cover": "images/projects/architectureinterior/residential/scheidegg/cover.webp",
   "images": [
-    { "src": "images/projects/architecture/scheidegg/1.webp" },
-    { "src": "images/projects/architecture/scheidegg/2.webp" }
+    { "src": "images/projects/architectureinterior/residential/scheidegg/1.webp" },
+    { "src": "images/projects/architectureinterior/residential/scheidegg/2.webp" }
   ]
 }

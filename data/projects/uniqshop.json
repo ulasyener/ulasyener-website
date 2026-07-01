@@ -1,0 +1,21 @@
+{
+  "id": "uniqshop",
+  "title": "Uniq Shop",
+  "year": "2015–2016",
+  "location": "Maslak, Istanbul",
+  "firm": "304 Design",
+  "program": "Pop-up Store",
+  "responsibilities": ["Interior Design", "Detail Design"],
+  "description": "Pop-up store design in Maslak, Istanbul.",
+  "cover": "images/projects/craftdesign/uniqshop/cover.jpg",
+  "images": [
+    { "src": "images/projects/craftdesign/uniqshop/1.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/2.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/3.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/4.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/5.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/6.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/7.jpg" },
+    { "src": "images/projects/craftdesign/uniqshop/8.jpg" }
+  ]
+}

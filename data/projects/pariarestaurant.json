@@ -1,0 +1,23 @@
+{
+  "id": "pariarestaurant",
+  "title": "Paria Restaurant",
+  "year": "2015–2016",
+  "location": "Bostancı, Istanbul",
+  "firm": "304 Design",
+  "program": "Restaurant",
+  "responsibilities": ["Interior Design", "Detail Design"],
+  "description": "Interior design for a restaurant in Bostancı, Istanbul.",
+  "cover": "images/projects/architectureinterior/retailhospitality/pariarestaurant/cover.jpg",
+  "images": [
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/1.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/2.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/3.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/4.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/5.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/6.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/7.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/8.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/9.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/pariarestaurant/10.jpg" }
+  ]
+}

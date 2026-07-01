@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "yesilkoy",
   "title": "Yeşilköy Residence",
   "category": "interior",
@@ -11,22 +11,22 @@
   "coworkers": [],
   "description": "",
   "type": "image-grid",
-  "cover": "images/projects/interior/yesilkoy/cover.webp",
+  "cover": "images/projects/architectureinterior/residential/yesilkoy/cover.webp",
   "images": [
-    { "src": "images/projects/interior/yesilkoy/1.webp" },
-    { "src": "images/projects/interior/yesilkoy/2.webp" },
-    { "src": "images/projects/interior/yesilkoy/3.webp" },
-    { "src": "images/projects/interior/yesilkoy/4.webp" },
-    { "src": "images/projects/interior/yesilkoy/5.webp" },
-    { "src": "images/projects/interior/yesilkoy/6.webp" },
-    { "src": "images/projects/interior/yesilkoy/7.webp" },
-    { "src": "images/projects/interior/yesilkoy/8.webp" },
-    { "src": "images/projects/interior/yesilkoy/9.webp" },
-    { "src": "images/projects/interior/yesilkoy/10.webp" },
-    { "src": "images/projects/interior/yesilkoy/11.webp" },
-    { "src": "images/projects/interior/yesilkoy/12.webp" },
-    { "src": "images/projects/interior/yesilkoy/13.webp" },
-    { "src": "images/projects/interior/yesilkoy/14.webp" },
-    { "src": "images/projects/interior/yesilkoy/15.webp" }
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/1.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/2.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/3.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/4.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/5.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/6.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/7.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/8.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/9.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/10.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/11.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/12.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/13.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/14.webp" },
+    { "src": "images/projects/architectureinterior/residential/yesilkoy/15.webp" }
   ]
 }

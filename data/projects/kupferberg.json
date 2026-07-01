@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "kupferberg",
   "title": "FH AM KUPFERBERG",
   "year": "2016–2020",
@@ -9,18 +9,18 @@
   "program": "Residential",
   "area": "300m²",
   "type": "image-grid",
-  "cover": "images/projects/architecture/kupferberg/cover.webp",
+  "cover": "images/projects/architectureinterior/residential/kupferberg/cover.webp",
   "images": [
-    { "src": "images/projects/architecture/kupferberg/1.webp" },
-    { "src": "images/projects/architecture/kupferberg/2.webp" },
-    { "src": "images/projects/architecture/kupferberg/3.webp" },
-    { "src": "images/projects/architecture/kupferberg/4.webp" },
-    { "src": "images/projects/architecture/kupferberg/5.webp" },
-    { "src": "images/projects/architecture/kupferberg/6.webp" },
-    { "src": "images/projects/architecture/kupferberg/7.webp" },
-    { "src": "images/projects/architecture/kupferberg/8.webp" },
-    { "src": "images/projects/architecture/kupferberg/9.webp" },
-    { "src": "images/projects/architecture/kupferberg/10.webp" },
-    { "src": "images/projects/architecture/kupferberg/11.webp" }
+    { "src": "images/projects/architectureinterior/residential/kupferberg/1.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/2.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/3.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/4.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/5.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/6.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/7.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/8.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/9.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/10.webp" },
+    { "src": "images/projects/architectureinterior/residential/kupferberg/11.webp" }
   ]
 }

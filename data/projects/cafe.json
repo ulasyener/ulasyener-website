@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "cafe",
   "title": "Mums Cafe",
   "year": "2013",
@@ -8,24 +8,24 @@
   "responsibilities": ["Interior Architect", "Project Architect", "Construction Management"],
   "program": "Cafe",
   "type": "image-grid",
-  "cover": "images/projects/interior/cafe/cover.webp",
+  "cover": "images/projects/architectureinterior/retailhospitality/cafe/cover.webp",
   "images": [
-    { "src": "images/projects/interior/cafe/1.webp" },
-    { "src": "images/projects/interior/cafe/2.webp" },
-    { "src": "images/projects/interior/cafe/3.webp" },
-    { "src": "images/projects/interior/cafe/4.webp" },
-    { "src": "images/projects/interior/cafe/5.webp" },
-    { "src": "images/projects/interior/cafe/6.webp" },
-    { "src": "images/projects/interior/cafe/7.webp" },
-    { "src": "images/projects/interior/cafe/8.webp" },
-    { "src": "images/projects/interior/cafe/9.webp" },
-    { "src": "images/projects/interior/cafe/10.webp" },
-    { "src": "images/projects/interior/cafe/11.webp" },
-    { "src": "images/projects/interior/cafe/12.webp" },
-    { "src": "images/projects/interior/cafe/13.webp" },
-    { "src": "images/projects/interior/cafe/14.webp" },
-    { "src": "images/projects/interior/cafe/15.webp" },
-    { "src": "images/projects/interior/cafe/16.webp" },
-    { "src": "images/projects/interior/cafe/17.webp" }
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/1.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/2.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/3.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/4.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/5.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/6.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/7.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/8.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/9.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/10.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/11.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/12.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/13.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/14.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/15.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/16.webp" },
+    { "src": "images/projects/architectureinterior/retailhospitality/cafe/17.webp" }
   ]
 }

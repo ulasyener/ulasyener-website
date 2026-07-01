@@ -1,0 +1,29 @@
+{
+  "id": "kahvebahane",
+  "title": "Bahane Cafe & Bar",
+  "year": "2015–2016",
+  "location": "Moda, Istanbul",
+  "firm": "304 Design",
+  "program": "Café · Bar · Conceptual Interior-Exterior Design",
+  "responsibilities": ["Construction Management", "Planning", "Detail Design", "Production"],
+  "description": "Conceptual interior and exterior design for a café & bar, approx. 500 m² total (350 m² outdoor, 150 m² indoor). Completed.",
+  "cover": "images/projects/architectureinterior/retailhospitality/kahvebahane/cover.jpg",
+  "images": [
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/1.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/2.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/3.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/4.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/5.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/6.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/7.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/8.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/9.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/10.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/11.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/12.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/13.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/14.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/15.jpg" },
+    { "src": "images/projects/architectureinterior/retailhospitality/kahvebahane/16.jpg" }
+  ]
+}
