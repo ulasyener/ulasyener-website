@@ -75,9 +75,9 @@ async function showCategory(categoryId) {
         return;
       }
 
-      const projects = await Promise.all(
-        cat.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null)).filter(Boolean)
-      );
+      const projects = (await Promise.all(
+        cat.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null))
+      )).filter(Boolean);
 
       window.grid3d = showProjectGrid(projects, (proj) => {
         openPhotoGrid(proj, categoryId, null, cat.label, null);
@@ -318,9 +318,9 @@ async function showNestedSubcategory(categoryId, parentSubId, nestedSubId) {
       return;
     }
 
-    const projects = await Promise.all(
-      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null)).filter(Boolean)
-    );
+    const projects = (await Promise.all(
+      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null))
+    )).filter(Boolean);
 
     window.grid3d = showProjectGrid(projects, (proj) => {
       openPhotoGridNested(proj, categoryId, parentSubId, nestedSubId, cat.label, parentSub.label, sub.label);
@@ -471,9 +471,9 @@ async function showSubcategory(categoryId, subcategoryId) {
       return;
     }
 
-    const projects = await Promise.all(
-      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null)).filter(Boolean)
-    );
+    const projects = (await Promise.all(
+      sub.projects.map(pid => fetch(`data/projects/${pid}.json`).then(r => r.json()).catch(() => null))
+    )).filter(Boolean);
 
     window.grid3d = showProjectGrid(projects, (proj) => {
       openPhotoGrid(proj, categoryId, subcategoryId, cat.label, sub.label);

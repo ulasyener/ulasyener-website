@@ -1,0 +1,19 @@
+{
+  "id": "storage",
+  "title": "Modular Storage System",
+  "year": "2014–2017",
+  "location": "Istanbul, Turkey",
+  "firm": "304 Design",
+  "program": "Modular Storage System",
+  "responsibilities": ["Product Design", "Detail Design"],
+  "description": "Modular storage system designed with refined detailing, developed for use in showrooms and retail environments of an internationally recognized brand.",
+  "cover": "images/projects/craftdesign/storage/cover.webp",
+  "images": [
+    { "src": "images/projects/craftdesign/storage/1.webp" },
+    { "src": "images/projects/craftdesign/storage/2.webp" },
+    { "src": "images/projects/craftdesign/storage/3.webp" },
+    { "src": "images/projects/craftdesign/storage/4.webp" },
+    { "src": "images/projects/craftdesign/storage/5.webp" },
+    { "src": "images/projects/craftdesign/storage/7.webp" }
+  ]
+}
