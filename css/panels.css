@@ -586,3 +586,9 @@
   .subcat-label { font-size: 12px; }
   .panel        { padding: 54px 14px 80px 14px; }
 }
+/* ─── Timeline overlay (Shared History) ─────────────────────────────────── */
+.fremde-story-item .cat-desc{color:#909B9A;font-size:12.5px;margin-top:4px;letter-spacing:.01em}
+.timeline-overlay{position:fixed;inset:0;z-index:600;background:#1B2121}
+.timeline-frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.timeline-close{position:absolute;top:16px;left:18px;z-index:601;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;color:#E2DAC2;background:rgba(20,25,25,.6);border:1px solid rgba(226,218,194,.4);border-radius:999px;padding:8px 15px;cursor:pointer;transition:.15s}
+.timeline-close:hover{background:#E2DAC2;color:#222A2A}

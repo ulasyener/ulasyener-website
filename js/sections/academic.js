@@ -242,6 +242,15 @@ function showFremdeTueren(archiveSection) {
     label.addEventListener('click', () => runGlitch(() => showArchiveSection(archiveSection)));
     el.appendChild(label);
 
+    // ─── Story · Shared History (timeline) — opening entry ───
+    const story = document.createElement('div');
+    story.className = 'category-item fremde-story-item';
+    story.innerHTML = `
+      <div class="cat-label">Story &middot; Timeline</div>
+    `;
+    story.addEventListener('click', () => openTimelineOverlay());
+    el.appendChild(story);
+
     FREMDE_SECTIONS.forEach(sec => {
       const secItem = document.createElement('div');
       secItem.className = 'category-item fremde-sec-item';
@@ -364,4 +373,18 @@ function showFremdeTuerenItem(item, sec, archiveSection) {
 
     root.appendChild(el);
   });
+}
+
+// ─── Timeline overlay (Shared History) ────────────────────────────────────
+function openTimelineOverlay() {
+  if (document.querySelector('.timeline-overlay')) return;
+  const ov = document.createElement('div');
+  ov.className = 'timeline-overlay';
+  ov.innerHTML =
+    '<button class="timeline-close" aria-label="Back to archive">&larr; BACK TO ARCHIVE</button>' +
+    '<iframe class="timeline-frame" src="fremde/timeline.html" title="Shared History Timeline" loading="lazy"></iframe>';
+  const close = () => ov.remove();
+  ov.querySelector('.timeline-close').addEventListener('click', close);
+  document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); } });
+  document.body.appendChild(ov);
 }

@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shared History · 1923–2026 — Fremde Türen</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#ECE9E1;--ink:#222A2A;--bone:#E2DAC2;--tr:#E8543C;--de:#E6C24A;--mig:#E39A3C}
+*{margin:0;box-sizing:border-box}html,body{height:100%}
+body{background:#1B2121;color:var(--bone);font-family:'Satoshi',sans-serif;overflow:hidden}
+#stage{position:fixed;inset:0}
+.imglayer{position:absolute;inset:0;background:#2a3231 center/cover no-repeat;will-change:filter,transform,opacity}
+#bg{z-index:0}
+#bg.play{animation:shutter 3.25s steps(120) infinite}
+#g1,#g2{z-index:1;opacity:0;mix-blend-mode:screen;pointer-events:none}
+#g1{filter:sepia(1) saturate(7) hue-rotate(-28deg)}
+#g2{filter:sepia(1) saturate(7) hue-rotate(150deg)}
+#g1.play{animation:gburstA 3.25s steps(60) infinite}
+#g2.play{animation:gburstB 3.25s steps(60) infinite}
+#scan{z-index:1;position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:overlay;background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 3px)}
+#scan.play{animation:scanpulse 3.25s steps(30) infinite}
+@keyframes shutter{
+ 0%{filter:invert(1) contrast(1.1) brightness(1.05)}
+ 89%{filter:invert(1) contrast(1.1) brightness(1.05);transform:translate3d(0,0,0)}
+ 90%{filter:invert(1) contrast(1.7) hue-rotate(-22deg);transform:translate3d(-8px,1px,0)}
+ 91%{filter:invert(0) contrast(1.5) saturate(1.4);transform:translate3d(6px,-2px,0)}
+ 92.5%{filter:invert(0) contrast(1.03);transform:none}
+ 99%{filter:invert(0) contrast(1.03);transform:none}
+ 99.5%{filter:invert(1) contrast(1.8) hue-rotate(18deg);transform:translate3d(6px,2px,0)}
+ 100%{filter:invert(1) contrast(1.1) brightness(1.05);transform:none}}
+@keyframes gburstA{0%,89%{opacity:0;transform:translateX(0)}
+ 90%{opacity:.55;transform:translateX(9px);clip-path:inset(18% 0 56% 0)}
+ 91%{opacity:.5;transform:translateX(-7px);clip-path:inset(62% 0 10% 0)}
+ 92%{opacity:.3;transform:translateX(6px);clip-path:inset(2% 0 82% 0)}
+ 92.7%,99%{opacity:0;transform:translateX(0);clip-path:inset(0)}
+ 99.5%{opacity:.5;transform:translateX(8px);clip-path:inset(38% 0 40% 0)}100%{opacity:0}}
+@keyframes gburstB{0%,89%{opacity:0;transform:translateX(0)}
+ 90%{opacity:.5;transform:translateX(-9px);clip-path:inset(40% 0 30% 0)}
+ 91%{opacity:.5;transform:translateX(7px);clip-path:inset(8% 0 70% 0)}
+ 92%{opacity:.3;transform:translateX(-6px);clip-path:inset(70% 0 6% 0)}
+ 92.7%,99%{opacity:0;transform:translateX(0);clip-path:inset(0)}
+ 99.5%{opacity:.5;transform:translateX(-8px);clip-path:inset(20% 0 55% 0)}100%{opacity:0}}
+@keyframes scanpulse{0%,89%{opacity:0}90%{opacity:.28}92.7%{opacity:0}99%{opacity:0}99.5%{opacity:.22}100%{opacity:0}}
+#scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,rgba(20,25,25,.82) 0%,rgba(20,25,25,.5) 42%,rgba(20,25,25,.12) 70%,rgba(20,25,25,.35) 100%)}
+#ghost{position:absolute;z-index:3;right:3vw;top:1vh;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30vh;line-height:1;color:var(--bone);opacity:.9;pointer-events:none;user-select:none;transition:color .4s;text-shadow:0 3px 40px rgba(0,0,0,.35);font-variant-numeric:tabular-nums}
+#kick{position:absolute;z-index:3;left:6vw;top:23vh;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.28em}
+#title{position:absolute;z-index:3;left:6vw;top:calc(23vh + 26px);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(32px,6vw,72px);line-height:1;letter-spacing:-.02em;max-width:60vw;text-shadow:0 2px 30px rgba(0,0,0,.4)}
+#note{position:absolute;z-index:3;left:6vw;top:calc(23vh + 26px + 19vh);max-width:min(500px,54vw);font-size:15.5px;line-height:1.55;color:#d7d0bd}
+#go{position:absolute;z-index:3;left:6vw;top:calc(23vh + 26px + 19vh + 128px);font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.05em;color:var(--bone);text-decoration:none;border:1.4px solid var(--bone);border-radius:999px;padding:9px 18px;transition:.15s}
+#go:hover{background:var(--bone);color:var(--ink)}
+#strip{position:absolute;z-index:3;left:0;right:0;bottom:0;height:230px;padding:0 3vw}
+#line{position:absolute;left:4%;right:4%;bottom:84px;height:1px;background:rgba(226,218,194,.3)}
+.ygroup{position:absolute;bottom:84px;width:0}
+.circ{position:absolute;left:0;bottom:calc(var(--k,0)*46px);width:38px;height:38px;border-radius:50%;transform:translate(-50%,50%);border:2px solid var(--cc);background:#2a3231 center/cover no-repeat;overflow:hidden;cursor:pointer;transition:opacity .25s,width .18s,height .18s,box-shadow .18s;z-index:2}
+.circ.stack{opacity:0;pointer-events:none}
+.ygroup:hover .circ.stack{opacity:1;pointer-events:all}
+.circ.on{border-color:var(--bone);box-shadow:0 0 0 2px rgba(226,218,194,.25),0 5px 18px rgba(0,0,0,.5);opacity:1 !important;pointer-events:all}
+.circ:hover{width:58px;height:58px;z-index:7;box-shadow:0 6px 22px rgba(0,0,0,.6)}
+.circ .cov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,25,25,.62);transition:opacity .22s}
+.circ .cov span{font-family:'DM Mono',monospace;font-weight:500;font-size:10.5px;color:var(--bone)}
+.circ:hover .cov,.circ.on .cov{opacity:0}
+.circ.noimg .cov{background:rgba(20,25,25,.35)}.circ.noimg .cov span{color:var(--cc)}
+#photoby{position:absolute;z-index:3;left:3vw;bottom:15px;font-family:'DM Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(226,218,194,.55)}
+#photoby a{color:inherit}
+#legend{position:absolute;z-index:3;right:3vw;bottom:15px;font-family:'DM Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(226,218,194,.6);display:flex;gap:14px}
+#legend span{cursor:pointer;user-select:none;transition:opacity .2s}
+#legend span.off{opacity:.32}
+#legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+@media(max-width:640px){#title{max-width:88vw;font-size:clamp(26px,8vw,42px)}#note{max-width:86vw}#kick,#title,#note,#go{left:5vw}#legend{display:none}}
+</style></head><body>
+<div id="stage">
+  <div id="bg" class="imglayer"></div><div id="g1" class="imglayer"></div><div id="g2" class="imglayer"></div><div id="scan"></div>
+  <div id="scrim"></div>
+  <div id="ghost"></div>
+  <div id="kick"></div><div id="title"></div><div id="note"></div><a id="go" href="#">OPEN FILE →</a>
+  <div id="strip"><div id="line"></div></div>
+  <div id="photoby"></div>
+  <div id="legend"><span data-flow="TR-POL"><i style="background:var(--tr)"></i>Turkey</span><span data-flow="DE-POL"><i style="background:var(--de)"></i>Germany</span><span data-flow="MIG"><i style="background:var(--mig)"></i>Migration · Media</span></div>
+</div>
+<script>
+const CLR={"TR-POL":"#E8543C","DE-POL":"#E6C24A","MIG":"#E39A3C"},LBL={"TR-POL":"TURKEY","DE-POL":"GERMANY","MIG":"MIGRATION · MEDIA"};
+const IMG="events/img/";
+/* [year, flow, title, note, image, slug, hasPage, credit] */
+const EV=[
+[1923,"TR-POL","Proclamation of the Republic","The Republic of Turkey is founded.","1923.webp","republic-1923",0,"AA"],
+[1939,"DE-POL","The Second World War begins","War across Europe; it would leave Germany ruined and divided.","1939.jpg","wwii-1939",0,"Hugo Jaeger"],
+[1945,"DE-POL","End of the war · a divided Germany","The war ends; Germany is occupied and split — the prelude to the 1949 BRD/DDR division.","1945.jpg","germany-divided-1945",0,"Yevgeny Khaldei"],
+[1949,"DE-POL","The Federal Republic (BRD)","The Grundgesetz is proclaimed; West Germany is founded.","1949_bdr.jpg","brd-1949",0,"AP"],
+[1949,"DE-POL","Founding of the GDR","East Germany is founded.","1949_ddr.webp","ddr-1949",0,"NDR"],
+[1959,"MIG","Bizim Radyo (Leipzig)","The Turkish Communist Party's clandestine radio, broadcasting from the GDR (1959–1989); Turks in West Germany were part of its audience.","1958_bizimradio.jpg","bizim-radyo-1959",0,"TÜSTAV"],
+[1960,"TR-POL","The 27 May coup","Military coup in Turkey.","1960.webp","27-may-1960",0,"AA"],
+[1961,"MIG","Construction of the Berlin Wall","The same year labour was being recruited from the West.","1961_berlinwall.webp","berlin-wall-1961",0,"Bundesregierung / Lehnartz"],
+[1961,"MIG","The Labour Recruitment Agreement","The official beginning of the migration (30 October 1961) — the axis of this archive.","1961.jpg","recruitment-agreement-1961",0,"DPA"],
+[1964,"MIG","Cologne Radio","The first Turkish-language broadcast on WDR (2 November 1964).","1964_kolnradyo.jpg","cologne-radio-1964",0,"Anonymous"],
+[1964,"MIG","Türkofon founded","One of the first Turkish record labels in Germany (Cologne); Türküola followed.","1964_turkofon.jpg","turkofon-1964",0,"Anonymous"],
+[1967,"MIG","Voice of the TKP","Broadcast from abroad; compilations are open at TÜSTAV.","1967_tkpninsesi.jpg","voice-of-tkp-1967",0,"TÜSTAV"],
+[1969,"MIG","Avrupa Hürriyet","Its German edition began in Munich (Frankfurt from 1971).","1969_hurriyet.png","avrupa-hurriyet-1969",0,"Anonymous"],
+[1971,"TR-POL","The 12 March memorandum","Military memorandum in Turkey.","1971.webp","12-march-1971",0,"Anonymous"],
+[1973,"MIG","Ford strike · Cologne","24–30 August 1973: a 'wildcat strike' at the Ford Cologne plant, led by the Turkish workers who made up a third of the workforce. A turning point in migrant-labour history.","1973_fordstreik.jpg","ford-strike-1973",0,"Gernot Huber"],
+[1980,"TR-POL","The 12 September coup","Associated with a new wave of political migration.","1980.jpg","12-september-1980",0,"Anonymous"],
+[1982,"MIG","Semra Ertan","24 May 1982, Hamburg: the worker-poet Semra Ertan took her own life in a public protest against rising racism and the conditions of migrants in Germany. She left behind more than 350 poems.","1982_semraertan.jpg","semra-ertan-1982",0,"Renk Magazin"],
+[1983,"MIG","Cemal Kemal Altun","30 August 1983, West Berlin: an asylum seeker who had fled Turkey after the 1980 coup, Altun fell to his death from a courthouse amid the fear of deportation and a hopeless asylum process; he became a symbol of the deportation and asylum debates.","1983_cemalkemalaltun.webp","cemal-kemal-altun-1983",0,"Elke Bruhn Hoffmann / DPA"],
+[1989,"DE-POL","Fall of the Berlin Wall","The wall dividing the two Germanys comes down.","1989_fallofberlinwall.webp","berlin-wall-fall-1989",0,"<a href=\"https://www.moma.org/artists/8594-keith-pannel-mail-on-sunday\" target=\"_blank\" rel=\"noopener\">Keith Pannel / Mail on Sunday</a>"],
+[1990,"DE-POL","German reunification","The BRD and the GDR unite.","1990_germany.jpg","reunification-1990",0,"Bundesarchiv"],
+[1992,"MIG","The Mölln arson attack","23 November 1992: Bahide Arslan, Yeliz Arslan and Ayşe Yılmaz were killed in an arson attack by the far right. A turning point in racist violence against Turks in Germany.","1992_molln.webp","molln-1992",0,"Rolf Rick / DPA"],
+[1993,"MIG","The Solingen arson attack","29 May 1993: the home of the Genç family was set on fire in a neo-Nazi-linked attack; five people, three of them children, died. One of the most severe racist attacks in Germany.","1993_sollingen.jpg","solingen-1993",0,"Anonymous"],
+[2018,"MIG","Fremde Türen · El Kapıları","The media memory of migration from Turkey to Germany — music, film, literature. This archive-project itself.","","fremde-turen-2018",0,""],
+[2026,"MIG","The living archive","An open, ongoing digital archive — this platform, still growing.","","archive-2026",0,""]];
+const Y0=1923,Y1=2026,strip=document.getElementById("strip");
+const xp=y=>4+(y-Y0)/(Y1-Y0)*92;
+const circs=[];const enabled={"TR-POL":true,"DE-POL":true,"MIG":true};
+const groups={};EV.forEach((e,i)=>{(groups[e[0]]=groups[e[0]]||[]).push(i);});
+const years=Object.keys(groups).map(Number).sort((a,b)=>a-b);
+let lastx=-9;
+years.forEach(y=>{let x=xp(y);if(x-lastx<3.6)x=lastx+3.7;lastx=x;
+  const g=document.createElement("div");g.className="ygroup";g.style.left=x+"%";
+  groups[y].forEach((i,k)=>{const e=EV[i];
+    const c=document.createElement("div");c.className="circ"+(e[4]?"":" noimg")+(k>0?" stack":"");
+    c.style.setProperty("--cc",CLR[e[1]]);c.style.setProperty("--k",k);
+    if(e[4])c.style.backgroundImage=`url('${IMG}${e[4]}')`;
+    c.innerHTML=`<div class="cov"><span>${e[0]}</span></div>`;
+    c.dataset.flow=e[1];c.onclick=(ev)=>{ev.stopPropagation();sel(i);};
+    g.appendChild(c);circs[i]=c;});
+  strip.appendChild(g);});
+const bg=document.getElementById("bg"),g1=document.getElementById("g1"),g2=document.getElementById("g2"),scan=document.getElementById("scan"),
+ghost=document.getElementById("ghost"),kick=document.getElementById("kick"),
+title=document.getElementById("title"),note=document.getElementById("note"),go=document.getElementById("go"),photoby=document.getElementById("photoby");
+const fx=[bg,g1,g2,scan];
+let lastYear=Y0,raf;
+function rollYear(to){cancelAnimationFrame(raf);const from=lastYear,t0=performance.now(),dur=560;
+  (function step(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+    ghost.textContent=Math.round(from+(to-from)*e);if(p<1)raf=requestAnimationFrame(step);else ghost.textContent=to;})(t0);
+  lastYear=to;}
+function sel(i){const e=EV[i];
+  const url=e[4]?`url('${IMG}${e[4]}')`:"none";
+  fx.forEach(l=>l.classList.remove("play"));
+  bg.style.backgroundImage=url;g1.style.backgroundImage=url;g2.style.backgroundImage=url;
+  void bg.offsetWidth;
+  if(e[4])fx.forEach(l=>l.classList.add("play"));
+  rollYear(e[0]);ghost.style.color=CLR[e[1]];
+  kick.innerHTML=`<span style="color:${CLR[e[1]]}">${LBL[e[1]]}</span> · ${e[0]}`;
+  title.textContent=e[2];note.textContent=e[3];
+  if(e[6]){go.href=`events/${e[5]}.html`;go.style.pointerEvents="";go.style.opacity="";}
+  else{go.removeAttribute("href");go.style.pointerEvents="none";go.style.opacity=".55";}
+  photoby.innerHTML=e[7]?("IMAGE · "+e[7]):"";
+  circs.forEach((c,k)=>c&&c.classList.toggle("on",k===i));}
+document.querySelectorAll("#legend span").forEach(sp=>{sp.onclick=()=>{const f=sp.dataset.flow;enabled[f]=!enabled[f];sp.classList.toggle("off",!enabled[f]);
+  EV.forEach((e,i)=>{if(circs[i])circs[i].style.display=enabled[e[1]]?"":"none";});};});
+sel(8);
+</script></body></html>
