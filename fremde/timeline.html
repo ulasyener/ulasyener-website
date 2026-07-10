@@ -65,7 +65,24 @@ body{background:#1B2121;color:var(--bone);font-family:'Satoshi',sans-serif;overf
 #legend span{cursor:pointer;user-select:none;transition:opacity .2s}
 #legend span.off{opacity:.32}
 #legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
-@media(max-width:640px){#title{max-width:88vw;font-size:clamp(26px,8vw,42px)}#note{max-width:86vw}#kick,#title,#note,#go{left:5vw}#legend{display:none}}
+#mobile{display:none}
+@media(max-width:640px){
+html,body{height:auto;overflow-y:auto;overflow-x:hidden}
+#stage{display:none}
+#mobile{display:block;min-height:100vh;padding-bottom:40px}
+.m-hero{padding:24px 18px 12px;position:sticky;top:0;background:#1B2121;z-index:2;border-bottom:1px solid rgba(226,218,194,.14)}
+.m-hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em}
+.m-hero .sub{font-family:'DM Mono',monospace;font-size:11px;color:#909B9A;letter-spacing:.2em;margin-top:4px}
+.m-card{padding:18px}
+.m-card+.m-card{border-top:1px solid rgba(226,218,194,.1)}
+.m-card .yr{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:1;color:var(--cc)}
+.m-card .tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--cc);display:inline-block;margin:3px 0 8px}
+.m-card img{width:100%;border-radius:6px;display:block;margin:8px 0;filter:contrast(1.03)}
+.m-card h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;margin:6px 0}
+.m-card p{font-size:14px;line-height:1.5;color:#d7d0bd;margin:0}
+.m-card .cr{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6D7A79;margin-top:10px}
+.m-card .cr a{color:inherit}
+}
 </style></head><body>
 <div id="stage">
   <div id="bg" class="imglayer"></div><div id="g1" class="imglayer"></div><div id="g2" class="imglayer"></div><div id="scan"></div>
@@ -145,5 +162,9 @@ function sel(i){const e=EV[i];
   circs.forEach((c,k)=>c&&c.classList.toggle("on",k===i));}
 document.querySelectorAll("#legend span").forEach(sp=>{sp.onclick=()=>{const f=sp.dataset.flow;enabled[f]=!enabled[f];sp.classList.toggle("off",!enabled[f]);
   EV.forEach((e,i)=>{if(circs[i])circs[i].style.display=enabled[e[1]]?"":"none";});};});
+(function(){var m=document.createElement('div');m.id='mobile';
+var h='<div class="m-hero"><h1>Shared History</h1><div class="sub">1923 \u2014 2026</div></div>';
+EV.forEach(function(e){h+='<div class="m-card" style="--cc:'+CLR[e[1]]+'"><div class="yr">'+e[0]+'</div><span class="tag">'+LBL[e[1]]+'</span>'+(e[4]?'<img loading="lazy" src="'+IMG+e[4]+'" alt="">':'')+'<h3>'+e[2]+'</h3><p>'+e[3]+'</p>'+(e[7]?'<div class="cr">IMAGE \u00b7 '+e[7]+'</div>':'')+'</div>';});
+m.innerHTML=h;document.body.appendChild(m);})();
 sel(8);
 </script></body></html>
