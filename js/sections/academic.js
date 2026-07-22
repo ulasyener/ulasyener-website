@@ -181,6 +181,10 @@ function showArchiveSection(section) {
 
     el.appendChild(list);
     root.appendChild(el);
+
+    if (window.PortraitField && typeof window.PortraitField.show === 'function') {
+      window.PortraitField.show();
+    }
   });
 }
 

@@ -157,6 +157,9 @@ function clearPanel() {
     window.grid3d.destroy();
     window.grid3d = null;
   }
+  if (window.PortraitField && typeof window.PortraitField.hide === 'function') {
+    window.PortraitField.hide();
+  }
 }
 
 // ─── Home ─────────────────────────────────────────────────────────────────

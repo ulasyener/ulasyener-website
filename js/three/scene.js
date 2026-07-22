@@ -62,5 +62,10 @@ function animate() {
   }
 
   camera.lookAt(0, 30, camera.position.z - 1);
+
+  if (window.PortraitField && typeof window.PortraitField.update === 'function') {
+    window.PortraitField.update();
+  }
+
   renderer.render(scene, camera);
 }
