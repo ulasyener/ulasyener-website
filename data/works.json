@@ -83,7 +83,8 @@
           "label": "Interactive Spaces",
           "description": "Game environments, spatial installations and interactive systems developed across digital and physical space.",
           "projects": [
-            "fremde-gameplay"
+            "fremde-gameplay",
+            "vorkurs-experience"
           ]
         }
       ]

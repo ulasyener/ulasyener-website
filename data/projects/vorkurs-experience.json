@@ -1,0 +1,43 @@
+{
+  "id": "vorkurs-experience",
+  "title": "The Vorkurs Experience",
+  "subtitle": "Interactive Intervention at the Tempelherrenhaus in Weimar",
+  "year": "2019",
+  "location": "Ilmpark, Weimar",
+  "program": "Media Architecture, Bauhaus-Universität Weimar",
+  "responsibilities": ["Concept", "Interaction Design", "AR Development"],
+  "description": "Framed around the 100th anniversary of the founding of the Bauhaus, a walkable path connecting eight sites around the ruin of the Tempelherrenhaus unveils its hidden link to the former school's 'Vorkurs', the preliminary course led by Johannes Itten, László Moholy-Nagy and Josef Albers. A series of sound, light and augmented-reality installations, triggered by smartphone, recall the experimental spirit of the Vorkurs along the route.",
+  "credits": [
+    "Aixa Navas Valbuena",
+    "Jonas Obertüfer",
+    "Ulaş Yener"
+  ],
+  "cover": "images/projects/spatialmedia/interactivespaces/vorkursexperience/cover.jpg",
+  "images": [
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/1.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/2.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/3.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/4.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/5.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/6.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/7.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/8.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/9.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/10.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/11.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/12.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/13.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/14.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/15.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/16.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/17.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/18.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/19.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/20.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/21.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/22.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/23.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/24.jpg" },
+    { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/25.jpg" }
+  ]
+}
