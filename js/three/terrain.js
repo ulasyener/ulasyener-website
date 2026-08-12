@@ -17,6 +17,7 @@ function initTerrain() {
       terrain.scale.set(1000, 1000, 1000);
       terrain.position.set(0, -20, 0);
       scene.add(terrain);
+      window.TerrainRoot = terrain; // nameForest.js raycasts against this for ground height
       if (canvas) canvas.style.opacity = '1';
     },
     undefined,

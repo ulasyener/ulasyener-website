@@ -382,5 +382,7 @@
     });
   }
 
-  window.PortraitField = { show, hide, update };
+  // buildPortrait/disposeGroup exposed so nameForest.js can lazy-load a single
+  // person's point-cloud shader on demand without duplicating it (see brief).
+  window.PortraitField = { show, hide, update, buildPortrait, disposeGroup };
 })();

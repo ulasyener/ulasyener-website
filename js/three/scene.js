@@ -49,22 +49,30 @@ let   terrainLooping         = false;
 function animate() {
   requestAnimationFrame(animate);
 
-  camera.position.z -= 0.015;
+  // NameForest.show() sets this while its own click-drag freeflight camera
+  // control is active, so the automatic drift/look-at doesn't fight it.
+  if (!window.__driftPaused) {
+    camera.position.z -= 0.015;
 
-  if (!terrainLooping && camera.position.z < TERRAIN_LOOP_THRESHOLD) {
-    terrainLooping = true;
-    const doReset = () => { camera.position.z = TERRAIN_LOOP_START; terrainLooping = false; };
-    if (typeof runGlitch === 'function') {
-      runGlitch(doReset);
-    } else {
-      doReset();
+    if (!terrainLooping && camera.position.z < TERRAIN_LOOP_THRESHOLD) {
+      terrainLooping = true;
+      const doReset = () => { camera.position.z = TERRAIN_LOOP_START; terrainLooping = false; };
+      if (typeof runGlitch === 'function') {
+        runGlitch(doReset);
+      } else {
+        doReset();
+      }
     }
-  }
 
-  camera.lookAt(0, 30, camera.position.z - 1);
+    camera.lookAt(0, 30, camera.position.z - 1);
+  }
 
   if (window.PortraitField && typeof window.PortraitField.update === 'function') {
     window.PortraitField.update();
+  }
+
+  if (window.NameForest && typeof window.NameForest.update === 'function') {
+    window.NameForest.update();
   }
 
   renderer.render(scene, camera);
