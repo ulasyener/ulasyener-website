@@ -1,0 +1,22 @@
+{
+  "id": "redbullmeo3",
+  "title": "Red Bull M.E.O. Season 3 — PUBG Mobile World Final (West)",
+  "year": "2021",
+  "location": "Istanbul, Turkey",
+  "client": "Red Bull",
+  "program": "Virtual Event Environment / 3D Level Design",
+  "responsibilities": ["3D Environment Design", "Level Design"],
+  "description": "A virtual recreation of Istanbul's historic peninsula — Sultanahmet, Galata, the Bosphorus — built as the competitive map and event environment for the Red Bull Mobile Esports Open Season 3, PUBG Mobile World Final (West).",
+  "cover": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/5.jpg",
+  "images": [
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/1.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/2.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/3.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/4.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/5.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/6.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/7.jpg" },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/vr/vr1.jpg", "panorama": true },
+    { "src": "images/projects/spatialmedia/immersiveenvironments/redbullmeo3/vr/vr2.jpg", "panorama": true }
+  ]
+}

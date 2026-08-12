@@ -491,6 +491,14 @@ function openLightbox(images, startIndex, project) {
 
   const isVideo = project && project.content_type === 'video' && project.video_provider === 'vimeo';
   let current = startIndex;
+  let loadImg; // else dalında tanımlanır; onKey ve son yükleme çağrısı buna erişir
+
+  let panoInstance  = null;
+  let panoContainer = null;
+  function destroyPano() {
+    if (panoInstance) { panoInstance.destroy(); panoInstance = null; }
+    if (panoContainer && panoContainer.parentNode) { panoContainer.parentNode.removeChild(panoContainer); panoContainer = null; }
+  }
 
   const box = document.createElement('div');
   box.id = 'lightbox';
@@ -503,6 +511,7 @@ function openLightbox(images, startIndex, project) {
   closeBtn.addEventListener('mouseleave', () => { closeBtn.style.color = 'rgba(255,255,255,0.35)'; });
 
   function closeLightbox() {
+    destroyPano();
     box.style.opacity = '0';
     box.style.transition = 'opacity 0.2s ease';
     setTimeout(() => box.remove(), 200);
@@ -537,16 +546,33 @@ function openLightbox(images, startIndex, project) {
     ensureVimeoScript(); // tekrar eklemez
     box.appendChild(wrapper);
   } else {
-    const img = document.createElement('img');
-    img.style.cssText = 'max-width:88vw;max-height:88vh;object-fit:contain;display:block;transition:opacity 0.2s ease;user-select:none;';
+    const mediaWrapper = document.createElement('div');
+    mediaWrapper.style.cssText = 'width:88vw;height:88vh;max-width:1400px;display:flex;align-items:center;justify-content:center;position:relative;';
 
-    function loadImg(index) {
+    const img = document.createElement('img');
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;display:block;transition:opacity 0.2s ease;user-select:none;';
+
+    loadImg = function(index) {
+      const entry = images[index];
+      counter.textContent = (index + 1) + ' / ' + images.length;
+
+      if (entry.panorama) {
+        img.style.display = 'none';
+        destroyPano();
+        panoContainer = document.createElement('div');
+        panoContainer.style.cssText = 'width:100%;height:100%;';
+        mediaWrapper.appendChild(panoContainer);
+        panoInstance = createPanoramaViewer(panoContainer, entry.src);
+        return;
+      }
+
+      destroyPano();
+      img.style.display = 'block';
       img.style.opacity = '0';
       setTimeout(() => {
-        img.src = images[index].src;
+        img.src = entry.src;
         img.onload = () => { img.style.opacity = '1'; };
       }, 150);
-      counter.textContent = (index + 1) + ' / ' + images.length;
     }
 
     function makeArrow(dir) {
@@ -567,11 +593,11 @@ function openLightbox(images, startIndex, project) {
     const counter = document.createElement('div');
     counter.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.25em;color:rgba(255,255,255,0.35);z-index:901;user-select:none;';
 
-    box.appendChild(img);
+    mediaWrapper.appendChild(img);
+    box.appendChild(mediaWrapper);
     box.appendChild(makeArrow('left'));
     box.appendChild(makeArrow('right'));
     box.appendChild(counter);
-    loadImg(current);
   }
 
   box.appendChild(closeBtn);
@@ -579,6 +605,10 @@ function openLightbox(images, startIndex, project) {
   box.style.opacity = '0';
   box.style.transition = 'opacity 0.25s ease';
   requestAnimationFrame(() => { box.style.opacity = '1'; });
+
+  // İçerik box DOM'a eklendikten SONRA yüklenir — panorama viewer, container'ın
+  // gerçek genişlik/yükseklik almasına (clientWidth/Height) ihtiyaç duyuyor.
+  if (!isVideo) loadImg(current);
 }
 
 // ─── Menü bağlantıları + Hash Routing init ────────────────────────────────

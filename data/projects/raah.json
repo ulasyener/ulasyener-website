@@ -1,0 +1,28 @@
+{
+  "id": "raah",
+  "title": "Raah",
+  "year": "2016",
+  "location": "Istanbul, Turkey",
+  "firm": "304 Design",
+  "program": "Product Design — Rahle",
+  "responsibilities": ["Concept Design", "Detail Design"],
+  "description": "A modern reinterpretation of the rahle (book stand), pairing a marble base with a crossed, blackened-steel frame.",
+  "cover": "images/projects/craftdesign/raah/1.jpg",
+  "images": [
+    { "src": "images/projects/craftdesign/raah/1.jpg" },
+    { "src": "images/projects/craftdesign/raah/2.jpg" },
+    { "src": "images/projects/craftdesign/raah/3.jpg" },
+    { "src": "images/projects/craftdesign/raah/4.jpg" },
+    { "src": "images/projects/craftdesign/raah/5.jpg" },
+    { "src": "images/projects/craftdesign/raah/6.jpg" },
+    { "src": "images/projects/craftdesign/raah/7.jpg" },
+    { "src": "images/projects/craftdesign/raah/8.jpg" },
+    { "src": "images/projects/craftdesign/raah/9.jpg" },
+    { "src": "images/projects/craftdesign/raah/10.jpg" },
+    { "src": "images/projects/craftdesign/raah/11.jpg" },
+    { "src": "images/projects/craftdesign/raah/12.jpg" },
+    { "src": "images/projects/craftdesign/raah/13.jpg" },
+    { "src": "images/projects/craftdesign/raah/14.jpg" },
+    { "src": "images/projects/craftdesign/raah/15.jpg" }
+  ]
+}

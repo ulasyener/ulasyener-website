@@ -1,0 +1,21 @@
+{
+  "id": "homeoffice",
+  "title": "Home Office",
+  "year": "2016",
+  "location": "Istanbul, Turkey",
+  "firm": "304 Design",
+  "program": "Residential Interior",
+  "responsibilities": ["Concept Design", "Interior Design"],
+  "description": "Residential living and study space organized around a freestanding geometric shelving unit that divides lounge and work areas within an open floor plan.",
+  "cover": "images/projects/architectureinterior/residential/homeoffice/cover.jpg",
+  "images": [
+    { "src": "images/projects/architectureinterior/residential/homeoffice/1.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/2.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/3.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/4.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/5.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/6.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/7.jpg" },
+    { "src": "images/projects/architectureinterior/residential/homeoffice/8.jpg" }
+  ]
+}
