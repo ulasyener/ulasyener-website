@@ -1,0 +1,1171 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fremde Türen — Template 01 · Timeline + Dossier</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECE9E1; --ink:#222A2A; --ink2:#6D7A79; --line:#C9C4B4;
+  --music:#EC4624; --lit:#F39120; --visual:#4FBBBC; --art:#7A5EA8; --person:#3E5F8A; --brand:#C9A227;
+}
+*{margin:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:'Satoshi',sans-serif;min-height:100vh}
+.frame{max-width:1240px;margin:0 auto;padding:40px 40px 56px}
+.kicker{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.18em;color:var(--ink2)}
+h1{font-weight:900;font-size:clamp(24px,3.2vw,36px);text-transform:uppercase;letter-spacing:-.015em;margin-top:6px}
+h1 em{font-style:normal;color:var(--brand)}
+#stage{margin-top:8px}
+svg{display:block;width:100%}
+.pict{cursor:pointer}
+.pict:hover .halo{opacity:.22}
+#people-band{display:flex;flex-wrap:wrap;gap:22px;align-items:center;padding:20px 2px 22px;padding-left:calc(100% * 64 / 1200)}
+.p-token{display:flex;align-items:center;cursor:pointer}
+.p-ring{width:48px;height:48px;border-radius:50%;border:2.5px solid var(--person);display:flex;align-items:center;
+  justify-content:center;background:#dfd9c8;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--ink);transition:all .12s}
+.p-token:hover .p-ring{background:var(--person);color:var(--paper)}
+.picon{transition:transform .15s ease;transform-box:fill-box;transform-origin:center}
+.pict:hover .picon{transform:scale(1.3)}
+.pict{opacity:0;transition:opacity .5s ease}
+.pict.in{opacity:1}
+.plabel-pop{opacity:0;transition:opacity .12s;pointer-events:none}
+.pict:hover .plabel-pop{opacity:1}
+/* below-canvas info row */
+/* 2026-08-08: Ulaş's call -- drop the How to read / Legend / Dataset explainer columns,
+   replace with a loose row of interdisciplinary keywords in the same DM Mono label
+   voice as .kicker. Draft word list, easy to edit in the markup below. */
+.below{border-top:2px solid var(--ink);padding-top:16px;margin-top:6px}
+.kw-row{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);line-height:2.5}
+.kw-row .sep{color:var(--line);margin:0 .6em}
+/* dossier */
+#veil{position:fixed;inset:0;background:rgba(34,42,42,.28);opacity:0;pointer-events:none;transition:opacity .25s;z-index:8}
+#veil.on{opacity:1;pointer-events:auto}
+#dossier{position:fixed;top:0;right:-360px;width:340px;max-width:88vw;height:100vh;background:var(--paper);
+  border-left:2px solid var(--ink);z-index:9;transition:right .28s cubic-bezier(.2,.8,.2,1);overflow-y:auto;padding:26px 26px 40px}
+#dossier.on{right:0}
+#dossier .close{position:absolute;top:18px;right:22px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink2)}
+#dossier .close:hover{color:var(--ink)}
+.d-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em}
+.d-title{font-weight:900;font-size:27px;line-height:1.05;text-transform:uppercase;margin:8px 0 2px}
+.d-sub{font-size:13px;color:#4a5453;margin-bottom:16px}
+.d-img{width:100%;aspect-ratio:1/1;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--ink2);text-align:center;padding:12px;background:#E6E2D6;margin-bottom:18px}
+.d-img img{width:100%;height:100%;object-fit:cover}
+.d-img canvas{width:100%;height:100%;display:block}
+#imgpop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);z-index:10;opacity:0;pointer-events:none;
+  transition:opacity .22s,transform .22s;width:min(72vw,420px)}
+#imgpop.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+#imgpop .frame{width:100%;aspect-ratio:1/1;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--ink2);text-align:center;padding:14px;background:#E6E2D6}
+#imgpop .frame img{width:100%;height:100%;object-fit:cover}
+#imgpop .cap{margin-top:12px;text-align:center;color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.03em}
+#imgpop .cap b{font-family:'Satoshi',sans-serif;font-size:12.5px;letter-spacing:0;display:block;margin-bottom:2px}
+#imgpop .close{position:absolute;top:-34px;right:0;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink)}
+.d-sec{font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;border-top:1.5px solid var(--ink);padding-top:8px;margin:16px 0 8px}
+.meta{font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.5;width:100%}
+.meta tr td:first-child{color:var(--ink2);padding:3px 14px 3px 0;white-space:nowrap;vertical-align:top}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:'DM Mono',monospace;font-size:10.5px;border:1.2px solid var(--ink);border-radius:999px;
+  padding:5px 12px;cursor:pointer;background:none;transition:all .12s}
+.chip:hover{background:var(--ink);color:var(--paper)}
+.chip .rel{color:var(--ink2);margin-right:6px}
+.chip:hover .rel{color:var(--paper)}
+.chip.ghost{border-style:dashed;color:var(--ink2);cursor:default}
+.chip.ghost:hover{background:none;color:var(--ink2)}
+.d-note{font-size:12.5px;line-height:1.65;color:#3c4645}
+.d-src{font-family:'Special Elite',monospace;font-size:10.5px;color:#8C2F2F;margin-top:20px;line-height:1.7}
+.d-src a{color:#8C2F2F;text-decoration:underline;text-decoration-color:rgba(140,47,47,.4)}
+.d-src a:hover{text-decoration-color:#8C2F2F}
+.crumb{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink2);margin-bottom:14px;min-height:14px}
+.crumb span{cursor:pointer;text-decoration:underline}
+/* ============ 3D TAKEOVER (full-screen point-cloud / record-card mode) ============
+   2026-08-07 brief (template01_3d_dossier_brief) -- full-screen black stage replacing
+   the flat side panel for is3DEligible() records: PERSON with a PORTRAIT3D_STEMS entry
+   (ghost point-cloud, same shader as the old .d-img box) and SOUND (record-card plane --
+   front cover only, limited tilt, no back texture since no back-cover assets exist yet,
+   Ulaş's call 2026-08-07). Parallel .tk-* classes carry the same type scale as .d-*/.chip
+   above, just recolored for a dark stage instead of the paper dossier panel.
+   2026-08-07 fix: the show/hide state used to be a stylesheet rule (.tk-screen{opacity:0}
+   toggled by adding/removing a ".on" class, same pattern as #veil/#dossier above). Verified
+   in two independent Chromium instances (Ulaş's own Chrome + this session's test browser)
+   that some installed extension/heuristic silently drops exactly that rule from the live
+   CSSOM -- a fixed, inset:0, opaque, high-z-index element that starts at opacity:0 and
+   toggles visible via a class matches the generic "hidden paywall/cookie-wall overlay"
+   fingerprint several ad/privacy blockers specifically hunt for and neutralize, which left
+   the panel permanently visible and blocking every click on the page. Fix: the hidden/shown
+   state now lives ONLY in the element's own inline style (set in the HTML, toggled directly
+   via JS below), never in a <style> rule -- nothing for that class of extension to find and
+   strip. */
+/* 2026-08-07: stage used to be inset:0 (full-bleed canvas, object rendered dead-center
+   of the whole screen) -- Ulaş's call: too centered, shrink it and pull it toward the
+   right so it reads as a companion to the text instead of competing with it. A fixed
+   right-aligned box (not a camera/world change) does this with zero Three.js edits --
+   createViewer()'s resize() already reads canvasEl.clientWidth/Height off whatever box
+   it's given. */
+/* positioning lives inline on the element itself (see markup below), not as a bare
+   .tk-stage{...} rule -- same silent-CSSOM-rule-loss issue as .tk-screen above kept
+   dropping single-class-selector rules for this box specifically; inline style has no
+   stylesheet rule for it to strip.
+   2026-08-08: the SAME bug also ate the compound `.tk-stage canvas{...}` rule below (it's
+   not just bare single-class selectors that get stripped) -- confirmed via cssRules
+   enumeration, the rule is gone from the live sheet. With no CSS width/height, the canvas's
+   intrinsic size (its width/height attributes) drives its own layout box, and
+   ResizeObserver -> renderer.setSize() -> new canvas.width/height -> ResizeObserver fires
+   again forms a runaway feedback loop that balloons to ~33M px and blows out the WebGL
+   framebuffer ("Attachment has zero size"). Canvas is created dynamically in JS (see
+   openTakeover), so its sizing now goes inline there instead of here -- this rule is dead,
+   left removed rather than re-added since it'll just get stripped again. */
+.tk-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:#6D7A79;text-align:center;padding:20px}
+.tk-text{position:absolute;left:0;top:0;bottom:0;width:min(460px,86vw);padding:56px 40px;
+  display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(90deg,rgba(10,13,13,.97) 55%,rgba(10,13,13,0));color:var(--paper)}
+.tk-icon{width:32px;height:32px;display:inline-flex;vertical-align:middle;margin-right:10px;flex:none}
+.tk-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--brand);display:flex;align-items:center}
+.tk-play{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10.5px;
+  border:1.2px solid var(--brand);border-radius:999px;padding:5px 14px 5px 6px;cursor:pointer;
+  background:none;color:var(--paper);margin:2px 8px 2px 0;transition:all .12s}
+.tk-play:hover{background:var(--brand);color:var(--ink)}
+.tk-play[disabled]{cursor:default;border-color:#6D7A79;color:#6D7A79}
+.tk-play[disabled]:hover{background:none;color:#6D7A79}
+.tk-play-dot{width:22px;height:22px;border-radius:50%;border:1.2px solid currentColor;
+  display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex:none}
+.tk-title{font-weight:900;font-size:30px;line-height:1.05;text-transform:uppercase;margin:8px 0 2px}
+.tk-sub{font-size:13px;color:#9aa39e;margin-bottom:18px}
+/* same treatment as timeline.html's #desc/.hi/.dud -- Special Elite typewriter font, text
+   sitting inside a translucent white "highlighter" strip (works on this dark tk-screen the
+   same way it works on timeline.html's cream page: the strip sets its own bg+ink color,
+   independent of what's behind it), scrambling chars shown in the same glitch/Turkish-char
+   set while unresolved. */
+.tk-note{font-family:'Special Elite',monospace;font-size:14px;line-height:1.9;letter-spacing:.01em;min-height:5.85em;white-space:pre-wrap}
+.tk-note .hi{background:rgba(255,255,255,.5);color:var(--ink);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:2px 6px;border-radius:1px}
+.tk-note .dud{color:rgba(34,42,42,.42)}
+.tk-sec{font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#6D7A79;margin:20px 0 8px}
+.tk-chips{display:flex;flex-wrap:wrap;gap:7px}
+.tk-chip{font-family:'DM Mono',monospace;font-size:10.5px;border:1.2px solid #6D7A79;border-radius:999px;
+  padding:5px 12px;cursor:pointer;background:none;color:var(--paper);transition:all .12s}
+.tk-chip:hover{background:var(--paper);color:var(--ink)}
+.tk-chip[disabled]{cursor:default;border-style:dashed;color:#6D7A79}
+.tk-chip[disabled]:hover{background:none;color:#6D7A79}
+.tk-chip .rel{color:#6D7A79;margin-right:6px}
+.tk-chip:hover .rel{color:var(--ink2)}
+.tk-crumb{font-family:'DM Mono',monospace;font-size:10px;color:#6D7A79;margin-bottom:10px;min-height:14px}
+.tk-crumb span{cursor:pointer;text-decoration:underline;color:#9aa39e}
+.tk-screen .close{position:absolute;top:18px;right:22px;background:none;border:none;font-size:26px;
+  cursor:pointer;color:var(--paper);z-index:2}
+.tk-screen .close:hover{color:var(--brand)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">FREMDE TÜREN / EL KAPILARI — TEMPLATE 01 · HORIZONTAL TIMELINE + DOSSIER</div>
+  <h1>El Kapıları, <em>1976</em></h1>
+  <div id="stage"></div>
+  <div id="people-band"></div>
+  <div class="below">
+    <div class="kw-row" id="kwRow"></div>
+  </div>
+</div>
+<div id="veil"></div>
+<aside id="dossier">
+  <button class="close" onclick="closeD()">×</button>
+  <div class="crumb" id="crumb"></div>
+  <div id="d-body"></div>
+</aside>
+<div id="imgpop">
+  <button class="close" onclick="closeImg()">×</button>
+  <div class="frame" id="imgpop-frame"></div>
+  <div class="cap" id="imgpop-cap"></div>
+</div>
+<div class="tk-screen" id="takeover3d" style="display:none;position:fixed;inset:0;background:#0a0d0d;z-index:20">
+  <button class="close" onclick="closeTakeover()">×</button>
+  <div class="tk-stage" id="tk-stage" style="position:absolute;inset:0"></div>
+  <div class="tk-text">
+    <div class="tk-crumb" id="tk-crumb"></div>
+    <div class="tk-kicker" id="tk-kicker"></div>
+    <div class="tk-title" id="tk-title"></div>
+    <div class="tk-sub" id="tk-sub"></div>
+    <div class="tk-chips" id="tk-play"></div>
+    <div class="tk-note" id="tk-note"></div>
+    <div class="tk-sec">Connections</div>
+    <div class="tk-chips" id="tk-chips"></div>
+  </div>
+</div>
+<script src="template01_data.js"></script>
+<script src="pictogram_icons.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* ============ DATA -- now loaded from template01_data.js (DB, LINKLABEL) and
+   pictogram_icons.js (PICTOGRAM_R0, PICTOGRAM_SVG) -- split out 2026-07-27, part of the
+   project-wide D3/data-separation pass (song_ring_prototype -> music_genres_radial ->
+   this file). DB is Ulaş's own curated pilot dataset, not raw-crawl data, but keeping it
+   external means the (planned) dossier_editor.html write path can update one JSON/JS
+   file instead of a <script> block buried in this page. PICTOGRAM_SVG/PICTOGRAM_R0 are
+   the hand-cut icon shape library -- confirmed (grep) that template02b_pictogram_field_full.html
+   ALSO embeds a PICTOGRAM_SVG object; not byte-diffed against this one yet (out of scope
+   for this pass -- that's the next component in the queue), but this file's copy is now in
+   a standalone pictogram_icons.js specifically so template02 can be pointed at the SAME
+   file next round instead of keeping two independent copies of the icon set in sync by hand. ============ */
+/* file:// keeps tripping this up (Ulaş opening the file directly instead of through
+   start_template01.bat) -- ES modules are blocked on bare file://, so mountPortrait3D/
+   mountRecord3D never get defined and every 3D takeover silently falls back to "portrait/
+   cover to be added". That fallback is correct behavior, but it looks identical to an
+   actual bug from the outside -- this banner makes the real cause visible on the page
+   itself instead of relying on remembering to use the .bat file. */
+if(location.protocol==="file:"){
+  const warn=document.createElement("div");
+  warn.textContent="⚠ Opened via file:// — 3D portraits/records need a local server. Close this tab and run start_template01.bat instead (see 08-platform/start_template01.bat).";
+  warn.style.cssText="background:#EC4624;color:#ECE9E1;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.02em;padding:10px 16px;margin-bottom:18px;border-radius:3px";
+  document.querySelector(".frame").prepend(warn);
+}
+/* ============ TIMELINE ============ */
+const W=1200,H=460,ML=64,MR=36,Y0=1960,Y1=2000,AX=310;
+const x=y=>ML+(y-Y0)/(Y1-Y0)*(W-ML-MR);
+const svg = d3.select("#stage").append("svg")
+  .attr("viewBox", `0 0 ${W} ${H}`);
+function el(n, at, parent){
+  const parentSel = (parent && typeof parent.node === "function") ? parent : d3.select(parent || svg.node());
+  const sel = parentSel.append(n);
+  for(const k in at) sel.attr(k, at[k]);
+  return sel.node();
+}
+
+/* axis */
+el("line",{x1:ML-16,x2:W-MR+8,y1:AX,y2:AX,stroke:"#222A2A","stroke-width":1.6});
+for(let y=Y0;y<=Y1;y++){
+  const maj=y%5===0;
+  el("line",{x1:x(y),x2:x(y),y1:AX,y2:AX+(maj?10:5),stroke:maj?"#222A2A":"#9aa39e","stroke-width":maj?1.2:.7});
+  if(maj){const t=el("text",{x:x(y),y:AX+26,"text-anchor":"middle",fill:"#6D7A79"});
+    t.style.font="400 11px 'DM Mono'";t.textContent=y;}
+}
+
+/* object pictograms above axis — hand-cut icon set (pictograms_export_2026-07-18/,
+   approved 2026-07-18). Each icon's raw SVG markup lives in PICTOGRAM_SVG in its own
+   local coordinate space; drawPictogram(key) wraps it in translate+scale so it drops
+   into the same (cx,cy,s) slot the old placeholder circle/rect used. Fixed black ink
+   on paper for every icon regardless of record type (Ulaş's call, 2026-07-18) — type
+   color still carries the legend dot/halo, just not the icon fill anymore. */
+function drawPictogram(key){
+  return function(g,cx,cy,s){
+    const k=s/PICTOGRAM_R0[key];
+    const wrap=el("g",{transform:`translate(${cx},${cy}) scale(${k})`},g);
+    wrap.innerHTML=PICTOGRAM_SVG[key];
+  };
+}
+/* Format-based icon selection (Ulaş's call, 2026-07-18): `type` still drives the
+   legend/dossier as before, but the drawn icon shape also looks at meta.format/
+   meta.label/sub/note for a closer match — e.g. a SOUND record whose format says
+   "cassette" draws the cassette icon instead of the vinyl default. Falls back to one
+   default icon per type when nothing matches, so every pre-existing record (none of
+   which carry this level of format detail yet) keeps looking exactly like its type's
+   default shape. */
+const TYPE_DEFAULT_ICON={SOUND:"vinyl_45",TEXT:"book",VISUAL:"film_reel",ARTWORK:"artwork"};
+/* Keyword sets below follow pictograms_export_2026-07-18/pictogram_tags.json — that file is
+   the canonical English tag/description reference (also meant for reuse in the UE game and a
+   future website), this function is just its first live consumer. Keep the two in sync. */
+function iconKeyFor(d){
+  const hay=[(d.meta&&d.meta.format)||"",(d.meta&&d.meta.label)||"",(d.meta&&d.meta["first published"])||"",d.sub||"",d.note||""].join(" ").toLowerCase();
+  // advertisement can appear in any medium -- checked before the per-type branches
+  if(/advertisement|\bad\b|commercial/.test(hay)) return "megaphone";
+  if(d.type==="SOUND"){
+    // physical-format words: checked against meta.format ONLY (fmt), not the broader
+    // hay blend -- hay includes sub/note prose, and a record's note can mention an
+    // unrelated record's format in passing (e.g. REC-0002's note says it was "later
+    // included on the 1976 album El Kapıları" -- that "album" belongs to REC-0001,
+    // not REC-0002, and was wrongly matching REC-0002 into vinyl_33 before this fix).
+    const fmt=((d.meta&&d.meta.format)||"").toLowerCase();
+    if(/cassette|kaset/.test(fmt)) return "cassette";
+    if(/\bvhs\b/.test(fmt)) return "vhs";
+    if(/\bcd\b|\bdvd\b|\bdisc\b/.test(fmt)) return "cd_dvd";
+    if(/\b33\b|33⅓|\blp\b|\balbum\b/.test(fmt)) return "vinyl_33";
+    if(/\b45\b|45 ?rpm|\bsingle\b/.test(fmt)) return "vinyl_45";
+    // content-description words: fine to check against the broader hay (sub/note)
+    if(/podcast|interview|audio recording/.test(hay)) return "microphone";
+    if(/radio broadcast|official radio|radio program|\bradio\b/.test(hay)) return "radio";
+    return "vinyl_45";
+  }
+  if(d.type==="TEXT"){
+    if(/newspaper|gazete|clipping/.test(hay)) return "newspaper";
+    if(/periodical|magazine|dergi|journal|article/.test(hay)) return "magazine";
+    if(/theater|theatre|tiyatro|concert|konser|exhibition|sergi/.test(hay)) return "ticket";
+    return "book";
+  }
+  if(d.type==="VISUAL"){
+    if(/\bvhs\b|35mm transfer|concert recording/.test(hay)) return "vhs";
+    if(/newspaper|gazete/.test(hay)) return "newspaper";
+    if(/photo|photograph/.test(hay)) return "camera";
+    if(/director|auteur|festival film/.test(hay)) return "clapperboard";
+    if(/made-for-tv|made for tv|tv series|tv program|\btv\b|television/.test(hay)) return "tv";
+    if(/poster|affiche|illustration|postcard/.test(hay)) return "artwork";
+    if(/theater|theatre|tiyatro|concert|konser|exhibition|sergi/.test(hay)) return "ticket";
+    return "film_reel";
+  }
+  if(d.type==="ARTWORK") return "artwork";
+  return null;
+}
+/* Pictogram placement is derived from DB, not hand-listed: any record with a `year`
+   and a type we know how to draw becomes a pictogram. Per-record `place:{h,s,label,anchor}`
+   overrides the auto layout when present (used by the pilot records above to keep their
+   hand-tuned look); records added later (e.g. via the dossier editor) without a `place`
+   get a sane default and just show up.
+   2026-07-18: auto-placed records (no manual `place.h`) now also check for collisions
+   against nearby pictograms — if two marks sit close together in time and their heights
+   would overlap (e.g. Burçak Tarlası 1964 vs the Almanya'da Çöpçülerimiz poem, 1965), the
+   auto one drops below the axis instead of stacking on top of it, using the room the
+   lifeline cleanup below freed up. Manually placed (`place.h`) pilot records are never
+   moved — only auto ones adapt. A second pass then staggers items that land below the
+   axis against EACH OTHER too (fixed a bug where two auto records both flipped below
+   could just re-collide down there, e.g. King Size Terror 1991 / Islamic Force 1992). */
+const AUTO_H=[80,116,152,188];
+/* 2026-07-19: pictogram size standardized to one constant for every record --
+   previously each object read its own `place.s` (pilot records had hand-tuned
+   values, 17/11/13, vs the 12 auto-default for everything else), which is
+   exactly what read as "inconsistent sizes" on screen. `place.s` is still
+   stored per-record in DB (harmless) but no longer consulted here. */
+const ICON_S=20.8;
+const objects=Object.entries(DB)
+  .filter(([id,d])=>d.year && TYPE_DEFAULT_ICON[d.type])
+  .sort((a,b)=>a[1].year-b[1].year)
+  .map(([id,d],i)=>{
+    const p=d.place||{};
+    return {id,yr:d.year,
+      h:p.h??AUTO_H[i%AUTO_H.length],
+      s:ICON_S,
+      auto:p.h==null,
+      side:"above",
+      draw:drawPictogram(iconKeyFor(d)),
+      label:p.label??`${d.title.toUpperCase()} · ${d.year}`,
+      anchor:p.anchor??"middle"};
+  });
+for(let i=0;i<objects.length;i++){
+  for(let j=i+1;j<objects.length;j++){
+    const a=objects[i],b=objects[j];
+    if(a.side!=="above"||b.side!=="above") continue;
+    const dx=Math.abs(x(a.yr)-x(b.yr)), dh=Math.abs(a.h-b.h);
+    if(dx<95 && dh<64){
+      if(a.auto){ a.side="below"; }
+      else if(b.auto){ b.side="below"; }
+    }
+  }
+}
+const BELOW_H=[40,85,130], placedBelow=[];
+objects.filter(o=>o.side==="below").forEach(o=>{
+  let h=BELOW_H[0];
+  for(const cand of BELOW_H){
+    if(!placedBelow.some(p=>Math.abs(x(p.yr)-x(o.yr))<95 && Math.abs(p.h-cand)<38)){ h=cand; break; }
+  }
+  o.h=h;
+  placedBelow.push({yr:o.yr,h});
+});
+/* 2026-07-18: labels no longer sit permanently next to the icon (that's what was
+   crowding into neighbors). Every icon now draws the same size/font popup label,
+   hidden until hover or click, opening to the RIGHT of the icon — and the icon
+   itself scales up slightly on hover so the hovered mark reads as "in front".
+   (Dropped an earlier attempt that reordered the DOM node on hover to fake
+   "bring to front" — that broke clicking entirely; pure CSS transform below
+   does the same visual job without touching the DOM.) */
+objects.forEach((o,pictIdx)=>{
+  const d=DB[o.id],cx=x(o.yr),cy=o.side==="below"?AX+o.h:AX-o.h;
+  const g=el("g",{class:"pict"});
+  g.style.transitionDelay=(pictIdx*35)+"ms";
+  el("circle",{cx,cy,r:o.s+11,fill:d.color,opacity:0,class:"halo"},g);
+  const cy1=o.side==="below"?cy-o.s-4:cy+o.s+4;
+  el("line",{x1:cx,x2:cx,y1:cy1,y2:AX,stroke:"#9aa39e","stroke-width":1,"stroke-dasharray":"1,3"},g);
+  const icon=el("g",{class:"picon"},g);
+  o.draw(icon,cx,cy,o.s,d.color);
+  const pop=el("g",{class:"plabel-pop"},g);
+  /* 2026-07-19: hover popup now shows two lines -- title (format) on top,
+     creator + year below -- instead of the old single-line title/label.
+     Format comes straight from meta.format (no fabrication if absent, parens
+     just omitted). Creator is read off `sub`, which every pictogram-eligible
+     record already writes as "CREATOR — details" (falls back to the whole
+     `sub` string when there's no em dash, e.g. REC-0003's bare "Tulay German"). */
+  const fmt=(d.meta&&d.meta.format)||"";
+  const line1=(d.title+(fmt?` (${fmt})`:"")).toUpperCase();
+  const creator=(d.sub||"").split(" — ")[0].trim();
+  const line2=creator?`${creator}, ${d.year}`:`${d.year}`;
+  const labelW=Math.max(Math.max(line1.length,line2.length)*6.2+18,64);
+  el("rect",{x:cx+o.s+8,y:cy-18,width:labelW,height:36,fill:"var(--paper)",stroke:d.color,"stroke-width":1.2},pop);
+  const t1=el("text",{x:cx+o.s+16,y:cy-3,fill:"#222A2A"},pop);
+  t1.style.font="700 10.5px Satoshi"; t1.style.letterSpacing=".03em";
+  t1.textContent=line1;
+  const t2=el("text",{x:cx+o.s+16,y:cy+13,fill:"#222A2A"},pop);
+  t2.style.font="700 10.5px Satoshi"; t2.style.letterSpacing=".03em";
+  t2.textContent=line2;
+  g.addEventListener("click",()=>{ if(is3DEligible(o.id)) openTakeover(o.id); else openImg(o.id); });
+});
+requestAnimationFrame(()=>{
+  requestAnimationFrame(()=>{
+    document.querySelectorAll(".pict").forEach(g=>g.classList.add("in"));
+  });
+});
+/* transformation arcs */
+[["LIT-0001","REC-0002"],["REC-0002","REC-0001"]].forEach(([a,b])=>{
+  const oa=objects.find(o=>o.id===a),ob=objects.find(o=>o.id===b);
+  const x1=x(oa.yr),y1p=oa.side==="below"?AX+oa.h+oa.s:AX-oa.h-oa.s;
+  const x2=x(ob.yr),y2p=ob.side==="below"?AX+ob.h+ob.s:AX-ob.h-ob.s;
+  el("path",{d:`M ${x1} ${y1p-16} C ${x1} ${Math.min(y1p,y2p)-64}, ${x2} ${Math.min(y1p,y2p)-64}, ${x2} ${y2p-16}`,
+    fill:"none",stroke:"#6D7A79","stroke-width":1,"stroke-dasharray":"3,4",opacity:.7});
+});
+
+/* ============ PEOPLE BAND (replaces the old below-axis lane lifelines) ============
+   2026-07-18: the lane rows (dots + hover tag) are gone — Ulaş asked for people to
+   read like the shared history timeline instead (ortak_tarih_timeline.html): round
+   portrait tokens in a colored ring, in their own row right above the How to read /
+   Legend / Dataset rule, left-aligned to start under the 1960 mark on the axis above
+   (padding-left in CSS matches ML/W). No real photos are wired in anywhere yet (same
+   as the dossier's "image to be added" box), so each token shows initials for now.
+   Clicking a person opens the same right-hand dossier as everything else (Ulaş tried
+   a separate left-opening panel for this and didn't like opening from both sides —
+   reverted), with a short "why this matters to the research" note added there —
+   `research` is an optional per-record field; until Ulaş writes the real text it
+   shows a to-be-added placeholder rather than inventing one. No date under the
+   tokens per his request — just the ring. */
+const people=Object.entries(DB)
+  .filter(([id,d])=>d.type==="PERSON")
+  .sort((a,b)=>(a[1].life?a[1].life[0]:9999)-(b[1].life?b[1].life[0]:9999));
+const band=document.getElementById("people-band");
+people.forEach(([id,d])=>{
+  const initials=d.title.split(/\s+/).map(w=>w[0]).join("").slice(0,3).toUpperCase();
+  const tok=document.createElement("div");
+  tok.className="p-token";
+  tok.innerHTML=`<div class="p-ring" style="border-color:${d.color}">${initials}</div>`;
+  tok.addEventListener("click",()=>{ if(is3DEligible(id)) openTakeover(id); else openD(id); });
+  band.appendChild(tok);
+});
+
+/* draft word list -- Ulaş's call to edit/swap, replaces the old How to read / Legend /
+   Dataset explainer columns with a loose interdisciplinary keyword row instead */
+const KEYWORDS=["labor migration","media archive","oral history","diaspora studies",
+  "cultural memory","sound archive","ethnomusicology","visual culture","working-class history",
+  "postmigration","testimony","translation","vernacular media","archive theory"];
+document.getElementById("kwRow").innerHTML =
+  KEYWORDS.map(w=>`<span>${w}</span>`).join(`<span class="sep">·</span>`);
+
+/* ============ DOSSIER ============ */
+let hist=[];
+function openD(id,push=true){
+  const d=DB[id]; if(!d) return;
+  if(push) hist.push(id);
+  document.getElementById("crumb").innerHTML = hist.length>1
+    ? `<span onclick="goBack()">← ${DB[hist[hist.length-2]].title}</span>` : "";
+  const linkChips=(d.links||[]).map(l=>`<button class="chip ghost">${LINKLABEL[l]} · link to be added</button>`).join("")
+    || `<button class="chip ghost">links to be added</button>`;
+  const relChips=(d.rel||[]).map(([lab,rid])=>{
+    const openFn = is3DEligible(rid) ? "openTakeover" : (DB[rid] && DB[rid].type==="PERSON" ? "openD" : "openImg");
+    return `<button class="chip" onclick="${openFn}('${rid}')"><span class="rel">${lab} →</span>${DB[rid]?DB[rid].title:rid}</button>`;
+  }).join("");
+  const metaRows=Object.entries(d.meta||{}).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("");
+  const researchSec = d.type==="PERSON"
+    ? `<div class="d-sec">Relevance to this research</div><div class="d-note">${d.research||"To be added — why this person matters to the El Kapıları / Fremde Türen research."}</div>`
+    : "";
+  const imgBox = d.img
+    ? `<img src="${d.img}" alt="${d.title}" onerror="imgFallback(this)">`
+    : "image to be added";
+  // window.mountPortrait3D only exists once the Three.js module script has actually loaded --
+  // it never will over plain file:// (ES modules are blocked there) or if the CDN fetch fails/
+  // is still in flight. Gate on the function too, not just the id->stem mapping, so a person
+  // with a 3D stem NEVER shows a dead blank canvas -- always the static placeholder instead.
+  const stem = PORTRAIT3D_STEMS[id];
+  const use3D = stem && typeof window.mountPortrait3D === "function";
+  document.getElementById("d-body").innerHTML=`
+    <div class="d-kicker" style="color:${d.color}">${d.type} · ${id}</div>
+    <div class="d-title">${d.title}</div>
+    <div class="d-sub">${d.sub||""}</div>
+    <div class="d-img" id="d-img-box">${use3D?"<canvas></canvas>":imgBox}</div>
+    <div class="d-sec">Record</div><table class="meta">${metaRows}</table>
+    <div class="d-sec">Listen / Watch</div><div class="chips">${linkChips}</div>
+    <div class="d-sec">Connections</div><div class="chips">${relChips}</div>
+    <div class="d-sec">Note</div><div class="d-note">${d.note||""}</div>
+    ${researchSec}
+    <div class="d-src">${d.src||""}</div>`;
+  closeImg();
+  if(window.disposeMountedPortrait3D) window.disposeMountedPortrait3D();
+  if(use3D){
+    const box=document.getElementById("d-img-box");
+    window.mountPortrait3D(box.querySelector("canvas"), stem).catch(()=>{
+      if(!box.isConnected) return; // dossier already moved to a different record before this rejected
+      box.innerHTML = d.img ? `image to be added<br>${d.img}` : "image to be added";
+    });
+  }
+  document.getElementById("dossier").classList.add("on");
+  document.getElementById("veil").classList.add("on");
+}
+function imgFallback(imgEl){
+  if(!imgEl.parentNode) return;
+  const src=imgEl.getAttribute("src");
+  imgEl.outerHTML = `image to be added<br>${src}`;
+}
+function openImg(id){
+  const d=DB[id]; if(!d) return;
+  const imgBox = d.img
+    ? `<img src="${d.img}" alt="${d.title}" onerror="imgFallback(this)">`
+    : "image to be added";
+  document.getElementById("imgpop-frame").innerHTML = imgBox;
+  const creator=(d.sub||"").split(" — ")[0].trim();
+  document.getElementById("imgpop-cap").innerHTML =
+    `<b>${d.title}</b>${creator?creator+", ":""}${d.year||""}`;
+  closeD();
+  document.getElementById("imgpop").classList.add("on");
+  document.getElementById("veil").classList.add("on");
+}
+function closeImg(){ document.getElementById("imgpop").classList.remove("on"); }
+function goBack(){ hist.pop(); openD(hist[hist.length-1],false); }
+function closeD(){ hist=[]; document.getElementById("dossier").classList.remove("on"); document.getElementById("veil").classList.remove("on"); if(window.disposeMountedPortrait3D) window.disposeMountedPortrait3D(); }
+document.getElementById("veil").onclick=()=>{ closeD(); closeImg(); };
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeD();closeTakeover();}});
+
+/* ============ 3D TAKEOVER ============
+   2026-08-07 brief: full-screen black stage that REPLACES the flat dossier for
+   PERSON records that have a working 3D ghost-portrait (PORTRAIT3D_STEMS + the
+   module below actually loaded) and for all SOUND records (record-card plane --
+   see mountRecord3D in the module script). Everything else (TEXT/ARTWORK/group
+   PERSON entries with no portrait stem) keeps opening the existing flat openD()/
+   openImg() -- that split is Ulaş's call, 2026-08-07: 3D for person+sound, a
+   separate 2D paper-cut/torn-paper treatment (template01_polish_brief section E)
+   for the rest, not built here. */
+function is3DEligible(id){
+  const d=DB[id]; if(!d) return false;
+  if(d.type==="PERSON") return !!PORTRAIT3D_STEMS[id];
+  if(d.type==="SOUND") return true;
+  return false;
+}
+/* "silme efekti olmayacak, text dururken harfler değişerek yeni metin halini
+   alacak" (landing_page_brief) -- text stays in place, each character scrambles
+   through random glyphs then locks into its real letter, staggered left to
+   right. Single fixed-language text here (no EN/DE/TR reconciliation problem --
+   that's the landing page's separate, harder version of this same mechanism,
+   not solved here). Re-entrant: a stale in-flight reveal is cancelled if the
+   dossier record changes again mid-animation (rapid chained navigation). */
+let scrambleRid=0;
+// same glitch/Turkish-char set as timeline.html's Scrambler, so the two pages' reveal
+// animations read as the same mechanism
+const SCRAMBLE_CHARS="!<>-_/\\[]{}=+*^?#×~üşğıöçßÜ";
+function escHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function scrambleReveal(el,text){
+  const dur=450, stagger=12;
+  const rid=++scrambleRid, t0=performance.now();
+  el.innerHTML=`<span class="hi"></span>`;
+  const hi=el.firstChild;
+  (function frame(){
+    if(rid!==scrambleRid) return;
+    const now=performance.now()-t0;
+    let out="";
+    for(let i=0;i<text.length;i++){
+      const ch=text[i];
+      if(ch===" "||ch==="\n"){ out+=ch; continue; }
+      const t=now-i*stagger;
+      if(t<0) out+="&nbsp;";
+      else if(t<dur) out+=`<span class="dud">${escHtml(SCRAMBLE_CHARS[(Math.random()*SCRAMBLE_CHARS.length)|0])}</span>`;
+      else out+=escHtml(ch);
+    }
+    hi.innerHTML=out;
+    if(now<text.length*stagger+dur) requestAnimationFrame(frame); else hi.textContent=text;
+  })();
+}
+let tkHist=[];
+function openTakeover(id,push=true){
+  const d=DB[id]; if(!d) return;
+  if(push) tkHist.push(id);
+  document.getElementById("tk-crumb").innerHTML = tkHist.length>1
+    ? `<span onclick="tkGoBack()">← ${DB[tkHist[tkHist.length-2]].title}</span>` : "";
+  // reuse the same hand-cut pictogram set the timeline draws with (pictogram_icons.js) --
+  // iconKeyFor(d) already picks vinyl_33/vinyl_45/cassette/etc. off meta.format; returns
+  // null for PERSON (no icon there, portraits speak for themselves). Local --ink/--paper
+  // override on the <svg> because the icon markup is authored for the light paper timeline
+  // (var(--ink) on near-black would be invisible) -- swapped so the disc silhouette shows
+  // light against this dark stage instead.
+  const iconKey = iconKeyFor(d);
+  const iconSvg = iconKey
+    ? `<svg class="tk-icon" viewBox="-${PICTOGRAM_R0[iconKey]} -${PICTOGRAM_R0[iconKey]} ${PICTOGRAM_R0[iconKey]*2} ${PICTOGRAM_R0[iconKey]*2}" style="--ink:#E2DAC2;--paper:#0a0d0d">${PICTOGRAM_SVG[iconKey]}</svg>`
+    : "";
+  document.getElementById("tk-kicker").innerHTML=`${iconSvg}${d.type} · ${id}`;
+  document.getElementById("tk-title").textContent=d.title;
+  document.getElementById("tk-sub").textContent=d.sub||"";
+  // "play" control for d.links (Spotify/YouTube/etc.) -- same ghost/ "link to be added"
+  // convention as the flat dossier's linkChips (no real audio/video URL field exists in
+  // DB yet, so this stays a disabled placeholder rather than faking a working player).
+  document.getElementById("tk-play").innerHTML = (d.links&&d.links.length)
+    ? d.links.map(l=>`<button class="tk-play" disabled title="link to be added"><span class="tk-play-dot">▶</span>${LINKLABEL[l]}</button>`).join("")
+    : `<button class="tk-play" disabled><span class="tk-play-dot">▶</span>link to be added</button>`;
+  scrambleReveal(document.getElementById("tk-note"), d.note||"");
+  const chips=document.getElementById("tk-chips");
+  chips.innerHTML=(d.rel||[]).map(([lab,rid])=>{
+    const openFn = is3DEligible(rid) ? "openTakeover" : (DB[rid] && DB[rid].type==="PERSON" ? "openD" : "openImg");
+    return `<button class="tk-chip" onclick="${openFn}('${rid}')"><span class="rel">${lab} →</span>${DB[rid]?DB[rid].title:rid}</button>`;
+  }).join("") || `<button class="tk-chip" disabled>no connections yet</button>`;
+  closeD(); closeImg();
+  const stage=document.getElementById("tk-stage");
+  stage.innerHTML = `<canvas style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas><div class="tk-fallback" id="tk-fallback"></div>`;
+  const canvas=stage.querySelector("canvas"), fallback=document.getElementById("tk-fallback");
+  if(window.disposeMountedPortrait3D) window.disposeMountedPortrait3D();
+  if(window.disposeMountedRecord3D) window.disposeMountedRecord3D();
+  if(d.type==="PERSON"){
+    const stem=PORTRAIT3D_STEMS[id];
+    if(stem && typeof window.mountPortrait3D==="function"){
+      window.mountPortrait3D(canvas,stem).catch(()=>{
+        if(!stage.isConnected) return;
+        fallback.textContent="portrait to be added"; fallback.style.display="flex";
+      });
+    } else {
+      fallback.textContent = typeof window.mountPortrait3D!=="function"
+        ? "3D view unavailable — open via start_template01.bat, not by double-clicking the file"
+        : "portrait to be added";
+      fallback.style.display="flex";
+    }
+  } else if(d.type==="SOUND"){
+    if(typeof window.mountRecord3D==="function"){
+      window.mountRecord3D(canvas,d).then(()=>{
+        if(!(d.model3d&&d.model3d.front) && stage.isConnected){ fallback.textContent="cover image to be added"; fallback.style.display="flex"; }
+      });
+    } else { fallback.textContent="3D view unavailable — open via start_template01.bat, not by double-clicking the file"; fallback.style.display="flex"; }
+  }
+  document.getElementById("takeover3d").style.display="block";
+}
+function tkGoBack(){ tkHist.pop(); openTakeover(tkHist[tkHist.length-1],false); }
+function closeTakeover(){
+  tkHist=[];
+  document.getElementById("takeover3d").style.display="none";
+  if(window.disposeMountedPortrait3D) window.disposeMountedPortrait3D();
+  if(window.disposeMountedRecord3D) window.disposeMountedRecord3D();
+}
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+/* 3D ghost-portrait for the dossier .d-img box -- verbatim shader/material/geometry logic
+   from comfyui/depth_pointcloud_prototype.html (validated separately, not re-derived here),
+   wrapped as window.mountPortrait3D(canvas, stem) / window.disposeMountedPortrait3D() so the
+   classic script's openD()/closeD() can drive it without needing module scope. Requires this
+   page to be served over http(s), not file:// -- see start_template01.bat. */
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { AfterimagePass } from "three/addons/postprocessing/AfterimagePass.js";
+import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+
+const GHOST_TRAIL_DAMP = 0.6;
+const SCATTER_AMOUNT = 0.55;
+const SCATTER_SPEED = 0.7;
+const COLS = 320, ROWS = 180;
+const DEPTH_SCALE = 3.2;
+const BG_THRESHOLD = 0.22;
+const PORTRAIT_DIR = "portraits";
+
+const GLSL_NOISE = `
+  vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+  vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+  vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+  vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+  float snoise(vec3 v) {
+    const vec2  C = vec2(1.0/6.0, 1.0/3.0);
+    const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+    vec3 i  = floor(v + dot(v, C.yyy));
+    vec3 x0 = v - i + dot(i, C.xxx);
+    vec3 g = step(x0.yzx, x0.xyz);
+    vec3 l = 1.0 - g;
+    vec3 i1 = min(g.xyz, l.zxy);
+    vec3 i2 = max(g.xyz, l.zxy);
+    vec3 x1 = x0 - i1 + C.xxx;
+    vec3 x2 = x0 - i2 + C.yyy;
+    vec3 x3 = x0 - D.yyy;
+    i = mod289(i);
+    vec4 p = permute( permute( permute(
+               i.z + vec4(0.0, i1.z, i2.z, 1.0))
+             + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+             + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+    float n_ = 0.142857142857;
+    vec3 ns = n_ * D.wyz - D.xzx;
+    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+    vec4 x_ = floor(j * ns.z);
+    vec4 y_ = floor(j - 7.0 * x_);
+    vec4 x = x_ * ns.x + ns.yyyy;
+    vec4 y = y_ * ns.x + ns.yyyy;
+    vec4 hh = 1.0 - abs(x) - abs(y);
+    vec4 b0 = vec4(x.xy, y.xy);
+    vec4 b1 = vec4(x.zw, y.zw);
+    vec4 s0 = floor(b0) * 2.0 + 1.0;
+    vec4 s1 = floor(b1) * 2.0 + 1.0;
+    vec4 sh = -step(hh, vec4(0.0));
+    vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+    vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+    vec3 p0 = vec3(a0.xy, hh.x);
+    vec3 p1 = vec3(a0.zw, hh.y);
+    vec3 p2 = vec3(a1.xy, hh.z);
+    vec3 p3 = vec3(a1.zw, hh.w);
+    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+    p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+    vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+    m = m * m;
+    return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+  }
+`;
+
+const VERTEX_SHADER = GLSL_NOISE + `
+  uniform sampler2D uDepth;
+  uniform float uDepthScale;
+  uniform float uPointSize;
+  uniform float uSizeMul;
+  uniform float uPixelRatio;
+  uniform float uTime;
+  uniform float uScatterAmount;
+  uniform float uScatterSpeed;
+  varying vec2 vUv;
+  varying float vDepth;
+  void main() {
+    vUv = uv;
+    float d = texture2D(uDepth, uv).r;
+    vDepth = d;
+    vec3 pos = position;
+    pos.z = (d - 1.0) * uDepthScale;
+    vec3 dirSeed = vec3(
+      snoise(vec3(uv * 3.2, 11.0)),
+      snoise(vec3(uv * 3.2, 23.0)),
+      snoise(vec3(uv * 3.2, 47.0))
+    );
+    vec3 dir = normalize(dirSeed + 0.0001);
+    float phase = snoise(vec3(uv * 2.4, 71.0)) * 6.2831853;
+    float magBase = 0.55 + 0.45 * (0.5 + 0.5 * snoise(vec3(uv * 4.0, 91.0)));
+    float wobble = snoise(vec3(uv * 2.0, uTime * 0.1 + phase));
+    float raw = sin(uTime * uScatterSpeed + phase + wobble * 1.2) * 0.5 + 0.5;
+    float cycle = raw * raw * raw;
+    pos += dir * cycle * magBase * uScatterAmount;
+    pos.z += sin(uTime * 0.6) * 0.06;
+    vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+    gl_Position = projectionMatrix * mv;
+    float sizePulse = 1.0 - 0.25 * cycle;
+    float safeDist = max(-mv.z, 1.0);
+    gl_PointSize = clamp(uPointSize * uSizeMul * sizePulse * uPixelRatio * (24.0 / safeDist), 0.0, 80.0);
+  }
+`;
+
+const FRAGMENT_SHADER = `
+  uniform sampler2D uColor;
+  uniform float uBgThreshold;
+  uniform float uOpacity;
+  uniform float uSoftInner;
+  varying vec2 vUv;
+  varying float vDepth;
+  void main() {
+    if (vDepth < uBgThreshold) discard;
+    vec2 c = gl_PointCoord - 0.5;
+    float distc = length(c);
+    if (distc > 0.5) discard;
+    float soft = 1.0 - smoothstep(uSoftInner, 0.5, distc);
+    vec3 col = texture2D(uColor, vUv).rgb;
+    gl_FragColor = vec4(col, soft * uOpacity);
+  }
+`;
+
+function buildMaterial({ sizeMul, opacity, softInner, scatterMul }) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uColor: { value: null }, uDepth: { value: null },
+      uDepthScale: { value: DEPTH_SCALE }, uBgThreshold: { value: BG_THRESHOLD },
+      uPointSize: { value: 3.0 }, uSizeMul: { value: sizeMul },
+      uPixelRatio: { value: devicePixelRatio }, uTime: { value: 0.0 },
+      uOpacity: { value: opacity }, uSoftInner: { value: softInner },
+      uScatterAmount: { value: SCATTER_AMOUNT * scatterMul }, uScatterSpeed: { value: SCATTER_SPEED }
+    },
+    vertexShader: VERTEX_SHADER, fragmentShader: FRAGMENT_SHADER,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+}
+
+function buildPointCloud(colorURL, depthURL) {
+  const loader = new THREE.TextureLoader();
+  return Promise.all([loader.loadAsync(colorURL), loader.loadAsync(depthURL)]).then(([colorTex, depthTex]) => {
+    colorTex.colorSpace = THREE.SRGBColorSpace;
+    const positions = new Float32Array(COLS * ROWS * 3);
+    const uvs = new Float32Array(COLS * ROWS * 2);
+    const aspect = 16/9;
+    const w = 6 * aspect, h = 6;
+    let i = 0, j = 0;
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        const u = x / (COLS - 1);
+        const v = 1 - y / (ROWS - 1);
+        positions[i++] = (u - 0.5) * w;
+        positions[i++] = (v - 0.5) * h;
+        positions[i++] = 0;
+        uvs[j++] = u; uvs[j++] = v;
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+    const matSharp = buildMaterial({ sizeMul: 1.0, opacity: 0.95, softInner: 0.4, scatterMul: 0.22 });
+    const matGlow  = buildMaterial({ sizeMul: 2.6, opacity: 0.28, softInner: 0.02, scatterMul: 1.5 });
+    for (const m of [matSharp, matGlow]) { m.uniforms.uColor.value = colorTex; m.uniforms.uDepth.value = depthTex; }
+    const group = new THREE.Group();
+    group.add(new THREE.Points(geo, matSharp));
+    group.add(new THREE.Points(geo, matGlow));
+    group.userData.materials = [matSharp, matGlow];
+    group.userData.geo = geo;
+    return group;
+  });
+}
+
+function createViewer(canvasEl){
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+  camera.position.set(0, 0, 24); // pulled back from 15 -- 1.75x scale needs the extra room, see PORTRAIT_SCALE below
+  const renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true });
+  renderer.setPixelRatio(devicePixelRatio);
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new AfterimagePass(GHOST_TRAIL_DAMP));
+
+  function resize(){
+    // fallback matters: this runs once synchronously at mount time, while the takeover
+    // screen is still display:none (clientWidth 0) -- window size is a much closer stand-in
+    // for the eventual full-screen box than an arbitrary 340x340 square, so even if the
+    // forced double-rAF resize (see mountPortrait3D/mountRecord3D) or ResizeObserver were
+    // somehow delayed, the object wouldn't render at the wrong aspect ratio in the meantime.
+    const w = canvasEl.clientWidth || window.innerWidth, h = canvasEl.clientHeight || window.innerHeight;
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false); composer.setSize(w, h);
+    if (cloud) cloud.scale.setScalar(computeFitScale());
+  }
+
+  const ROTATION_SWAY = THREE.MathUtils.degToRad(45) / 2; // ±22.5° = 45° total arc, not a full spin
+  const ROTATION_SPEED = 0.18; // rad/s of the sine argument -- slow, gentle sway
+  // 2026-08-07: Ulaş's call -- the stage stays full-bleed (see #tk-stage inline style,
+  // back to inset:0), the PORTRAIT itself is what shifts right and grows, via the object's
+  // own transform, not by shrinking the canvas into a boxed-in frame (that was tried first
+  // and rejected -- "cerceve icinde gerek yok"). First attempt at OFFSET_X=3.4 with the old
+  // z=15 camera clipped almost the whole cloud out of frame (scale 1.75 alone already
+  // overflows the frustum at that distance) -- camera pulled back to z=24 above so there's
+  // actual room, and this offset is now sized to line the cloud's LEFT edge up near screen
+  // center (offset == the cloud's own half-width at this scale), matching where Ulaş marked
+  // the target region: right half of frame, left side intentionally cropped off-canvas.
+  const PORTRAIT_OFFSET_X = 9.3;
+  const PORTRAIT_SCALE = 1.75; // "1.5 ya da iki kat" -- splitting the difference, the target
+  // size on a normal-width takeover stage; computeFitScale() below shrinks it (never grows it
+  // past this) only when the actual canvas is too narrow/short to fit it, so a portrait never
+  // renders past the canvas edge. 2026-08-11: Ulaş flagged some portraits overflowing the
+  // canvas -- the plane's world-space size was constant (fixed 16:9 * PORTRAIT_SCALE) with no
+  // relationship to the canvas's actual aspect ratio, so it only ever fit by coincidence.
+  const PORTRAIT_PLANE_W = 6 * (16 / 9), PORTRAIT_PLANE_H = 6;
+  function computeFitScale(){
+    const dist = camera.position.z; // plane sits at z≈0, so this is ~the camera-to-plane distance
+    const visH = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    const visW = visH * camera.aspect;
+    // only the right/top/bottom edges constrain the fit -- the left side is meant to run off
+    // canvas (see PORTRAIT_OFFSET_X comment above), so it's deliberately excluded here.
+    const margin = 0.92;
+    const wLimit = (2 * (visW / 2 * margin - PORTRAIT_OFFSET_X)) / PORTRAIT_PLANE_W;
+    const hLimit = (visH * margin) / PORTRAIT_PLANE_H;
+    return THREE.MathUtils.clamp(Math.min(PORTRAIT_SCALE, wLimit, hLimit), 0.3, PORTRAIT_SCALE);
+  }
+  let cloud = null, raf = null, disposed = false;
+  function animate(){
+    if(disposed) return;
+    raf = requestAnimationFrame(animate);
+    if (cloud) {
+      const t = clock.getElapsedTime();
+      cloud.rotation.y = Math.sin(t * ROTATION_SPEED) * ROTATION_SWAY;
+      for (const m of cloud.userData.materials) m.uniforms.uTime.value = t;
+    }
+    composer.render();
+  }
+  const clock = new THREE.Clock();
+  const resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(canvasEl);
+  resize();
+  animate();
+
+  return {
+    resize,
+    load(stem){
+      return buildPointCloud(`${PORTRAIT_DIR}/${stem}_color.png`, `${PORTRAIT_DIR}/${stem}_depth.png`)
+        .then(group => {
+          if(disposed) return;
+          group.position.x = PORTRAIT_OFFSET_X;
+          cloud = group; scene.add(cloud);
+          cloud.scale.setScalar(computeFitScale());
+        });
+    },
+    dispose(){
+      disposed = true;
+      if(raf) cancelAnimationFrame(raf);
+      resizeObs.disconnect();
+      if(cloud){ cloud.userData.geo.dispose(); for(const m of cloud.userData.materials) m.dispose(); }
+      renderer.dispose();
+    }
+  };
+}
+
+let activeViewer = null;
+window.mountPortrait3D = function(canvasEl, stem){
+  if(activeViewer){ activeViewer.dispose(); activeViewer=null; }
+  const viewer = createViewer(canvasEl);
+  activeViewer = viewer;
+  // the takeover screen is still display:none at this exact moment (openTakeover flips it
+  // right after this call returns), so this first resize() sized to the 0-width canvas and
+  // fell back to 340x340 -- ResizeObserver is supposed to correct it once the screen becomes
+  // visible, but that's not reliable timing to depend on alone. Two nested rAFs guarantee the
+  // display:block + layout has actually committed, so this forces a correct-size resize no
+  // matter what the observer does.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(activeViewer===viewer) viewer.resize(); }));
+  return viewer.load(stem);
+};
+window.disposeMountedPortrait3D = function(){
+  if(activeViewer){ activeViewer.dispose(); activeViewer=null; }
+};
+
+/* Record viewer for the 3D takeover's SOUND side -- 2026-08-09, superseded the
+   flat auto-tilt plane (archived: _archive/record_viewer_tilt_v1_2026-08-09.js)
+   once Ulaş pointed to his Unreal Engine project's Albums_3D library: a real
+   record static mesh plus separate front AND back cover textures, already
+   exported per his instruction to assets/models/vinyl/elkapilari/. Ulaş's call:
+   ONE shared mesh (RECORD3D_MODEL_URL) reused for every record, only the two
+   cover textures swap per-record via d.model3d -- so a record with no model3d
+   entry yet just falls back to the old flat kraft-color/cover-photo behaviour
+   in openTakeover(), same graceful-degradation convention as everywhere else.
+   User drives the rotation (drag = free 360° on both Y and X, no clamp) instead
+   of the old fixed auto-sway -- that was Ulaş's explicit ask, "kullanici 360
+   derecede dondurebilsin", plus scroll-wheel zoom (scales the rig around its own
+   fixed on-screen center -- see onWheel below for why it's not a camera dolly).
+   Material slot names from the FBX export are matched
+   by substring ("_f"/"front", "_b"/"back") to decide which texture goes where;
+   unmatched slots (e.g. a vinyl-body material) get a plain dark placeholder
+   material rather than guessing -- untested against the real FBX's actual slot
+   names, first pass pending Ulaş's visual check like everything else in this
+   pipeline. */
+const RECORD3D_MODEL_URL = "models/vinyl/elkapilari/SM_1976_ElKapilari.FBX";
+let record3dModelCache = null; // one shared geometry across every record, per Ulaş's instruction
+function loadRecord3DModel(){
+  if(!record3dModelCache) record3dModelCache = new FBXLoader().loadAsync(RECORD3D_MODEL_URL);
+  return record3dModelCache;
+}
+
+function createRecordViewer(canvasEl){
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 500);
+  camera.position.set(0, 0, 24); // matches the portrait viewer's pulled-back distance, same reasoning
+  const renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true, alpha: true });
+  renderer.setPixelRatio(devicePixelRatio);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+  const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(3, 4, 6); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.4); rim.position.set(-4, -2, -3); scene.add(rim);
+
+  function resize(){
+    // see createCardViewer's original note (archived file): mount happens while the
+    // takeover screen is still display:none, so window size is the right stand-in
+    // for clientWidth 0 until the forced double-rAF resize runs.
+    const w = canvasEl.clientWidth || window.innerWidth, h = canvasEl.clientHeight || window.innerHeight;
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  }
+
+  // smaller within the canvas than the old edge-filling plane -- Ulaş 2026-08-09:
+  // "boyutunu biraz kucultup kanvas içerisinde 3d dondurulebilien bir plak yapalım"
+  const RECORD_DIAMETER = 5;
+  const RECORD_OFFSET_X = 4.5;
+  const IDLE_SPIN = 0.0022;
+  const ZOOM_MIN = 0.6, ZOOM_MAX = 2.4;
+
+  // 2026-08-09 fix: rotation used to be written directly onto the same object that
+  // carried the one-time axis-correction rotation (the "which side faces the camera"
+  // fix below) -- animate() overwrote .rotation.x/.y every frame, silently erasing that
+  // correction on the very first frame, which is what made the cover art look flipped/
+  // wrong-side and made rotation look broken. Now split in two: `inner` carries the
+  // static correction + centering (touched once, at load, never again), `rig` is the
+  // only thing the drag/idle-spin loop touches.
+  const rig = new THREE.Group();
+  scene.add(rig);
+  let raf = null, disposed = false, loaded = false;
+
+  // 2026-08-09 -- three blind guesses at the UV flip (no flip, U-only, V-only) each got
+  // corrected by Ulaş's screenshots, none matched the real cover. Rather than keep
+  // guessing without being able to see the render myself, this exposes the flip/rotate
+  // as live, on-screen toggles Ulaş can click through himself -- see the button UI
+  // mountRecord3D injects into the stage. liveTextures/texState/applyTexTransform let
+  // any of load()'s already-loaded textures be re-transformed instantly without a
+  // network reload. Once Ulaş finds the right combination, tell me the state label
+  // (e.g. "H:0 V:1 R:1") and I'll hardcode it and remove the buttons.
+  const texState = { flipH: false, flipV: true, rot90: false }; // starts from the current best guess (V flip)
+  let liveTextures = [];
+  function applyTexTransform(tex){
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.center.set(0.5, 0.5);
+    tex.rotation = texState.rot90 ? Math.PI / 2 : 0;
+    tex.repeat.x = texState.flipH ? -1 : 1;
+    tex.repeat.y = texState.flipV ? -1 : 1;
+    tex.needsUpdate = true;
+  }
+  function texStateLabel(){
+    return `H:${texState.flipH ? 1 : 0} V:${texState.flipV ? 1 : 0} R:${texState.rot90 ? 1 : 0}`;
+  }
+  let dragging = false, lastX = 0, lastY = 0, rotY = 0.4, rotX = 0, zoomScale = 1;
+  function onDown(e){ dragging = true; lastX = e.clientX; lastY = e.clientY; canvasEl.style.cursor = "grabbing"; }
+  function onMove(e){
+    if(!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    // full 360° on both axes -- Ulaş 2026-08-09: "tam 360 derece dondurebilmeliyiz",
+    // no clamp on tilt either (an earlier pass limited X to ±0.5 rad -- removed)
+    rotY += dx * 0.012;
+    rotX += dy * 0.012;
+  }
+  function onUp(){ dragging = false; canvasEl.style.cursor = "grab"; }
+  // 2026-08-09: zoom used to dolly the camera along Z while it kept looking straight
+  // down -Z through the world origin -- but the record itself sits off-axis at
+  // RECORD_OFFSET_X (deliberately, so it lands center-right of the canvas, matching
+  // the takeover's approved two-panel layout). Dollying the camera toward an
+  // off-axis object makes it sweep toward the frame edge (perspective parallax),
+  // which is exactly the "canvas dışına çıkıyor" Ulaş hit. Scaling the rig instead
+  // keeps the record growing/shrinking from its own fixed on-screen center --
+  // camera never moves, so it can't drift off-canvas at any zoom level.
+  function onWheel(e){
+    e.preventDefault();
+    zoomScale = THREE.MathUtils.clamp(zoomScale - e.deltaY * 0.0015, ZOOM_MIN, ZOOM_MAX);
+    rig.scale.setScalar(zoomScale);
+  }
+  canvasEl.addEventListener("pointerdown", onDown);
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("pointerup", onUp);
+  canvasEl.addEventListener("wheel", onWheel, { passive: false });
+  canvasEl.style.cursor = "grab";
+  canvasEl.style.touchAction = "none";
+
+  function animate(){
+    if(disposed) return;
+    raf = requestAnimationFrame(animate);
+    if(loaded){
+      if(!dragging) rotY += IDLE_SPIN; // ambient motion so it doesn't read as inert before the user touches it
+      rig.rotation.y = rotY;
+      rig.rotation.x = rotX;
+    }
+    renderer.render(scene, camera);
+  }
+  const resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(canvasEl);
+  resize();
+  animate();
+
+  return {
+    resize,
+    toggleFlipH(){ texState.flipH = !texState.flipH; liveTextures.forEach(applyTexTransform); return texStateLabel(); },
+    toggleFlipV(){ texState.flipV = !texState.flipV; liveTextures.forEach(applyTexTransform); return texStateLabel(); },
+    toggleRot90(){ texState.rot90 = !texState.rot90; liveTextures.forEach(applyTexTransform); return texStateLabel(); },
+    stateLabel: texStateLabel,
+    load(d){
+      liveTextures = [];
+      return loadRecord3DModel().then(fbx => {
+        if(disposed) return;
+        const inner = fbx.clone(true);
+
+        // normalize scale first (FBX export units vary)
+        const rawBox = new THREE.Box3().setFromObject(inner);
+        const rawSize = rawBox.getSize(new THREE.Vector3());
+        const largest = Math.max(rawSize.x, rawSize.y, rawSize.z) || 1;
+        const s = RECORD_DIAMETER / largest;
+        inner.scale.setScalar(s);
+
+        // orient the disc's flat face toward the camera regardless of the FBX's up-axis
+        // convention (UE is Z-up, three.js is Y-up -- FBXLoader doesn't always reconcile
+        // this cleanly): find the thinnest raw-space axis (the disc's thickness) and
+        // rotate it onto world Z so the round face is what the user actually sees.
+        const dims = [["x", rawSize.x], ["y", rawSize.y], ["z", rawSize.z]].sort((a, b) => a[1] - b[1]);
+        const thin = dims[0][0];
+        if(thin === "y") inner.rotation.x = Math.PI / 2;
+        else if(thin === "x") inner.rotation.y = Math.PI / 2;
+
+        // re-center AFTER scale+rotation are baked in (must come after, not before --
+        // that ordering was the bug: a pre-rotation center offset doesn't stay correct
+        // once the rotation is applied on top of it)
+        inner.updateMatrixWorld(true);
+        const box = new THREE.Box3().setFromObject(inner);
+        inner.position.sub(box.getCenter(new THREE.Vector3()));
+
+        rig.position.x = RECORD_OFFSET_X;
+        rig.add(inner);
+
+        const loader = new THREE.TextureLoader();
+        const texPromises = [];
+        const VINYL_BODY = new THREE.MeshStandardMaterial({ color: 0x161616, roughness: 0.5, metalness: 0.1 });
+        inner.traverse(child => {
+          if(!child.isMesh) return;
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          child.material = mats.map(m => {
+            const name = (m.name || "").toLowerCase();
+            const isFront = name.includes("_f") || name.includes("front");
+            const isBack = name.includes("_b") || name.includes("back");
+            const src = isFront ? (d.model3d && d.model3d.front) : isBack ? (d.model3d && d.model3d.back) : null;
+            if(!src) return VINYL_BODY.clone();
+            const fresh = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.55, metalness: 0.05 });
+            texPromises.push(loader.loadAsync(src).then(tex => {
+              if(disposed) return;
+              tex.colorSpace = THREE.SRGBColorSpace;
+              applyTexTransform(tex);
+              liveTextures.push(tex);
+              fresh.map = tex; fresh.needsUpdate = true;
+            }).catch(() => {})); // cover texture missing for this record -- keep the plain placeholder material
+            return fresh;
+          });
+        });
+
+        loaded = true;
+        return Promise.all(texPromises);
+      });
+    },
+    dispose(){
+      disposed = true;
+      if(raf) cancelAnimationFrame(raf);
+      resizeObs.disconnect();
+      canvasEl.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      canvasEl.removeEventListener("wheel", onWheel);
+      scene.remove(rig);
+      renderer.dispose();
+    }
+  };
+}
+
+// 2026-08-09 TEMPORARY debug panel -- lets Ulaş click through the UV flip/rotate
+// combinations live and read the winning one off-screen, instead of more blind
+// guesses from me. Remove this whole block (and the debug methods on the viewer)
+// once he's confirmed the right combination and I've hardcoded it as the default.
+function buildRecordFlipDebugUI(stage, viewer){
+  const old = stage.querySelector(".tk-flip-debug");
+  if(old) old.remove();
+  const bar = document.createElement("div");
+  bar.className = "tk-flip-debug";
+  bar.style.cssText = "position:absolute;right:14px;bottom:14px;z-index:5;display:flex;gap:6px;align-items:center;font-family:'DM Mono',monospace;font-size:10px;color:#E2DAC2;background:rgba(0,0,0,.55);padding:6px 8px;border-radius:3px";
+  function btn(label, fn){
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.style.cssText = "font-family:inherit;font-size:10px;background:rgba(226,218,194,.12);color:#E2DAC2;border:1px solid rgba(226,218,194,.3);border-radius:2px;padding:3px 7px;cursor:pointer";
+    b.onclick = () => { readout.textContent = fn(); };
+    return b;
+  }
+  const readout = document.createElement("span");
+  readout.textContent = viewer.stateLabel();
+  bar.append(
+    document.createTextNode("cover flip: "),
+    btn("H", () => viewer.toggleFlipH()),
+    btn("V", () => viewer.toggleFlipV()),
+    btn("R90", () => viewer.toggleRot90()),
+    readout
+  );
+  stage.appendChild(bar);
+}
+
+let activeCardViewer = null;
+window.mountRecord3D = function(canvasEl, d){
+  if(activeCardViewer){ activeCardViewer.dispose(); activeCardViewer=null; }
+  const viewer = createRecordViewer(canvasEl);
+  activeCardViewer = viewer;
+  buildRecordFlipDebugUI(canvasEl.parentElement, viewer);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(activeCardViewer===viewer) viewer.resize(); }));
+  return viewer.load(d);
+};
+window.disposeMountedRecord3D = function(){
+  if(activeCardViewer){ activeCardViewer.dispose(); activeCardViewer=null; }
+};
+</script>
+</body></html>

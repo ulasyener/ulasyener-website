@@ -278,6 +278,7 @@ function showFremdeTueren(archiveSection) {
           `;
           div.addEventListener('click', (e) => {
             e.stopPropagation();
+            if (sec.title === 'Works' && item.label === 'Web') { openDossierOverlay(); return; }
             showFremdeTuerenItem(item, sec, archiveSection);
           });
           list.appendChild(div);
@@ -336,9 +337,10 @@ function showFremdeTuerenSection(sec, archiveSection) {
         <div class="subcat-label">${item.label}</div>
         <div class="cat-desc">${item.desc}</div>
       `;
-      div.addEventListener('click', () =>
-        showFremdeTuerenItem(item, sec, archiveSection)
-      );
+      div.addEventListener('click', () => {
+        if (sec.title === 'Works' && item.label === 'Web') { openDossierOverlay(); return; }
+        showFremdeTuerenItem(item, sec, archiveSection);
+      });
       list.appendChild(div);
     });
 
@@ -387,6 +389,20 @@ function openTimelineOverlay() {
   ov.innerHTML =
     '<button class="timeline-close" aria-label="Back to archive">&larr; BACK TO ARCHIVE</button>' +
     '<iframe class="timeline-frame" src="fremde/timeline.html" title="Shared History Timeline" loading="lazy"></iframe>';
+  const close = () => ov.remove();
+  ov.querySelector('.timeline-close').addEventListener('click', close);
+  document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); } });
+  document.body.appendChild(ov);
+}
+
+// ─── Dossier overlay (El Kapıları timeline + dossier + 3D takeover) ───────
+function openDossierOverlay() {
+  if (document.querySelector('.timeline-overlay')) return;
+  const ov = document.createElement('div');
+  ov.className = 'timeline-overlay';
+  ov.innerHTML =
+    '<button class="timeline-close" aria-label="Back to archive">&larr; BACK TO ARCHIVE</button>' +
+    '<iframe class="timeline-frame" src="fremde/dossier.html" title="El Kapıları — Timeline + Dossier" loading="lazy"></iframe>';
   const close = () => ov.remove();
   ov.querySelector('.timeline-close').addEventListener('click', close);
   document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); } });
