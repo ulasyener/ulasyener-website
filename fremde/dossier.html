@@ -826,7 +826,7 @@ function createViewer(canvasEl){
     const w = canvasEl.clientWidth || window.innerWidth, h = canvasEl.clientHeight || window.innerHeight;
     camera.aspect = w / h; camera.updateProjectionMatrix();
     renderer.setSize(w, h, false); composer.setSize(w, h);
-    if (cloud) cloud.scale.setScalar(computeFitScale());
+    if (cloud) { const fit = computeFit(); cloud.scale.setScalar(fit.scale); cloud.position.x = fit.offsetX; }
   }
 
   const ROTATION_SWAY = THREE.MathUtils.degToRad(45) / 2; // ±22.5° = 45° total arc, not a full spin
@@ -840,24 +840,28 @@ function createViewer(canvasEl){
   // actual room, and this offset is now sized to line the cloud's LEFT edge up near screen
   // center (offset == the cloud's own half-width at this scale), matching where Ulaş marked
   // the target region: right half of frame, left side intentionally cropped off-canvas.
-  const PORTRAIT_OFFSET_X = 9.3;
   const PORTRAIT_SCALE = 1.75; // "1.5 ya da iki kat" -- splitting the difference, the target
-  // size on a normal-width takeover stage; computeFitScale() below shrinks it (never grows it
-  // past this) only when the actual canvas is too narrow/short to fit it, so a portrait never
-  // renders past the canvas edge. 2026-08-11: Ulaş flagged some portraits overflowing the
-  // canvas -- the plane's world-space size was constant (fixed 16:9 * PORTRAIT_SCALE) with no
-  // relationship to the canvas's actual aspect ratio, so it only ever fit by coincidence.
+  // size on a normal-width takeover stage; computeFit() below shrinks it (never grows it past
+  // this) only when the actual canvas is too narrow/short to fit it, so a portrait never
+  // renders past the canvas edge.
   const PORTRAIT_PLANE_W = 6 * (16 / 9), PORTRAIT_PLANE_H = 6;
-  function computeFitScale(){
+  // 2026-08-12: offset used to be a fixed 9.3 world units, sized so the cloud's left edge
+  // lands at screen-center only when scale reaches the full 1.75 target -- but that pinned a
+  // big chunk of the width budget before the fit check even ran, so on a normal (non-ultrawide)
+  // laptop screen wLimit collapsed almost to the 0.3 floor and portraits read as "shrunk".
+  // Offset is now derived FROM the scale actually achieved (still half the cloud's own
+  // width, so the same right-cropped/left-off-canvas composition holds at any size), so the
+  // fit check only has to keep the right edge on-screen instead of also pre-spending a fixed
+  // offset that assumed the full target scale.
+  function computeFit(){
     const dist = camera.position.z; // plane sits at z≈0, so this is ~the camera-to-plane distance
     const visH = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
     const visW = visH * camera.aspect;
-    // only the right/top/bottom edges constrain the fit -- the left side is meant to run off
-    // canvas (see PORTRAIT_OFFSET_X comment above), so it's deliberately excluded here.
     const margin = 0.92;
-    const wLimit = (2 * (visW / 2 * margin - PORTRAIT_OFFSET_X)) / PORTRAIT_PLANE_W;
+    const wLimit = (visW * margin) / PORTRAIT_PLANE_W;
     const hLimit = (visH * margin) / PORTRAIT_PLANE_H;
-    return THREE.MathUtils.clamp(Math.min(PORTRAIT_SCALE, wLimit, hLimit), 0.3, PORTRAIT_SCALE);
+    const scale = THREE.MathUtils.clamp(Math.min(PORTRAIT_SCALE, wLimit, hLimit), 0.3, PORTRAIT_SCALE);
+    return { scale, offsetX: scale * PORTRAIT_PLANE_W / 2 };
   }
   let cloud = null, raf = null, disposed = false;
   function animate(){
@@ -882,9 +886,10 @@ function createViewer(canvasEl){
       return buildPointCloud(`${PORTRAIT_DIR}/${stem}_color.png`, `${PORTRAIT_DIR}/${stem}_depth.png`)
         .then(group => {
           if(disposed) return;
-          group.position.x = PORTRAIT_OFFSET_X;
+          const fit = computeFit();
+          group.position.x = fit.offsetX;
           cloud = group; scene.add(cloud);
-          cloud.scale.setScalar(computeFitScale());
+          cloud.scale.setScalar(fit.scale);
         });
     },
     dispose(){
