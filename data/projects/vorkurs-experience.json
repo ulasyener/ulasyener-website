@@ -14,6 +14,7 @@
   ],
   "cover": "images/projects/spatialmedia/interactivespaces/vorkursexperience/cover.jpg",
   "images": [
+    { "src": "https://vumbnail.com/253255553.jpg", "video": true, "video_provider": "vimeo", "vimeo_id": "253255553" },
     { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/1.jpg" },
     { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/2.jpg" },
     { "src": "images/projects/spatialmedia/interactivespaces/vorkursexperience/3.jpg" },

@@ -102,7 +102,9 @@
           "id": "mi-documentary",
           "label": "Film & Documentary",
           "description": "Essayistic documentary films exploring migration, memory and cultural history.",
-          "projects": []
+          "projects": [
+            "doc-fremdetueren-archive"
+          ]
         },
         {
           "id": "mi-sequences",
@@ -112,7 +114,8 @@
             "anim-dkam",
             "anim-wed",
             "anim-stools",
-            "anim-fremde-trailer1"
+            "anim-fremde-trailer1",
+            "anim-elkapilari-particles"
           ]
         }
       ]

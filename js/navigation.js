@@ -500,6 +500,11 @@ function openLightbox(images, startIndex, project) {
     if (panoContainer && panoContainer.parentNode) { panoContainer.parentNode.removeChild(panoContainer); panoContainer = null; }
   }
 
+  let videoContainer = null;
+  function destroyEntryVideo() {
+    if (videoContainer && videoContainer.parentNode) { videoContainer.parentNode.removeChild(videoContainer); videoContainer = null; }
+  }
+
   const box = document.createElement('div');
   box.id = 'lightbox';
   box.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:900;background:rgba(14,13,12,0.94);display:flex;align-items:center;justify-content:center;';
@@ -512,6 +517,7 @@ function openLightbox(images, startIndex, project) {
 
   function closeLightbox() {
     destroyPano();
+    destroyEntryVideo();
     box.style.opacity = '0';
     box.style.transition = 'opacity 0.2s ease';
     setTimeout(() => box.remove(), 200);
@@ -556,9 +562,33 @@ function openLightbox(images, startIndex, project) {
       const entry = images[index];
       counter.textContent = (index + 1) + ' / ' + images.length;
 
+      if (entry.video) {
+        img.style.display = 'none';
+        destroyPano();
+        destroyEntryVideo();
+        videoContainer = document.createElement('div');
+        videoContainer.style.cssText = 'width:100%;max-width:1100px;aspect-ratio:16/9;max-height:100%;position:relative;';
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share');
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        if (entry.video_provider === 'youtube' && entry.youtube_id) {
+          iframe.src = 'https://www.youtube.com/embed/' + entry.youtube_id + '?rel=0&modestbranding=1';
+        } else if (entry.vimeo_id) {
+          iframe.src = 'https://player.vimeo.com/video/' + entry.vimeo_id + '?title=0&byline=0&portrait=0&badge=0';
+          ensureVimeoScript();
+        }
+        videoContainer.appendChild(iframe);
+        mediaWrapper.appendChild(videoContainer);
+        return;
+      }
+
       if (entry.panorama) {
         img.style.display = 'none';
         destroyPano();
+        destroyEntryVideo();
         panoContainer = document.createElement('div');
         panoContainer.style.cssText = 'width:100%;height:100%;';
         mediaWrapper.appendChild(panoContainer);
@@ -567,6 +597,7 @@ function openLightbox(images, startIndex, project) {
       }
 
       destroyPano();
+      destroyEntryVideo();
       img.style.display = 'block';
       img.style.opacity = '0';
       setTimeout(() => {

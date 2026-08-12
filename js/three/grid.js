@@ -134,6 +134,19 @@ function buildGrid(items, onSelect, overlayTop) {
       card.appendChild(badge);
     }
 
+    if (item.video) {
+      const badge = document.createElement('div');
+      badge.textContent = '▶ PLAY';
+      badge.style.cssText =
+        'position:absolute;top:10px;right:10px;' +
+        'font-family:"DM Mono",monospace;' +
+        'font-size:9px;letter-spacing:.14em;' +
+        'color:rgba(255,255,255,0.92);' +
+        'background:rgba(0,0,0,0.45);' +
+        'padding:4px 8px;pointer-events:none;';
+      card.appendChild(badge);
+    }
+
     if (item.label) {
       const band = document.createElement('div');
       band.style.cssText =
@@ -234,6 +247,7 @@ function showPhotoGrid(project, onPhotoClick) {
       label:    null,
       sublabel: null,
       panorama: !!img.panorama,
+      video:    !!img.video,
       data:     { index: i, project: project }
     };
   });
