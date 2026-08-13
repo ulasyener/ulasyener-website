@@ -5,18 +5,132 @@ async function getWorksData() {
   return _worksData;
 }
 
-async function renderWorks() {
+// Tum kategori agacini dolasip benzersiz proje listesini + navigasyon
+// meta bilgisini (hangi kategori/alt kategori altinda oldugu) cikarir.
+function collectAllProjects(data) {
+  const seen   = new Set();
+  const result = [];
+
+  function addProject(pid, meta) {
+    if (seen.has(pid)) return;
+    seen.add(pid);
+    result.push(Object.assign({ id: pid }, meta));
+  }
+
+  data.categories.forEach(cat => {
+    if (!cat.subcategories && cat.projects) {
+      cat.projects.forEach(pid => addProject(pid, {
+        categoryId: cat.id, catLabel: cat.label,
+        subcategoryId: null, subLabel: null,
+        parentSubId: null, parentSubLabel: null
+      }));
+      return;
+    }
+
+    (cat.subcategories || []).forEach(sub => {
+      if (sub.subcategories) {
+        sub.subcategories.forEach(nested => {
+          (nested.projects || []).forEach(pid => addProject(pid, {
+            categoryId: cat.id, catLabel: cat.label,
+            subcategoryId: nested.id, subLabel: nested.label,
+            parentSubId: sub.id, parentSubLabel: sub.label
+          }));
+        });
+        return;
+      }
+
+      (sub.projects || []).forEach(pid => addProject(pid, {
+        categoryId: cat.id, catLabel: cat.label,
+        subcategoryId: sub.id, subLabel: sub.label,
+        parentSubId: null, parentSubLabel: null
+      }));
+    });
+  });
+
+  return result;
+}
+
+function navigateToProjectFromGrid(proj, meta) {
+  if (meta.parentSubId) {
+    openPhotoGridNested(proj, meta.categoryId, meta.parentSubId, meta.subcategoryId, meta.catLabel, meta.parentSubLabel, meta.subLabel);
+  } else if (meta.subcategoryId) {
+    openPhotoGrid(proj, meta.categoryId, meta.subcategoryId, meta.catLabel, meta.subLabel);
+  } else {
+    openPhotoGrid(proj, meta.categoryId, null, meta.catLabel, null);
+  }
+}
+
+async function renderAllProjectsGrid(data, compact) {
+  const entries = collectAllProjects(data);
+
+  const loaded = (await Promise.all(
+    entries.map(meta =>
+      fetch(`data/projects/${meta.id}.json`)
+        .then(r => r.json())
+        .then(proj => ({ proj, meta }))
+        .catch(() => null)
+    )
+  )).filter(Boolean);
+
+  const items = loaded.map(({ proj, meta }) => ({
+    src:      proj.cover || null,
+    label:    proj.title,
+    sublabel: proj.year,
+    data:     { proj, meta }
+  }));
+
+  window.grid3d = buildGrid(items, (d) => {
+    navigateToProjectFromGrid(d.proj, d.meta);
+  }, K1_OVERLAY_TOP, compact ? { cols: 6, gap: 8, compact: true } : null);
+}
+
+const WORKS_VIEWS = ['list', 'grid', 'compact'];
+const WORKS_VIEW_LABELS = { list: 'List', grid: 'Grid', compact: 'Compact' };
+
+async function renderWorks(view) {
+  view = WORKS_VIEWS.includes(view) ? view : 'list';
   const data = await getWorksData();
   const root = getPanelRoot();
 
   const el = document.createElement('div');
   el.className = 'panel';
 
+  el.appendChild(makePanelNav([{ label: 'Works' }]));
+
+  const headerRow = document.createElement('div');
+  headerRow.className = 'works-header-row';
+
   const label = document.createElement('div');
   label.className = 'sec-label sec-label--home';
   label.textContent = 'Works';
   label.addEventListener('click', goHome);
-  el.appendChild(label);
+  headerRow.appendChild(label);
+
+  const toggle = document.createElement('div');
+  toggle.className = 'view-toggle';
+
+  WORKS_VIEWS.forEach(v => {
+    const btn = document.createElement('span');
+    btn.className = 'view-toggle-btn' + (view === v ? ' active' : '');
+    btn.textContent = WORKS_VIEW_LABELS[v];
+    btn.addEventListener('click', () => {
+      if (view === v) return;
+      clearPanel();
+      renderWorks(v);
+    });
+    toggle.appendChild(btn);
+  });
+
+  headerRow.appendChild(toggle);
+
+  el.appendChild(headerRow);
+
+  if (view === 'grid' || view === 'compact') {
+    el.classList.add('panel-grid');
+    root.appendChild(el);
+    await renderAllProjectsGrid(data, view === 'compact');
+    return;
+  }
 
   const list = document.createElement('div');
   list.className = 'category-list';

@@ -37,15 +37,17 @@ function destroyGrid() {
 
 
 // ─── Cekirdek builder ─────────────────────────────────────────────────────
-function buildGrid(items, onSelect, overlayTop) {
+function buildGrid(items, onSelect, overlayTop, opts) {
   destroyGrid();
+  opts = opts || {};
 
-  const IS_MOB = window.innerWidth <= 768;
-  const COLS   = IS_MOB ? 1 : 3;
-  const GAP    = IS_MOB ? 12 : 16;
-  const FADE   = IS_MOB ? FADE_PX_MOB : FADE_PX;
-  const OV_TOP = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
-  const PAD_H  = IS_MOB ? '16px' : '80px';
+  const IS_MOB  = window.innerWidth <= 768;
+  const COMPACT = !!opts.compact;
+  const COLS    = IS_MOB ? (COMPACT ? 3 : 1) : (opts.cols || 3);
+  const GAP     = IS_MOB ? (COMPACT ? 6 : 12) : (opts.gap != null ? opts.gap : 16);
+  const FADE    = IS_MOB ? FADE_PX_MOB : FADE_PX;
+  const OV_TOP  = IS_MOB ? MOB_OVERLAY_TOP : overlayTop;
+  const PAD_H   = IS_MOB ? '16px' : '80px';
 
   gridOverlay = document.createElement('div');
   gridOverlay.id = 'grid-overlay';
@@ -99,7 +101,7 @@ function buildGrid(items, onSelect, overlayTop) {
     if (item.src) {
       const img = document.createElement('img');
       img.src     = item.src;
-      img.loading = i < 3 ? 'eager' : 'lazy'; // ilk 3 kart aninda, gerisi lazy
+      img.loading = i < COLS ? 'eager' : 'lazy'; // ilk sira aninda, gerisi lazy
       img.decoding = 'async';
       img.style.cssText =
         'position:absolute;inset:0;' +
@@ -125,12 +127,12 @@ function buildGrid(items, onSelect, overlayTop) {
       const badge = document.createElement('div');
       badge.textContent = '360°';
       badge.style.cssText =
-        'position:absolute;top:10px;right:10px;' +
+        'position:absolute;top:' + (COMPACT ? '5px' : '10px') + ';right:' + (COMPACT ? '5px' : '10px') + ';' +
         'font-family:"DM Mono",monospace;' +
-        'font-size:9px;letter-spacing:.14em;' +
+        'font-size:' + (COMPACT ? '7px' : '9px') + ';letter-spacing:.14em;' +
         'color:rgba(255,255,255,0.92);' +
         'background:rgba(0,0,0,0.45);' +
-        'padding:4px 8px;pointer-events:none;';
+        'padding:' + (COMPACT ? '2px 4px' : '4px 8px') + ';pointer-events:none;';
       card.appendChild(badge);
     }
 
@@ -138,12 +140,12 @@ function buildGrid(items, onSelect, overlayTop) {
       const badge = document.createElement('div');
       badge.textContent = '▶ PLAY';
       badge.style.cssText =
-        'position:absolute;top:10px;right:10px;' +
+        'position:absolute;top:' + (COMPACT ? '5px' : '10px') + ';right:' + (COMPACT ? '5px' : '10px') + ';' +
         'font-family:"DM Mono",monospace;' +
-        'font-size:9px;letter-spacing:.14em;' +
+        'font-size:' + (COMPACT ? '7px' : '9px') + ';letter-spacing:.14em;' +
         'color:rgba(255,255,255,0.92);' +
         'background:rgba(0,0,0,0.45);' +
-        'padding:4px 8px;pointer-events:none;';
+        'padding:' + (COMPACT ? '2px 4px' : '4px 8px') + ';pointer-events:none;';
       card.appendChild(badge);
     }
 
@@ -151,7 +153,7 @@ function buildGrid(items, onSelect, overlayTop) {
       const band = document.createElement('div');
       band.style.cssText =
         'position:absolute;bottom:0;left:0;right:0;' +
-        'padding:10px 14px 12px;' +
+        'padding:' + (COMPACT ? '5px 7px 6px' : '10px 14px 12px') + ';' +
         'background:rgba(218,215,210,0.90);' +
         'backdrop-filter:blur(2px);' +
         'pointer-events:none;';
@@ -159,18 +161,19 @@ function buildGrid(items, onSelect, overlayTop) {
       const titleEl = document.createElement('div');
       titleEl.style.cssText =
         'font-family:"Space Grotesk",sans-serif;' +
-        'font-size:' + (IS_MOB ? '13px' : '14px') + ';' +
-        'font-weight:700;letter-spacing:.10em;' +
+        'font-size:' + (COMPACT ? '9px' : (IS_MOB ? '13px' : '14px')) + ';' +
+        'font-weight:700;letter-spacing:' + (COMPACT ? '.04em' : '.10em') + ';' +
         'text-transform:uppercase;color:rgba(0,0,0,0.78);' +
-        'line-height:1.3;';
+        'line-height:1.3;' +
+        (COMPACT ? 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' : '');
       band.appendChild(titleEl);
 
       if (item.sublabel) {
         const subEl = document.createElement('div');
         subEl.style.cssText =
           'font-family:"DM Mono",monospace;' +
-          'font-size:' + (IS_MOB ? '9px' : '10px') + ';' +
-          'letter-spacing:.18em;color:rgba(0,0,0,0.38);margin-top:3px;';
+          'font-size:' + (COMPACT ? '7px' : (IS_MOB ? '9px' : '10px')) + ';' +
+          'letter-spacing:.18em;color:rgba(0,0,0,0.38);margin-top:' + (COMPACT ? '1px' : '3px') + ';';
         band.appendChild(subEl);
 
         const obs = new IntersectionObserver(function(entries) {
@@ -223,7 +226,7 @@ function buildGrid(items, onSelect, overlayTop) {
 }
 
 // ─── Kademe 1: Proje kapak grid'i ─────────────────────────────────────────
-function showProjectGrid(projects, onProjectClick) {
+function showProjectGrid(projects, onProjectClick, opts) {
   const items = projects.map(function(proj) {
     return {
       src:      proj.cover || null,
@@ -232,7 +235,7 @@ function showProjectGrid(projects, onProjectClick) {
       data:     proj
     };
   });
-  return buildGrid(items, onProjectClick, K1_OVERLAY_TOP);
+  return buildGrid(items, onProjectClick, K1_OVERLAY_TOP, opts);
 }
 
 // ─── Kademe 2: Proje fotograf grid'i ──────────────────────────────────────

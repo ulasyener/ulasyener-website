@@ -68,6 +68,50 @@
 }
 .sec-label--home:hover { color: rgba(0,0,0,1); }
 
+/* ─── Works header (label + list/grid toggle) ────────────────────────── */
+.works-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.works-header-row .sec-label {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.view-toggle {
+  display: flex;
+  flex-shrink: 0;
+  margin-top: 32px;
+  padding-bottom: 16px;
+}
+
+.view-toggle-btn {
+  font-family: var(--f-sans);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+  padding: 5px 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  cursor: pointer;
+  pointer-events: all;
+  background: transparent;
+  transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+.view-toggle-btn + .view-toggle-btn { border-left: none; }
+.view-toggle-btn:hover { color: rgba(0,0,0,0.8); }
+.view-toggle-btn.active {
+  color: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.32);
+}
+
 /* ─── Kategori listesi ───────────────────────────────────────────────── */
 .category-list {
   display: flex;
@@ -538,6 +582,10 @@
   .panel-nav     { gap: 12px; }
   .sec-label     { font-size: 8px; letter-spacing: .2em; margin: 20px 0 0; }
   .proj-nav-title { font-size: 8px; }
+
+  .works-header-row { flex-wrap: wrap; gap: 10px 16px; }
+  .view-toggle       { margin-top: 20px; padding-bottom: 0; }
+  .view-toggle-btn   { font-size: 8px; letter-spacing: .1em; padding: 5px 9px; }
 
   .contact-key { min-width: 64px; font-size: 8px; }
   .contact-val { font-size: 10px; }
