@@ -1,0 +1,17 @@
+{
+  "id": "bilgitekheadquarters",
+  "title": "Bilgitek Headquarters",
+  "year": "2012–2013",
+  "location": "Zeytinburnu, Istanbul",
+  "program": "Office / Workplace",
+  "cover": "images/projects/architectureinterior/workspace/bilgitekheadquarters/cover.jpg",
+  "images": [
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/1.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/2.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/5.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/6.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/8.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/10.jpg" },
+    { "src": "images/projects/architectureinterior/workspace/bilgitekheadquarters/11.jpg" }
+  ]
+}

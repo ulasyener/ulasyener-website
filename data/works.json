@@ -41,7 +41,11 @@
               "id": "ai-workspace",
               "label": "Workspace",
               "description": "Office and studio environments designed for focus, collaboration and culture.",
-              "projects": []
+              "projects": [
+                "bilgitekheadquarters",
+                "gategroupheadquarters",
+                "homeoffice"
+              ]
             }
           ]
         },

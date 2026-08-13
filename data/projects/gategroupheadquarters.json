@@ -1,0 +1,16 @@
+{
+  "id": "gategroupheadquarters",
+  "title": "Gate Group Headquarters",
+  "year": "2017–2018",
+  "location": "Opfikon, Switzerland",
+  "program": "Corporate Workplace Design",
+  "cover": "images/projects/architectureinterior/workspace/gategroupheadquarters/cover.avif",
+  "images": [
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/1.avif" },
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/2.avif" },
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/3.png" },
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/4.png" },
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/5.avif" },
+    { "src": "images/projects/architectureinterior/workspace/gategroupheadquarters/6.avif" }
+  ]
+}
