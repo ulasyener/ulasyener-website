@@ -395,6 +395,10 @@ function showVideoEmbed(project) {
   } else if (project.video_provider === 'youtube' && project.youtube_id) {
     iframe.src = 'https://www.youtube.com/embed/' + project.youtube_id +
       '?rel=0&modestbranding=1';
+  } else if (project.content_type === 'interactive' && project.embed_src) {
+    // interactive WebGL piece hosted on this site (lab/)
+    iframe.src = project.embed_src;
+    iframe.removeAttribute('loading');
   }
 
   wrapper.appendChild(iframe);

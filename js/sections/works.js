@@ -475,7 +475,7 @@ function openPhotoGridNested(project, categoryId, parentSubId, nestedSubId, catL
 
     if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
 
-    if (project.content_type === 'video') {
+    if (project.content_type === 'video' || project.content_type === 'interactive') {
       window.grid3d = showVideoEmbed(project);
     } else {
       window.grid3d = showPhotoGrid(project, (data) => {
@@ -485,7 +485,7 @@ function openPhotoGridNested(project, categoryId, parentSubId, nestedSubId, catL
       });
     }
 
-    if (project.content_type !== 'video') {
+    if (project.content_type !== 'video' && project.content_type !== 'interactive') {
       renderProjectInfoPanel(project, false);
     }
   });
@@ -640,7 +640,7 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
 
     if (window.grid3d && window.grid3d.destroy) window.grid3d.destroy();
 
-    if (project.content_type === 'video') {
+    if (project.content_type === 'video' || project.content_type === 'interactive') {
       window.grid3d = showVideoEmbed(project);
     } else {
       window.grid3d = showPhotoGrid(project, (data) => {
@@ -650,7 +650,7 @@ function openPhotoGrid(project, categoryId, subcategoryId, catLabel, subLabel) {
       });
     }
 
-    if (project.content_type !== 'video') {
+    if (project.content_type !== 'video' && project.content_type !== 'interactive') {
       renderProjectInfoPanel(project, project.content_type === 'video');
     }
   });

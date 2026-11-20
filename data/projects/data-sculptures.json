@@ -1,8 +1,10 @@
 {
   "id": "data-sculptures",
   "title": "Data Sculptures",
-  "subtitle": "Twenty-nine generative point-cloud sculptures",
+  "subtitle": "Twenty-nine real-time point-cloud sculptures",
   "year": "2026",
+  "content_type": "interactive",
+  "embed_src": "lab/data-sculptures.html",
   "responsibilities": [
     "Concept",
     "Design",

@@ -1,8 +1,10 @@
 {
   "id": "data-river",
   "title": "River",
-  "subtitle": "Data landscape with interchangeable materials",
+  "subtitle": "Real-time data landscape, nine materials",
   "year": "2026",
+  "content_type": "interactive",
+  "embed_src": "lab/river.html",
   "responsibilities": [
     "Concept",
     "Design",
