@@ -1,0 +1,42 @@
+{
+  "id": "data-river",
+  "title": "River",
+  "subtitle": "Data landscape with interchangeable materials",
+  "year": "2026",
+  "responsibilities": [
+    "Concept",
+    "Design",
+    "Real-time 3D Development"
+  ],
+  "description": "A data landscape in which a river meanders through a valley: its course, its width and the ridges on both banks are drawn from time series. Time runs in depth, from the present at the front edge into the past. The same terrain can be rendered in nine materials – particle, plastic, monochrome, terrace, voxel, line, wire, column and candle – and cut into sections that open as separate interactive 3D windows.",
+  "cover": "images/projects/spatialmedia/datasculptures/river/04-terrace.webp",
+  "images": [
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/01-particle.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/02-plastic.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/03-monochrome.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/04-terrace.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/05-voxel.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/06-line.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/07-wire.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/08-column.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/river/09-candle.webp"
+    }
+  ]
+}

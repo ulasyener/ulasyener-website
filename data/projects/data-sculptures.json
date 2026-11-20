@@ -1,0 +1,105 @@
+{
+  "id": "data-sculptures",
+  "title": "Data Sculptures",
+  "subtitle": "Twenty-nine generative point-cloud sculptures",
+  "year": "2026",
+  "responsibilities": [
+    "Concept",
+    "Design",
+    "Real-time 3D Development"
+  ],
+  "description": "A series of twenty-nine real-time sculptures that turn the same time series into different spatial forms: massif, tree, network, cascade, braid, orbit, arches, city and others. Each piece is built in the browser with WebGL from point clouds, lines and shaders, and can be rotated, scrubbed through time and switched between three time horizons.",
+  "cover": "images/projects/spatialmedia/datasculptures/sculptures/01-massif-surface.webp",
+  "images": [
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/01-massif-surface.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/01-massif-points.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/02-tree.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/03-network.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/04-column.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/05-cascade.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/06-ruled-surface.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/07-vector-field.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/08-braid.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/09-flow-ring.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/10-flock.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/11-regime-cloud.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/12-seismic-pulse.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/13-lathe.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/14-river-network.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/15-mobile.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/16-nested-shells.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/17-curtain.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/18-orbit.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/19-arches.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/20-trace-field.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/21-cube.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/22-stacked-planes.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/23-fan.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/24-data-city.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/25-globe.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/26-line-map.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/27-mosaic-cube.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/28-scenario-tree.webp"
+    },
+    {
+      "src": "images/projects/spatialmedia/datasculptures/sculptures/29-typographic-field.webp"
+    }
+  ]
+}

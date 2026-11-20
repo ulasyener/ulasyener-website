@@ -94,6 +94,15 @@
             "fremde-gameplay",
             "vorkurs-experience"
           ]
+        },
+        {
+          "id": "sm-data",
+          "label": "Data Sculptures",
+          "description": "Real-time generative sculptures and landscapes that give time series a spatial form.",
+          "projects": [
+            "data-sculptures",
+            "data-river"
+          ]
         }
       ]
     },
